@@ -51,3 +51,35 @@
         reagents:
         - ReagentId: Nutriment
           Quantity: 18
+
+- type: entity
+  parent: FoodMealBase
+  id: FoodMealCottonRavioli
+  name: cotton ravioli
+  description: A plate of cheese-filled cotton pasta squares in a brown butter sauce.
+  components:
+  - type: Item
+    storedOffset: 0,-1
+  - type: FlavorProfile
+    flavors:
+      - pasta
+      - cheesy
+      - butter
+      - cotton
+  - type: Sprite
+    sprite: _Persistence14/Objects/Consumable/Food/meals.rsi
+    state: cotton-ravioli
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 4
+        - ReagentId: Fiber
+          Quantity: 14
+  - type: Edible
+    requiresSpecialDigestion: true
+  - type: Tag
+    tags:
+      - ClothMade
