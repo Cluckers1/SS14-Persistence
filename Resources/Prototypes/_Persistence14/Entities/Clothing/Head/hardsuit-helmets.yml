@@ -162,6 +162,7 @@
     sprite: _Persistence14/Clothing/Head/Helmets/Hardsuits/donkmicrowave.rsi
   - type: Clothing
     sprite: _Persistence14/Clothing/Head/Helmets/Hardsuits/donkmicrowave.rsi
+    unequipSound: /Audio/Machines/microwave_done_beep.ogg
   - type: PointLight
     radius: 7
     energy: 3
