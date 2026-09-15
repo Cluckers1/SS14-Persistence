@@ -21,6 +21,21 @@
     },
     {
       "name": "pasta-dough-strip"
+    },
+    {
+      "name": "cotton-pasta-dough"
+    },
+    {
+      "name": "cotton-pasta-dough-flat"
+    },
+    {
+      "name": "cotton-pasta-dough-rope"
+    },
+    {
+      "name": "cotton-pasta-dough-slice"
+    },
+    {
+      "name": "cotton-pasta-dough-strip"
     }
   ]
 }

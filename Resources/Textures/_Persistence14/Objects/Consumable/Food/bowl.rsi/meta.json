@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "bowl copied from regular files, macaroni-cheese sprite by @SilverSS14 (YouTube)",
+  "copyright": "bowl copied from regular files, macaroni-cheese sprites by @SilverSS14 (YouTube)",
   "size": {
     "x": 32,
     "y": 32
@@ -12,6 +12,9 @@
     },
     {
       "name": "macaroni-cheese"
+    },
+    {
+      "name": "cotton-macaroni-cheese"
     }
   ]
 }

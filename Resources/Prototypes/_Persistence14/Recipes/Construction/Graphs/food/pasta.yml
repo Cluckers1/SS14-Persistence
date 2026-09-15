@@ -13,3 +13,17 @@
         doAfter: 1
   - node: flat
     entity: FoodDoughPastaFlat
+
+- type: constructionGraph
+  id: CottonPasta
+  start: start
+  graph:
+  - node: start
+    entity: FoodDoughCottonPasta
+    edges:
+    - to: flat
+      steps:
+      - tool: Rolling
+        doAfter: 1
+  - node: flat
+    entity: FoodDoughCottonPastaFlat

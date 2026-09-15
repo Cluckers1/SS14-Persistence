@@ -100,3 +100,102 @@
     Water: 10
   solids:
     FoodDoughPastaStrip: 3
+
+- type: microwaveMealRecipe
+  id: RecipeCottonMacaroniCheese
+  name: cotton_macaroni_cheese_recipe
+  result: FoodCottonMacaroniCheese
+  time: 15
+  group: Moth
+  reagents:
+    Milk: 5
+  solids:
+    FoodDoughCottonPastaRope: 2
+    FoodBowlBig: 1
+    FoodCheeseSlice: 1
+
+- type: microwaveMealRecipe
+  id: RecipeCottonRavioli
+  name: cotton_ravioli_recipe
+  result: FoodMealCottonRavioli
+  time: 15
+  group: Moth
+  solids:
+    FoodDoughCottonPastaFlat: 1
+    FoodCheeseSlice: 2
+    FoodButterSlice: 2
+
+- type: microwaveMealRecipe
+  id: RecipeBoiledCottonFettuccine
+  name: boiled_cotton_fettuccine_recipe
+  result: FoodNoodlesCottonBoiledFlat
+  time: 15
+  group: Moth
+  reagents:
+    Water: 10
+  solids:
+    FoodDoughCottonPastaStrip: 3
+
+# Moffins
+
+- type: microwaveMealRecipe
+  id: RecipeMoffin
+  name: moffin_recipe
+  result: FoodBakedMoffin
+  time: 15
+  group: Moth
+  solids:
+    FoodPlateMuffinTin: 1
+    FoodDoughCottonSlice: 1
+  reagents:
+    Sugar: 10
+
+- type: microwaveMealRecipe
+  id: RecipeMoffinBerry
+  name: berry_moffin_recipe
+  result: FoodBakedMoffinBerry
+  time: 15
+  group: Moth
+  solids:
+    FoodPlateMuffinTin: 1
+    FoodDoughCottonSlice: 1
+    FoodBerries: 1
+  reagents:
+    Sugar: 10
+
+#Pancakes
+
+- type: microwaveMealRecipe
+  id: RecipeCottonPancake
+  name: cotton_pancake_recipe
+  result: FoodBakedCottonPancake
+  time: 5
+  group: Moth
+  reagents:
+    Fiber: 5
+    Milk: 5
+    Egg: 6
+
+#Toasts
+
+- type: microwaveMealRecipe
+  id: RecipeCottonButteredToast
+  name: cotton_buttered_toast_recipe
+  result: FoodBreadCottonButteredToast
+  time: 5
+  group: Moth
+  solids:
+    FoodBreadCottonSlice: 1
+    FoodButterSlice: 1
+
+- type: microwaveMealRecipe
+  id: RecipeCottonFrenchToast
+  name: cotton_french_toast_recipe
+  result: FoodBreadCottonFrenchToast
+  time: 5
+  group: Moth
+  reagents:
+    Milk: 5
+    Egg: 12
+  solids:
+    FoodBreadCottonSlice: 1
