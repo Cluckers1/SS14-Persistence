@@ -103,6 +103,8 @@
         mode: TrueVisual
   - type: Construction
     graph: PipeInterchangeSecondaryTertiary
+  - type: Flippable
+    mirrorEntity: PipeInterchangeSecondaryTertiaryFlipped
 
 - type: entity
   id: PipeInterchangeSecondaryTertiaryFlipped
@@ -131,6 +133,8 @@
         mode: TrueVisual
   - type: Construction
     graph: PipeInterchangeSecondaryTertiaryFlipped
+  - type: Flippable
+    mirrorEntity: PipeInterchangeSecondaryTertiary
 
 - type: entity
   id: PipeInterchangePrimarySecondary
@@ -157,6 +161,8 @@
         volume: 50
   - type: Construction
     graph: PipeInterchangePrimarySecondary
+  - type: Flippable
+    mirrorEntity: PipeInterchangePrimaryTertiary
 
 - type: entity
   id: PipeInterchangePrimaryTertiary
@@ -183,3 +189,5 @@
         volume: 50
   - type: Construction
     graph: PipeInterchangePrimaryTertiary
+  - type: Flippable
+    mirrorEntity: PipeInterchangePrimarySecondary
