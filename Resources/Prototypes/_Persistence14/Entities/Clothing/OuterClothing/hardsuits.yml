@@ -155,7 +155,7 @@
   parent: ClothingOuterHardsuitBase
   id: ClothingOuterHardsuitDonk
   name: Donk suit hardsuit
-  description: the new Donk co space suit now with space to store your donk pockets (note Donk co is not held responsible for your donk pockets getting cold in the vacumes of space).
+  description: the new Donk Co. space suit now with space to store your donk-pockets. (note Donk Co. is not held responsible for your donk-pockets getting cold in the vacuum of space)
   components:
   - type: Sprite
     sprite: _Persistence14/Clothing/OuterClothing/Hardsuits/donksuit.rsi
@@ -202,7 +202,7 @@
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitDonk
   - type: StaticPrice
-    price: 750
+    price: 450
 
 #SOL Chief of Police's Hardsuit
 - type: entity
