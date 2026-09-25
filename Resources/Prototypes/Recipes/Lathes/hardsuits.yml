@@ -193,6 +193,22 @@
   unlockUses: 1
   completetime: 30
 
+#Persistence 14
+
+- type: latheRecipe
+  parent: BaseHardsuitRecipe
+  id: WaffleCoElitesuit
+  result: ClothingOuterHardsuitWaffleCoElite
+  materials:
+    Plasteel: 2000
+    Durathread: 1500
+    Uranium: 1500
+    Plasma: 1500
+    Bananium: 450
+    Glass: 500
+  unlockUses: 1
+  completetime: 30
+
 - type: latheRecipe
   parent: BaseHardsuitRecipe
   id: Captainsuit
