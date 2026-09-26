@@ -232,7 +232,9 @@
   cost: 62500
   recipeUnlocks:
   - Engineeringsuit
+  - WaffleCoEngisuit
   - Atmossuit
+  - WaffleCoAtmossuit
   - AtmosFireSuit
   - AtmosFireHelmet
   - Miningsuit
