@@ -818,7 +818,7 @@
         reagents:
         - ReagentId: Nutriment
           Quantity: 1 # Scav: 4 < 1
-        - ReagaentId: Grain # Scav
+        - ReagentId: Grain # Scav
           Quantity: 3
         - ReagentId: Protein
           Quantity: 5
