@@ -390,6 +390,7 @@
   - type: FlavorProfile
     flavors:
       - rice
+  - type: SolutionContainerManager
     solutions:
       food:
         maxVol: 20
