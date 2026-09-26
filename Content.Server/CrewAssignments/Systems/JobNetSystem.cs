@@ -103,11 +103,6 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         SubscribeLocalEvent<JobNetComponent, OpenJobNetImplantEvent>(OnImplantActivate);
         SubscribeLocalEvent<JobNetComponent, JobNetSelectMessage>(OnSelect);
         SubscribeLocalEvent<JobNetComponent, JobNetPurchaseMessage>(OnPurchase);
-        SubscribeLocalEvent<JobNetComponent, JobNetSelectRogueNetMessage>(OnSelectRogueNet);
-        SubscribeLocalEvent<JobNetComponent, JobNetPurchasePrecursorMessage>(OnPurchasePrecursor);
-        SubscribeLocalEvent<JobNetComponent, JobNetSubmitHuntMessage>(OnSubmitHunt);
-        SubscribeLocalEvent<JobNetComponent, JobNetSubmitHuntedMessage>(OnSubmitHunted);
-        SubscribeLocalEvent<JobNetComponent, JobNetDealerLabelMessage>(OnDealerLabel);
         SubscribeLocalEvent<PrecursorExtractorComponent, AfterInteractEvent>(AfterInteractOn);
         SubscribeLocalEvent<PrecursorExtractorComponent, PrecursorExtractorDoAfterEvent>(OnDoAfter);
 
@@ -154,61 +149,6 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         return null;
     }
 
-    private void OnDealerLabel(Entity<JobNetComponent> ent, ref JobNetDealerLabelMessage args)
-    {
-        if (ent.Comp.DealerBounty == null) return;
-        if (ent.Comp.NextPrintTime > _timing2.CurTime) return;
-        EntityUid? player = null;
-        var comp = Transform(ent.Owner);
-        if (comp != null)
-        {
-            player = comp.ParentUid;
-        }
-        if (!TryComp<ActorComponent>(player, out var actor) || actor == null || actor.PlayerSession == null) return;
-        var query = EntityQueryEnumerator<CargoTelepadComponent>();
-        var found = false;
-        var userMapPos = _transform.GetMapCoordinates(player.Value);
-        var ts = _cargo.GetTradeStationByID(ent.Comp.DealerBounty.TradeStationUID);
-        if (ts == null) return;
-        while (query.MoveNext(out var telepad, out var telepadcomp))
-        {
-            var targetMapPos = _transform.GetMapCoordinates(telepad);
-            var calculatedDistance = targetMapPos.Position - userMapPos.Position;
-            var total = calculatedDistance.Length();
-            if (total <= 3)
-            {
-                var teleTransform = Transform(telepad);
-                var newEntity = Spawn("PaperCargoBountyManifest", teleTransform.Coordinates);
-                ent.Comp.NextPrintTime = _timing2.CurTime + TimeSpan.FromSeconds(10);
-                _cargo.SetupBountyLabel(newEntity, ts.Value, ent.Comp.DealerBounty);
-                if (TryComp<CargoBountyLabelComponent>(newEntity, out var cbl))
-                {
-                    if (cbl != null)
-                    {
-                        cbl.DealerName = Name(player.Value);
-                    }
-                }
-                found = true;
-
-                break;
-            }
-        }
-        if (!found)
-        {
-            _audio.PlayEntity(ent.Comp.ErrorSound, player.Value, player.Value);
-            var msg = $"You must be next to a telepad to teleport the label.";
-            if (msg != null)
-                _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                    msg,
-                    msg,
-                    player.Value,
-                    false,
-                    actor.PlayerSession.Channel
-                    );
-            return;
-        }
-        UpdateUserInterface(args.Actor, ent.Owner, ent.Comp);
-    }
 
     private void AwardPrecursor(EntityUid uid, JobNetComponent component, int amount)
     {
@@ -244,117 +184,6 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
             }
         }
     }
-    private void OnSubmitHunted(Entity<JobNetComponent> ent, ref JobNetSubmitHuntedMessage args)
-    {
-        if (args.ID == "") return;
-        var query = EntityQueryEnumerator<JobNetComponent>();
-        var player = Transform(ent).ParentUid;
-        if (player == EntityUid.Invalid) return;
-        if (!TryComp<ActorComponent>(player, out var actor) || actor.PlayerSession == null) return;
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            if (comp.KillTarget == Name(player))
-            {
-                if (args.ID == comp.SecretPhrase)
-                {
-                    Compromise(uid, comp);
-                    HuntedCompleted(ent.Owner, ent.Comp);
-                    return;
-                }
-            }
-        }
-    }
-
-    private void OnSubmitHunt(Entity<JobNetComponent> ent, ref JobNetSubmitHuntMessage args)
-    {
-        if (args.ID == "") return;
-        if (ent.Comp.KillTarget == null) return;
-        var query = EntityQueryEnumerator<JobNetComponent>();
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            var tx = Transform(uid);
-            var parent = tx.ParentUid;
-            if (Name(parent) == ent.Comp.KillTarget)
-            {
-                if (args.ID == comp.SecretPhrase)
-                {
-                    HuntCompleted(ent.Owner, ent.Comp);
-                    Compromise(uid, comp);
-                    return;
-                }
-            }
-        }
-    }
-
-    private void HuntCompleted(EntityUid uid, JobNetComponent component)
-    {
-        EntityUid? player = null;
-        var comp = Transform(uid);
-        player = comp.ParentUid;
-        if (player == null) return;
-        if (TryComp<ActorComponent>(player, out var actor) && actor != null && actor.PlayerSession != null)
-        {
-            var msg = $"You have completed the hunt.";
-            _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                msg,
-                msg,
-                player.Value,
-                false,
-                actor.PlayerSession.Channel
-                );
-        }
-        component.KillTarget = null;
-        AwardPrecursor(uid, component, 500);
-        UpdateUserInterface(player, uid, component);
-    }
-    private void HuntedCompleted(EntityUid uid, JobNetComponent component)
-    {
-        EntityUid? player = null;
-        var comp = Transform(uid);
-        player = comp.ParentUid;
-        if (player == null) return;
-        if (TryComp<ActorComponent>(player, out var actor) && actor != null && actor.PlayerSession != null)
-        {
-            var msg = $"You have compromised the person hunting you.";
-            _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                msg,
-                msg,
-                player.Value,
-                false,
-                actor.PlayerSession.Channel
-                );
-        }
-        AwardPrecursor(uid, component, 500);
-        UpdateUserInterface(player, uid, component);
-    }
-
-    private void Compromise(EntityUid uid, JobNetComponent component)
-    {
-        EntityUid? player = null;
-        var comp = Transform(uid);
-        player = comp.ParentUid;
-        if (player != null)
-        {
-            if (TryComp<ActorComponent>(player, out var actor) && actor != null && actor.PlayerSession != null)
-            {
-                var msg = $"You have been compromised. You must protect your secret phrase!";
-                _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                    msg,
-                    msg,
-                    player.Value,
-                    false,
-                    actor.PlayerSession.Channel
-                    );
-            }
-        }
-        component.KillTarget = null;
-        component.NetworkType = RogueNetworkType.None;
-        component.RogueLevel = "RogueLevel1";
-        component.XP = 0;
-        component.Precursor = Math.Max(0, component.Precursor - 500);
-        UpdateUserInterface(player, uid, component);
-    }
-
 
 
     private void AfterInteractOn(EntityUid uid, PrecursorExtractorComponent component, AfterInteractEvent args)
