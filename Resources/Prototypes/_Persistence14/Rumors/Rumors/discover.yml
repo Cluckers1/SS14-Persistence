@@ -1,0 +1,51 @@
+- type: rumor
+  id: DiscoverSmallSalvage
+  name: Salvage Tip
+  description: "We've lost track of a small bit of salvage.\nFind it!"
+  eventGrids:
+    - /Maps/Salvage/small-1.yml
+    - /Maps/Salvage/small-2.yml
+    - /Maps/Salvage/small-ship-1.yml
+    - /Maps/Salvage/small-3.yml
+    - /Maps/Salvage/small-ai-survey-drone.yml
+    - /Maps/Salvage/small-4.yml
+    - /Maps/Salvage/small-cargo.yml
+    - /Maps/Salvage/small-chapel.yml
+    - /Maps/Salvage/small-chef.yml
+    - /Maps/Salvage/small-party.yml
+    - /Maps/Salvage/small-a-1.yml
+  cashReward: 2500
+  reputationReward: 50
+
+- type: rumor
+  id: DiscoverSmallSalvageSyndicate
+  name: Lost Vessel
+  description: "One of our ships has crashed!\nBoard it!"
+  eventGrids:
+    - /Maps/Salvage/small-ship-1.yml
+    - /Maps/Salvage/small-syndicate.yml
+  cashReward: 2500
+  reputationReward: 50
+
+
+- type: rumor
+  id: DiscoverSmallSalvageShadow
+  name: Vile Colony
+  description: "*BZZT*\nFind the installation*ZZkkt*"
+  eventGrids:
+    - /Maps/Salvage/tick-colony.yml
+    - /Maps/Salvage/meatball.yml
+  cashReward: 2500
+  reputationReward: 50
+
+- type: rumor
+  id: DiscoverMediumSalvage
+  name: Salvage Finder
+  description: "We want to survey a large bit of salvage. \nHelp us locate it!"
+  eventGrids:
+    - /Maps/Salvage/medium-1.yml
+    - /Maps/Salvage/medium-vault-1.yml
+    - /Maps/Salvage/medium-silent-orchestra.yml
+    - /Maps/Salvage/medium-library.yml
+  cashReward: 2500
+  reputationReward: 50
