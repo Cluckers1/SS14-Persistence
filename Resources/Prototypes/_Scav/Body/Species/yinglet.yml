@@ -281,6 +281,7 @@
   components:
   - type: Damageable
     damageModifierSet: Yinglet
+    displacement: Dwarfism
   - type: Speech
     speechSounds: Alto
     allowedEmotes: ['Weh', 'Squeak']
@@ -322,7 +323,7 @@
         damageType: Blunt
         damage: 300
       behaviors:
-      - !type:GibBehavior { }  
+      - !type:GibBehavior { }
     - trigger:
         !type:DamageTypeTrigger
         damageType: Heat
@@ -378,7 +379,12 @@
     shiveringHeatRegulation: 250
     normalBodyTemperature: 310.15
     thermalRegulationTemperatureThreshold: 2
-#DamageVisuals
+  - type: CreamPied
+    displacement: Dwarfism
+  - type: Flammable
+    displacement: Dwarfism
+  - type: InnerBodyAnomalyVisuals
+    displacement: Dwarfism
 
 - type: entity
   parent: OrganBase
