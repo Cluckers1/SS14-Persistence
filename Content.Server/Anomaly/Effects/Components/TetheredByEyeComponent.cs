@@ -99,6 +99,9 @@ public sealed partial class TetheredByEyeComponent : Component
     /// </summary>
     [DataField]
     public HashSet<ProtoId<NpcFactionPrototype>> OldFactions = new();
+
+    [DataField]
+    public string EyeFactionId = "EyeThrall";
 }
 
 public enum TetherState : byte

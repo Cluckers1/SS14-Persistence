@@ -1,3 +1,5 @@
+using Content.Shared._Persistence14.Background.Prototypes;
+using Content.Shared._Persistence14.Rumors.Prototypes;
 using Content.Shared.CrewAssignments.Prototypes;
 using Content.Shared.CrewAssignments.Systems;
 using Content.Shared.MessageBoard.Components;
@@ -80,6 +82,15 @@ public partial class CrewMetaRecord
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextMessageBoardComment = TimeSpan.Zero;
+
+    [DataField]
+    public ProtoId<AlignmentPrototype> Alignment = "TrueNeutral";
+    [DataField]
+    public ProtoId<UniverseOriginPrototype> Origin = "Zenith";
+    [DataField]
+    public ProtoId<MotivePrototype> Motive = "Wealth";
+    [DataField]
+    public Dictionary<ProtoId<MetaFactionPrototype>, int> MetaFactionReputations = new();
 
     public CrewMetaRecord(string name)
     {

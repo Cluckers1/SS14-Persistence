@@ -1,8 +1,9 @@
+using System.Text;
 using Content.Shared.CrewAssignments.Prototypes;
 using Content.Shared.Radio;
+using Content.Shared.Roles;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using System.Text;
 
 namespace Content.Shared.Station.Components;
 
@@ -23,6 +24,12 @@ public sealed partial class StationDataComponent : Component
     /// </summary>
     [DataField]
     public StationConfig? StationConfig;
+
+    /// <summary>
+    /// The map-specific profile used to order jobs on this station.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public ProtoId<JobWeightPrototype>? JobWeights;
 
     /// <summary>
     /// List of all grids this station is part of.

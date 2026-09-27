@@ -13,9 +13,10 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Events;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Speech.Muting;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Players;
 using Content.Shared.Preferences;
-using Content.Shared.Speech.Muting;
 using Content.Shared.Tag;
 using Robust.Server.Console;
 using Robust.Server.GameObjects;
@@ -30,7 +31,7 @@ namespace Content.Server.Mobs;
 /// <summary>
 ///     Handles performing crit-specific actions.
 /// </summary>
-public sealed class CritMobActionsSystem : EntitySystem
+public sealed partial class CritMobActionsSystem : EntitySystem
 {
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly DeathgaspSystem _deathgasp = default!;
@@ -38,6 +39,8 @@ public sealed class CritMobActionsSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly QuickDialogSystem _quickDialog = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+
     // Start Persistence
     [Dependency] private readonly GameTicker _ticker = default!;
     [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
@@ -79,7 +82,7 @@ public sealed class CritMobActionsSystem : EntitySystem
         if (!_mobState.IsCritical(uid))
             return;
 
-        if (HasComp<MutedComponent>(uid))
+        if (_statusEffects.HasEffectComp<MutedStatusEffectComponent>(uid))
         {
             _popupSystem.PopupEntity(Loc.GetString("fake-death-muted"), uid, uid);
             return;
@@ -191,7 +194,7 @@ public sealed class CritMobActionsSystem : EntitySystem
         var message = overrideEv.MessageOverride ?? $"{Name(uid)} has died at ({mapPos.X:F1}, {mapPos.Y:F1}) and is broadcasting an SOS.";
 
         var speaker = overrideEv.SpeakerOverride ?? uid;
-        _radio.SendRadioMessage(speaker, message, "Common", speaker, true, false);
+        _radio.SendRadioMessage(speaker, message, "Common", speaker, true);
         var respawnTime = TimeSpan.FromSeconds(_configurationManager.GetCVar(CCVars.AcceptDeathTime));
         component.SOSCooldown = _timing.CurTime + respawnTime;
         UpdateUserInterface(uid, uid, component);

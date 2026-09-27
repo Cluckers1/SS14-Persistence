@@ -5,6 +5,7 @@ using Content.Server.Station.Systems;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Cargo.Components;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CrewAssignments.Components;
 using Content.Shared.CrewAssignments.Prototypes;
@@ -30,21 +31,21 @@ using static Content.Shared.GridControl.Components.StationCreatorComponent;
 namespace Content.Server.GridControl.Systems;
 
 [UsedImplicitly]
-public sealed class GridConfigSystem : SharedGridConfigSystem
+public sealed partial class GridConfigSystem : SharedGridConfigSystem
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly UserInterfaceSystem _userInterface = default!;
-    [Dependency] private readonly AccessReaderSystem _accessReader = default!;
-    [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly MapSystem _mapSystem = default!;
-    [Dependency] private readonly IPrototypeManager _protoMan = default!;
-    [Dependency] private readonly CrewMetaRecordsSystem _crewMeta = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private UserInterfaceSystem _userInterface = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private SharedInteractionSystem _interactionSystem = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private MapSystem _mapSystem = default!;
+    [Dependency] private IPrototypeManager _protoMan = default!;
+    [Dependency] private CrewMetaRecordsSystem _crewMeta = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -456,7 +457,7 @@ public sealed class GridConfigSystem : SharedGridConfigSystem
         if (args.StationName == null || args.StationName == "") return;
         StationConfig config = new();
         config.StationPrototype = "StandardNanotrasenStation";
-        _station.InitializeNewStation(config, null, args.StationName, realName);
+        _station.InitializeNewStation(config, null, args.StationName);
         if (idCard != null)
         {
             _popupSystem.PopupEntity($"The station {args.StationName} was created.", idCard.Value);

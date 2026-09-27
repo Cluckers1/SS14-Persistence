@@ -1,0 +1,6 @@
+- type: metaFaction
+  id: Zenith
+  name: The Solar Legion
+  description: "The Solar Legion controls the Zenith Universe."
+  rumors:
+    - BasicRumor

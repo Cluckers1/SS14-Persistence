@@ -1,0 +1,7 @@
+- type: rumor
+  id: BasicRumor
+  name: Testing Rumor
+  description: "Test."
+  eventGrids:
+    - /Maps/Salvage/small-chef.yml
+  spawnDistance: 500

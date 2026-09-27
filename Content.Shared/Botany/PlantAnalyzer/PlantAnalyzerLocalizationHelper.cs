@@ -27,7 +27,7 @@ public sealed class PlantAnalyzerLocalizationHelper : EntitySystem
         return ContentLocalizationManager.FormatList(gasesLoc);
     }
 
-    public string ChemicalsToLocalizedStrings(List<string> ids)
+    public string ChemicalsToLocalizedStrings(List<ProtoId<ReagentPrototype>> ids)
     {
         if (ids.Count == 0)
             return "";
