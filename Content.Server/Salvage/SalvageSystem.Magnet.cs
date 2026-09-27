@@ -177,7 +177,7 @@ public sealed partial class SalvageSystem
             // Go and cleanup the active ents.
             foreach (var ent in data.Comp.ActiveEntities)
             {
-                Del(ent);
+                QueueDel(ent);
             }
 
             foreach (var entity in _detachEnts)
