@@ -119,7 +119,7 @@ public abstract partial class SharedXenoArtifactSystem
         foreach (var table in otherTables) // Clear duplicate IDs from other tables.
             table.Remove(triggerId.Value);
 
-        var trigger = PrototypeManager.Index(triggerId);
+        var trigger = ProtoMan.Index(triggerId);
 
         foreach (var incompatible in trigger.IncompatibleTriggers)
         {

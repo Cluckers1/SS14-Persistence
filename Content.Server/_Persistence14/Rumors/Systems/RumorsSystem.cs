@@ -57,7 +57,7 @@ public sealed partial class RumorsSystem : EntitySystem
     private void OnGridChanged(Entity<RumorGetterComponent> ent, ref GridUidChangedEvent args)
     {
         EntityUid? player = null;
-        var implant = Transform(uid);
+        var implant = Transform(ent.Owner);
         player = implant.ParentUid;
         if (player == null) return;
         if (args.NewGrid == null) return;
@@ -114,7 +114,7 @@ public sealed partial class RumorsSystem : EntitySystem
             var timePassed = _timing.CurTime - comp.LastRumorTime;
             if(timePassed >= comp.NextRumor)
             {
-                // Time to give a new rumor 
+                // Time to give a new rumor
                 var newRumor = GenerateRumor(player.Value, comp);
                 if(newRumor != null)
                 {
@@ -279,7 +279,7 @@ public sealed partial class RumorsSystem : EntitySystem
             attachedBounds = new Box2Rotated(gridAABB.Translated(gridPos), gridRot, gridPos);
 
             worldAngle = (gridRot + magnetXform.LocalRotation) - MathF.PI / 2;
-            
+
         }
         else
         {
@@ -310,7 +310,7 @@ public sealed partial class RumorsSystem : EntitySystem
 
             var salvXForm = Transform(mapChild);
             var localPos = salvXForm.LocalPosition;
-            
+
             _transform.SetParent(mapChild, salvXForm, spawnUid.Value);
             _transform.SetWorldPositionRotation(mapChild, spawnLocation.Position + localPos, spawnAngle, salvXForm);
 

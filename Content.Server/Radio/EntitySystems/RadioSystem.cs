@@ -96,7 +96,7 @@ public sealed partial class RadioSystem : SharedRadioSystem
     }
 
     /// <inheritdoc/>
-    public override void SendRadioMessage(EntityUid messageSource, string message, RadioChannelPrototype channel, EntityUid radioSource, bool escapeMarkup = true, bool useNetworkOverride = true, float transmitterRange = float.PositiveInfinity)
+    public void SendRadioMessage(EntityUid messageSource, string message, RadioChannelPrototype channel, EntityUid radioSource, bool escapeMarkup = true, bool useNetworkOverride = true, float transmitterRange = float.PositiveInfinity)
     {
         // TODO if radios ever garble / modify messages, feedback-prevention needs to be handled better than this.
         if (!_messages.Add(message))

@@ -303,84 +303,84 @@
       speedModifier: 2 # Very powerful to balance out the desire to sell or scrap for points
       useSound: /Audio/Items/ratchet.ogg
 
-- type: entity
-  id: XenoArtifactToolJaws
-  parent: BaseOneTimeXenoArtifactEffect
-  description: Obtains ability to cut and pry
-  components:
-  - type: XAEApplyComponents
-    components:
-    - type: ToolTileCompatible
-    - type: Tool
-      qualities:
-      - Prying
-      speedModifier: 2 # Very powerful to balance out the desire to sell or scrap for points
-      useSound: /Audio/Items/jaws_pry.ogg
-    - type: MultipleTool
-      statusShowBehavior: true
-      entries:
-      - behavior:
-        - Prying
-        useSound:
-          path: /Audio/Items/jaws_pry.ogg
-        changeSound:
-          path: /Audio/Items/change_drill.ogg
-      - behavior:
-        - Cutting
-        useSound:
-          path: /Audio/Items/jaws_cut.ogg
-        changeSound:
-          path: /Audio/Items/change_drill.ogg
-
-- type: entity
-  id: XenoArtifactToolPowerDrill
-  parent: BaseOneTimeXenoArtifactEffect
-  description: Obtains ability to screw and tighten
-  components:
-  - type: XAEApplyComponents
-    components:
-    - type: ToolTileCompatible
-    - type: Tool
-      qualities:
-      - Screwing
-      speedModifier: 2 # Very powerful to balance out the desire to sell or scrap for points
-      useSound: /Audio/Items/drill_use.ogg
-    - type: MultipleTool
-      statusShowBehavior: true
-      entries:
-      - behavior:
-        - Screwing
-        useSound:
-          path: /Audio/Items/jaws_pry.ogg
-        changeSound:
-          path: /Audio/Items/drill_use.ogg
-      - behavior:
-        - Anchoring
-        useSound:
-          path: /Audio/Items/jaws_cut.ogg
-        changeSound:
-          path: /Audio/Items/ratchet.ogg
-
-- type: entity
-  id: XenoArtifactToolKnife
-  parent: BaseOneTimeXenoArtifactEffect
-  description: Gains a sharp edge
-  components:
-  - type: XAEApplyComponents
-    components:
-    - type: ToolTileCompatible
-    - type: Tool
-      qualities:
-      - Slicing
-      speedModifier: 2 # Very powerful to balance out the desire to sell or scrap for points
-      useSound: /Audio/Items/drill_use.ogg
-  - type: MeleeWeapon
-    wideAnimationRotation: -135
-    damage:
-      types:
-        Slash: 12 # A decently powerful knife
-    soundHit:
-      path: /Audio/Weapons/bladeslice.ogg
+#- type: entity
+#  id: XenoArtifactToolJaws
+#  parent: BaseOneTimeXenoArtifactEffect
+#  description: Obtains ability to cut and pry
+#  components:
+#  - type: XAEApplyComponents
+#    components:
+#    - type: ToolTileCompatible
+#    - type: Tool
+#      qualities:
+#      - Prying
+#      speedModifier: 2 # Very powerful to balance out the desire to sell or scrap for points
+#      useSound: /Audio/Items/jaws_pry.ogg
+#    - type: MultipleTool
+#      statusShowBehavior: true
+#      entries:
+#      - behavior:
+#        - Prying
+#        useSound:
+#          path: /Audio/Items/jaws_pry.ogg
+#        changeSound:
+#          path: /Audio/Items/change_drill.ogg
+#      - behavior:
+#        - Cutting
+#        useSound:
+#          path: /Audio/Items/jaws_cut.ogg
+#        changeSound:
+#          path: /Audio/Items/change_drill.ogg
+#
+#- type: entity
+#  id: XenoArtifactToolPowerDrill
+#  parent: BaseOneTimeXenoArtifactEffect
+#  description: Obtains ability to screw and tighten
+#  components:
+#  - type: XAEApplyComponents
+#    components:
+#    - type: ToolTileCompatible
+#    - type: Tool
+#      qualities:
+#      - Screwing
+#      speedModifier: 2 # Very powerful to balance out the desire to sell or scrap for points
+#      useSound: /Audio/Items/drill_use.ogg
+#    - type: MultipleTool
+#      statusShowBehavior: true
+#      entries:
+#      - behavior:
+#        - Screwing
+#        useSound:
+#          path: /Audio/Items/jaws_pry.ogg
+#        changeSound:
+#          path: /Audio/Items/drill_use.ogg
+#      - behavior:
+#        - Anchoring
+#        useSound:
+#          path: /Audio/Items/jaws_cut.ogg
+#        changeSound:
+#          path: /Audio/Items/ratchet.ogg
+#
+#- type: entity
+#  id: XenoArtifactToolKnife
+#  parent: BaseOneTimeXenoArtifactEffect
+#  description: Gains a sharp edge
+#  components:
+#  - type: XAEApplyComponents
+#    components:
+#    - type: ToolTileCompatible
+#    - type: Tool
+#      qualities:
+#      - Slicing
+#      speedModifier: 2 # Very powerful to balance out the desire to sell or scrap for points
+#      useSound: /Audio/Items/drill_use.ogg
+#  - type: MeleeWeapon
+#    wideAnimationRotation: -135
+#    damage:
+#      types:
+#        Slash: 12 # A decently powerful knife
+#    soundHit:
+#      path: /Audio/Weapons/bladeslice.ogg
 
 - type: entity
   parent: BaseOneTimeXenoArtifactEffect
@@ -428,92 +428,6 @@
       - behavior: [ Pulsing ]
         changeSound:
           path: /Audio/Items/change_drill.ogg
-
-# _Persistence14 content
-# Forced-emote effects: on activation, every living mob within `radius` (line of sight ignored) that
-# can perform the emote is made to repeat it for `duration` seconds. The repeat cadence/probability
-# come from the referenced AutoEmote prototype (see _Persistence14/Voice/auto_emotes.yml).
-# To add another, pair a new autoEmote prototype with a copy of one of these (new id + autoEmote).
-- type: entity
-  id: XenoArtifactEffectLaughingFit
-  parent: BaseXenoArtifactEffect
-  description: Induces uncontrollable laughter in nearby minds
-  components:
-  - type: XAEForcedEmote
-    autoEmote: XenoArchForcedLaugh
-    radius: 5
-    duration: 10
-
-- type: entity
-  id: XenoArtifactEffectSighingFit
-  parent: BaseXenoArtifactEffect
-  description: Induces uncontrollable sighing in nearby minds
-  components:
-  - type: XAEForcedEmote
-    autoEmote: XenoArchForcedSigh
-    radius: 5
-    duration: 10
-
-- type: entity
-  id: XenoArtifactEffectSneezingFit
-  parent: BaseXenoArtifactEffect
-  description: Induces uncontrollable sneezing in nearby minds
-  components:
-  - type: XAEForcedEmote
-    autoEmote: XenoArchForcedSneeze
-    radius: 5
-    duration: 10
-
-- type: entity
-  id: XenoArtifactEffectCoughingFit
-  parent: BaseXenoArtifactEffect
-  description: Induces uncontrollable coughing in nearby minds
-  components:
-  - type: XAEForcedEmote
-    autoEmote: XenoArchForcedCough
-    radius: 5
-    duration: 10
-
-- type: entity
-  id: XenoArtifactEffectWhistlingFit
-  parent: BaseXenoArtifactEffect
-  description: Induces uncontrollable whistling in nearby minds
-  components:
-  - type: XAEForcedEmote
-    autoEmote: XenoArchForcedWhistle
-    radius: 5
-    duration: 10
-
-- type: entity
-  id: XenoArtifactEffectCryingFit
-  parent: BaseXenoArtifactEffect
-  description: Induces uncontrollable crying in nearby minds
-  components:
-  - type: XAEForcedEmote
-    autoEmote: XenoArchForcedCry
-    radius: 5
-    duration: 10
-
-- type: entity
-  id: XenoArtifactEffectYawningFit
-  parent: BaseXenoArtifactEffect
-  description: Induces uncontrollable yawning in nearby minds
-  components:
-  - type: XAEForcedEmote
-    autoEmote: XenoArchForcedYawn
-    radius: 5
-    duration: 10
-
-- type: entity
-  id: XenoArtifactEffectScreamingFit
-  parent: BaseXenoArtifactEffect
-  description: Induces uncontrollable screaming in nearby minds
-  components:
-  - type: XAEForcedEmote
-    autoEmote: XenoArchForcedScream
-    radius: 5
-    duration: 10
-# end _Persistence14 content
 
 - type: entity
   parent: BaseXenoArtifactEffect
