@@ -30,6 +30,7 @@ using Robust.Shared.Utility;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using Content.Shared.Humanoid; // Scav
 
 
 namespace Content.Server.GameTicking

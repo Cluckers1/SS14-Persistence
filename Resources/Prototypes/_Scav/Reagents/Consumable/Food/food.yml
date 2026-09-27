@@ -9,7 +9,8 @@
   metabolisms:
     Metabolites:
       effects:
-      - !type:SatiateHunger
+      - !type:Satiate
+        satiationType: Hunger
       - !type:Vomit
           conditions:
           - !type:MetabolizerTypeCondition

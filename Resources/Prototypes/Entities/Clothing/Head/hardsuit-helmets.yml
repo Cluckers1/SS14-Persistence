@@ -18,6 +18,7 @@
     addPrefix: false
   - type: ToggleableVisuals
     spriteLayer: light
+    clothingVisuals:
       head-yinglet: # Scav
       - state: equipped-head-light-yinglet
         shader: unshaded

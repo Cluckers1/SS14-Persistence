@@ -50,8 +50,8 @@
         Quantity: 4 # Scav: 10 < 4
       - ReagentId: Vitamin
         Quantity: 1
-        - ReagentId: Grain # Scav
-          Quantity: 6
+      - ReagentId: Grain # Scav
+        Quantity: 6
   - type: Item
     size: Tiny
   - type: Tag
@@ -283,8 +283,8 @@
         Quantity: 0.25
       - ReagentId: Omnizine
         Quantity: 0.75
-        - ReagentId: Grain # Scav
-          Quantity: 6
+      - ReagentId: Grain # Scav
+        Quantity: 6
   - type: Tag
     tags:
     - Meat
@@ -521,8 +521,8 @@
         Quantity: 1.5
       - ReagentId: Omnizine
         Quantity: 2.5
-        - ReagentId: Grain # Scav
-          Quantity: 3
+      - ReagentId: Grain # Scav
+        Quantity: 3
   - type: Tag
     tags:
     - Meat
