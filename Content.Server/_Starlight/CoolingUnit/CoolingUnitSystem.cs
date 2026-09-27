@@ -59,7 +59,7 @@ public sealed partial class CoolingUnitSystem : SharedCoolingUnitSystem
 
 
                 var coolingAmount = Math.Min(coolingUnit.MaxCooling * (float)timeSince.TotalSeconds, temperatureComponent.Temperature - thermalRegulatorComponent.NormalBodyTemperature);
-                _tempSys.ChangeHeat((target, temperatureComponent), temperatureComponent.Temperature - coolingAmount);
+                _tempSys.ConductHeat((target, temperatureComponent), temperatureComponent.Temperature - coolingAmount, timeSince.Milliseconds * 1000f);
             }
         }
     }
