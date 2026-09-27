@@ -9,20 +9,22 @@ using Content.Shared.DetailExaminable;
 using Content.Shared.Objectives;
 using Content.Shared.Objectives.Components;
 using Content.Shared.Objectives.Systems;
+using Content.Shared.Roles;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Configuration;
 using Robust.Shared.Utility;
 
 namespace Content.Server.CharacterInfo;
 
-public sealed class CharacterInfoSystem : EntitySystem
+public sealed partial class CharacterInfoSystem : EntitySystem
 {
-    [Dependency] private readonly JobSystem _jobs = default!;
-    [Dependency] private readonly MindSystem _minds = default!;
-    [Dependency] private readonly RoleSystem _roles = default!;
-    [Dependency] private readonly SharedObjectivesSystem _objectives = default!;
-    [Dependency] private readonly BankSystem _bank = default!;
-    [Dependency] private readonly JobNetSystem _jobNet = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private JobSystem _jobs = default!;
+    [Dependency] private MindSystem _minds = default!;
+    [Dependency] private RoleSystem _roles = default!;
+    [Dependency] private SharedObjectivesSystem _objectives = default!;
+    [Dependency] private BankSystem _bank = default!;
+    [Dependency] private JobNetSystem _jobNet = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     public override void Initialize()
     {
@@ -49,6 +51,7 @@ public sealed class CharacterInfoSystem : EntitySystem
         _bank.TryGetBalance(entity, out var bankBal);
 
         string? briefing = null;
+        ProtoId<JobPrototype>? job = null;
         if (_minds.TryGetMind(entity, out var mindId, out var mind))
         {
             // Get objectives
@@ -58,15 +61,21 @@ public sealed class CharacterInfoSystem : EntitySystem
                 if (info == null)
                     continue;
 
+                if (!ProtoMan.TryIndex(Comp<ObjectiveComponent>(objective).Issuer, out var issuerProto))
+                {
+                    Log.Error($"Found incorrect objective issuer {issuerProto} when generating character info for objective {MetaData(objective).EntityPrototype}.");
+                    continue;
+                }
+
                 // group objectives by their issuer
-                var issuer = Comp<ObjectiveComponent>(objective).LocIssuer;
+                var issuer = issuerProto.LocalizedName;
                 if (!objectives.ContainsKey(issuer))
                     objectives[issuer] = new List<ObjectiveInfo>();
                 objectives[issuer].Add(info.Value);
             }
 
-            if (_jobs.MindTryGetJobName(mindId, out var jobName))
-                jobTitle = jobName;
+            if (_jobs.MindTryGetJob(mindId, out var j))
+                job = j;
 
             // Get briefing
             briefing = _roles.MindGetBriefing(mindId);
@@ -75,13 +84,13 @@ public sealed class CharacterInfoSystem : EntitySystem
         var detailExaminable = EnsureComp<DetailExaminableComponent>(entity, out var detail) ? detail.Content : Loc.GetString("flavor-text-placeholder");
 
         RaiseNetworkEvent(new CharacterInfoEvent(
-            GetNetEntity(entity),
-            jobTitle,
-            faction,
-            "$" + bankBal.ToString(),
-            objectives,
-            briefing,
-            detailExaminable),
+            netEntity: GetNetEntity(entity),
+            job: jobTitle,
+            faction: faction,
+            bankBal: "$" + bankBal.ToString(),
+            objectives: objectives,
+            briefing: briefing,
+            detailExaminable: detailExaminable),
             args.SenderSession
         );
 

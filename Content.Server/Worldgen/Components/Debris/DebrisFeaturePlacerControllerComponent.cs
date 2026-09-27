@@ -1,7 +1,8 @@
+﻿using System.Numerics;
 using Content.Server.Worldgen.Prototypes;
 using Content.Server.Worldgen.Systems.Debris;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
-using System.Numerics;
 
 namespace Content.Server.Worldgen.Components.Debris;
 
@@ -20,7 +21,6 @@ public sealed partial class DebrisFeaturePlacerControllerComponent : Component
     /// <summary>
     ///     Whether or not entities are already spawned.
     /// </summary>
-    [DataField("doSpawns")]
     public bool DoSpawns = true;
 
     [DataField("ownedDebris")] public Dictionary<Vector2, EntityUid?> OwnedDebris = new();
@@ -28,7 +28,7 @@ public sealed partial class DebrisFeaturePlacerControllerComponent : Component
     /// <summary>
     ///     The chance spawning a piece of debris will just be cancelled randomly.
     /// </summary>
-    [DataField("randomCancelChance")] public float RandomCancellationChance = 0.25f;
+    [DataField("randomCancelChance")] public float RandomCancellationChance = 0.1f;
 
     /// <summary>
     ///     Radius in which there should be no objects for debris to spawn.
@@ -38,7 +38,7 @@ public sealed partial class DebrisFeaturePlacerControllerComponent : Component
     /// <summary>
     ///     The noise channel to use as a density controller.
     /// </summary>
-    [DataField("densityNoiseChannel", customTypeSerializer: typeof(PrototypeIdSerializer<NoiseChannelPrototype>))]
-    public string DensityNoiseChannel { get; private set; } = default!;
+    [DataField]
+    public ProtoId<NoiseChannelPrototype> DensityNoiseChannel { get; private set; } = default!;
 }
 

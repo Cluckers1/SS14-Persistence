@@ -1,3 +1,4 @@
+using Content.Shared.Radio;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Anomaly.Effects.Components;
@@ -151,6 +152,9 @@ public sealed partial class EyeAnomalyComponent : Component
     /// <summary>Whether cracking open will grant a research bonus, once that logic exists.</summary>
     [DataField]
     public bool GrantResearchOnCrack = true;
+
+    [DataField]
+    public ProtoId<RadioChannelPrototype> BroadcastChannel = "Common";
 
     // ================= Death (no thralls left) =================
     // Once every victim tethered to this eye has escaped/died and none remain, the anomaly plays
