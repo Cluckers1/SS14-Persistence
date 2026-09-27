@@ -135,7 +135,6 @@ cookie_recipe = cookie recipe
 sugar_cookie_recipe = sugar cookie recipe
 raisin_cookie_recipe = raisin cookie recipe
 oatmeal_cookie_recipe = oatmeal cookie recipe
-nuke_cookie_recipe = nuke disk cookie recipe
 banana_cookie_recipe = banana cookie recipe
 cotton_cookie_recipe = cotton cookie recipe
 chocolate_chip_pancake_recipe = chocolate chip pancake recipe
