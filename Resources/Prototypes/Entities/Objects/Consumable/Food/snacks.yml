@@ -29,7 +29,7 @@
   components:
   - type: Sprite
     sprite: Objects/Consumable/Food/snacks.rsi
-  - type: SolutionContainerManager
+  - type: Solution
     solution:
       reagents:
       - ReagentId: Grain

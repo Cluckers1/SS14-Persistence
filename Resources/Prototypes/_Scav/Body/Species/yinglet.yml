@@ -286,14 +286,10 @@
     speechSounds: Alto
     allowedEmotes: ['Weh', 'Squeak']
   - type: Vocal
-    sounds:
-      Male: MaleHuman # TODO: Add UnisexYinglet
-      Female: FemaleHuman # TODO: Add UnisexYinglet
-      Unsexed: MaleHuman # TODO: Add UnisexYinglet
+    emoteSounds: MaleHuman # TODO: Add yinglet sounds
   - type: TypingIndicator
     proto: default
   - type: Butcherable
-    butcheringType: Spike
     spawned:
     - id: FoodMeat
       amount: 2
