@@ -71,7 +71,7 @@ public sealed partial class CharacterBackgroundSystem : EntitySystem
                 {
                     if (unequippedItem != null)
                     {
-                        Del(unequippedItem.Value);
+                        QueueDel(unequippedItem.Value);
                     }
                 }
                 if (itemType != string.Empty)

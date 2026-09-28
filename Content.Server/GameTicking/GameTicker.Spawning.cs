@@ -378,32 +378,11 @@ namespace Content.Server.GameTicking
                 }
             }
 
-
-
-
-
-
-
             if (!silent && TryComp(station, out MetaDataComponent? metaData))
             {
                 _chatManager.DispatchServerMessage(player,
                     Loc.GetString("job-greet-station-name", ("stationName", metaData.EntityName)));
             }
-
-
-
-
-            // We raise this event directed to the mob, but also broadcast it so game rules can do something now.
-            PlayersJoinedRoundNormally++;
-            var aev = new PlayerSpawnCompleteEvent(mob,
-                player,
-                jobId,
-                lateJoin,
-                silent,
-                PlayersJoinedRoundNormally,
-                station,
-                character);
-            RaiseLocalEvent(mob, aev, true);
         }
 
 
