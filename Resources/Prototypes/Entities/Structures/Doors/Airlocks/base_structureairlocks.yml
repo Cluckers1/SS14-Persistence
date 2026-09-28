@@ -211,7 +211,7 @@
   - type: Occluder
     enabled: false
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/glass.rsi
+    sprite: Structures/Doors/Airlocks/Glass/basic.rsi # Persistence glass.rsi < basic.rsi
   - type: AnimationPlayer
   - type: Fixtures
     fixtures:

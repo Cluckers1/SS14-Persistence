@@ -38,3 +38,4 @@
     science: AirlockScienceGlass
     security: AirlockSecurityGlass
     virology: AirlockVirologyGlass
+    fancy: AirlockFancyGlass
