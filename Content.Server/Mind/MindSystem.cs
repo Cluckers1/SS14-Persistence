@@ -312,9 +312,8 @@ public sealed partial class MindSystem : SharedMindSystem
         if (mind.UserId != null)
         {
             UserMinds.Remove(mind.UserId.Value);
-
-            //if (_players.GetPlayerData(mind.UserId.Value).ContentData() is { } oldData)
-            //    oldData.Mind = null;
+            if (_players.GetPlayerData(mind.UserId.Value).ContentData() is { } oldData)
+                oldData.Mind = null;
             mind.UserId = null;
         }
 
