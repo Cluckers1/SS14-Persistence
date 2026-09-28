@@ -1,3 +1,5 @@
+using Content.Shared.Cargo;
+using Content.Shared.Cargo.Prototypes;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -33,6 +35,8 @@ public sealed partial class RumorPrototype : IPrototype
     public int CashReward { get; set; } = 0;
     [DataField]
     public int ReputationReward { get; set; } = 0;
+    [DataField]
+    public List<ProtoId<CargoBountyPrototype>> PossibleBounties { get; set; } = new();
 
 }
 public enum CompletionType
@@ -41,7 +45,8 @@ public enum CompletionType
     Exterminate,
     Power,
     Rescue,
-    Move
+    Move,
+    Bounty
 
 }
 
@@ -81,5 +86,8 @@ public partial class ActiveRumor
     public int CashReward { get; set; } = 2500;
     [DataField]
     public int ReputationReward { get; set; } = 50;
+
+    [DataField]
+    public CargoBountyData? Bounty = null;
 
 }

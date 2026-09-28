@@ -204,18 +204,6 @@ public sealed partial class JobNetSystem
         }
         var balance = 0;
         _bank.TryGetBalance(user.Value, out balance);
-        string? stationName = null;
-        if(component.DealerBounty != null)
-        {
-            if(component.DealerBounty.TradeStationUID != 0)
-            {
-                var ts = _cargo.GetTradeStationByID(component.DealerBounty.TradeStationUID);
-                if (ts != null)
-                {
-                    stationName = Name(ts.Value);
-                }
-            }
-        }
 
         var state = new JobNetUpdateState(possibleStations, assignmentName, wage, selectedstation, remainingTime, currentObjectives, completedObjectives, codexEntries, currentLevel, balance, spendAuth, spent, spendable, sectorStatus, metaFactionReputations, rumors);
         _ui.SetUiState(jobnet, JobNetUiKey.Key, state);

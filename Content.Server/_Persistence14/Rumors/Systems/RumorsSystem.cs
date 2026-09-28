@@ -4,16 +4,27 @@ using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Chat.Managers;
 using Content.Server.CrewRecords.Systems;
+using Content.Server.Database;
+using Content.Server.Database.Migrations.Postgres;
 using Content.Server.Mind;
 using Content.Server.Movement.Systems;
+using Content.Server.NameIdentifier;
+using Content.Server.Power.SMES;
 using Content.Server.Salvage.Magnet;
 using Content.Shared._Persistence14.PersistentIdentifier;
 using Content.Shared._Persistence14.Rumors.Components;
 using Content.Shared._Persistence14.Rumors.Prototypes;
 using Content.Shared.Administration;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Cargo;
+using Content.Shared.Cargo.Components;
+using Content.Shared.Cargo.Prototypes;
 using Content.Shared.CrewAssignments.Components;
 using Content.Shared.Mind;
+using Content.Shared.Mobs;
+using Content.Shared.Power;
+using Content.Shared.Power.Components;
+using Content.Shared.Station.Components;
 using NetCord;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -48,16 +59,127 @@ public sealed partial class RumorsSystem : EntitySystem
     [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private EntityQuery<SalvageMobRestrictionsComponent> _salvMobQuery = default!;
+
+    [Dependency] private EntityQuery<RumorPowerTargetComponent> _powerTargetQuery = default!;
     [Dependency] private IChatManager _chatManager = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private MetaDataSystem _meta = default!;
     [Dependency] private PersistentIdentifierSystem _pid = default!;
     [Dependency] private BankSystem _bank = default!;
+    [Dependency] private NameIdentifierSystem _nameIdentifier = default!;
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<RumorGetterComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<RumorGetterComponent, GridUidChangedEvent>(OnGridChanged);
+        SubscribeLocalEvent<RumorExterminationTargetComponent, MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<RumorPowerTargetComponent, ChargeChangedEvent>(OnBatteryChargeChanged);
+    }
+
+    private void OnBatteryChargeChanged(Entity<RumorPowerTargetComponent> ent, ref ChargeChangedEvent args)
+    {
+        if (!TryComp<BatteryComponent>(ent, out var batteryComp)) return;
+        if(args.CurrentCharge == batteryComp.MaxCharge)
+        {
+            var query = EntityQueryEnumerator<RumorGetterComponent>();
+            if (!TryComp<PersistentIdentifierComponent>(ent, out var pid)) return;
+            while (query.MoveNext(out var uid, out var comp))
+            {
+                foreach (var rumor in comp.Rumors.ShallowClone())
+                {
+                    if (rumor.Targets.Contains(pid.Id))
+                    {
+                        if(rumor.Targets.Count == 1)
+                        {
+                            EntityUid? player = null;
+                            var implant = Transform(uid);
+                            player = implant.ParentUid;
+                            if (player == null) return;
+                            CompleteRumor((uid, comp), player.Value, rumor);
+                        }
+                        else
+                        {
+                            bool pass = true;
+                            foreach(var target in rumor.Targets)
+                            {
+                                if (target == pid.Id) continue;
+                                if (!_pid.TryResolveId(target, out var sister)) return;
+                                if (!TryComp<BatteryComponent>(sister, out var sisterBattery) || sisterBattery == null) return;
+                                if(sisterBattery.LastCharge < sisterBattery.MaxCharge)
+                                {
+                                    pass = false;
+                                }
+                                
+                            }
+                            if(pass)
+                            {
+                                EntityUid? player = null;
+                                var implant = Transform(uid);
+                                player = implant.ParentUid;
+                                if (player == null) return;
+                                CompleteRumor((uid, comp), player.Value, rumor);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void CompleteBounty(RumorGetterComponent comp, CargoBountyData bounty)
+    {
+        foreach (var rumor in comp.Rumors)
+        {
+            if(rumor.Bounty != null && rumor.Bounty.Id == bounty.Id)
+            {
+                EntityUid? player = null;
+                var implant = Transform(comp.Owner);
+                player = implant.ParentUid;
+                if (player == null) return;
+                CompleteRumor((comp.Owner, comp), player.Value, rumor);
+                return;
+            }
+        }
+    }
+    public RumorGetterComponent? GetRumorGetterByName(string name)
+    {
+        var query = EntityQueryEnumerator<RumorGetterComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            var tranform = Transform(uid);
+            var parent = tranform.ParentUid;
+            if (Name(parent) == name)
+            {
+                return comp;
+            }
+        }
+        return null;
+    }
+    private void OnMobStateChanged(Entity<RumorExterminationTargetComponent> ent, ref MobStateChangedEvent args)
+    {
+        if (!TryComp<PersistentIdentifierComponent>(ent, out var pid)) return;
+        if(args.NewMobState == MobState.Dead)
+        {
+            var query = EntityQueryEnumerator<RumorGetterComponent>();
+            while (query.MoveNext(out var uid, out var comp))
+            {
+                foreach(var rumor in comp.Rumors.ShallowClone())
+                {
+                    if(rumor.Targets.Contains(pid.Id))
+                    {
+                        rumor.Targets.Remove(pid.Id);
+                        if(rumor.Targets.Count == 0)
+                        {
+                            EntityUid? player = null;
+                            var implant = Transform(uid);
+                            player = implant.ParentUid;
+                            if (player == null) return;
+                            CompleteRumor((uid, comp), player.Value, rumor);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void OnGridChanged(Entity<RumorGetterComponent> ent, ref GridUidChangedEvent args)
@@ -276,6 +398,25 @@ public sealed partial class RumorsSystem : EntitySystem
             final.SpawnDistance = rumorProto.SpawnDistance;
             final.GridsToSpawn = rumorProto.GridsToSpawn;
         }
+        if(rumorProto.PossibleBounties.Count > 0)
+        {
+            var chosenBounty = _random.Pick(rumorProto.PossibleBounties);
+            var query = EntityQueryEnumerator<TradeStationComponent>();
+            List<TradeStationComponent> possibleTrade = new();
+            while (query.MoveNext(out var uid, out var comp))
+            {
+                if (TryComp<StationMemberComponent>(uid, out var sm))
+                {
+                    possibleTrade.Add(comp);
+                }
+            }
+            if (possibleTrade.Count < 1) return null;
+            var chosenUID = _random.Pick(possibleTrade).UID;
+            _nameIdentifier.GenerateUniqueNameModifier("Bounty", out var randomVal);
+            var newBounty = new CargoBountyData(_protoMan.Index<CargoBountyPrototype>(chosenBounty), randomVal);
+            newBounty.TradeStationUID = chosenUID;
+            final.Bounty = newBounty;
+        }
         final.CashReward = rumorProto.CashReward;
         final.ReputationReward = rumorProto.ReputationReward;
         final.Description = RealizeDescription(rumorProto, chosenFaction, final);
@@ -295,6 +436,20 @@ public sealed partial class RumorsSystem : EntitySystem
             else
             {
                 addon += $"A grid will arrive as you approach\n[color=yellow]({Math.Round(active.TargetPosition.Value.Position.X)}, {Math.Round(active.TargetPosition.Value.Position.Y)})[/color]\nExplore it!";
+            }
+            return rumor.Description + addon;
+        }
+        if(rumor.CompletionType == CompletionType.Exterminate)
+        {
+            if (active.TargetPosition == null) return rumor.Description;
+            string addon = "\n";
+            if (active.GridsToSpawn > 1)
+            {
+                addon += $"{active.GridsToSpawn} grids will arrive as you approach\n[color=yellow]{Math.Round(active.TargetPosition.Value.Position.X)}, {Math.Round(active.TargetPosition.Value.Position.Y)})[/color]\nKill all hostile creatures onboard!";
+            }
+            else
+            {
+                addon += $"A grid will arrive as you approach\n[color=yellow]({Math.Round(active.TargetPosition.Value.Position.X)}, {Math.Round(active.TargetPosition.Value.Position.Y)})[/color]\nKill all hostile creatures onboard!";
             }
             return rumor.Description + addon;
         }
@@ -386,10 +541,23 @@ public sealed partial class RumorsSystem : EntitySystem
 
             while (children.MoveNext(out var child))
             {
-                if (!_salvMobQuery.TryGetComponent(child, out var salvMob))
-                    continue;
+                if (_salvMobQuery.TryGetComponent(child, out var salvMob))
+                {
+                    salvMob.LinkedEntity = mapChild;
+                    if (rumor.CompletionType == CompletionType.Exterminate)
+                    {
+                        rumor.Targets.Add(_pid.EnsureId(child));
+                        EnsureComp<RumorExterminationTargetComponent>(child);
+                    }
+                }
 
-                salvMob.LinkedEntity = mapChild;
+                if(rumor.CompletionType == CompletionType.Power)
+                {
+                    if (!_powerTargetQuery.TryGetComponent(child, out _))
+                        continue;
+                    rumor.Targets.Add(_pid.EnsureId(child));
+                }
+                
             }
         }
         _mapSystem.DeleteMap(salvMapXform.MapID);

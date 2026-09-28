@@ -3,7 +3,7 @@
   name: The Solar Legion
   description: "The Solar Legion controls the Zenith Universe."
   rumors:
-    - DiscoverSmallSalvage
+    - PowerBasic
   color: Red
   levels:
     Zenith2: 150

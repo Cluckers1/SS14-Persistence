@@ -1,0 +1,9 @@
+- type: rumor
+  id: BountyBasic
+  name: Bounty Time
+  description: "Complete this bounty."
+  cashReward: 2500
+  reputationReward: 50
+  completionType: Bounty
+  possibleBounties:
+    - BountyHandcuffs

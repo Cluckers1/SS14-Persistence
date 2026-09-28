@@ -1,0 +1,9 @@
+- type: rumor
+  id: ExterminateBasic
+  name: Bug Hunt
+  description: "Kill everything on board the grid!"
+  eventGrids:
+    - /Maps/Salvage/meatball.yml
+  cashReward: 2500
+  reputationReward: 50
+  completionType: Exterminate
