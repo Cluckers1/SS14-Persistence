@@ -1905,6 +1905,25 @@
         Slash: 7
         Blunt: 3
 
+#persistence 14 dead goat
+
+- type: entity
+  parent: MobGoat
+  suffix: Dead
+  save: true
+  id: MobGoatDead
+  name: goat
+  description: Shriek!
+  components:
+  - type: Damageable
+    damage:
+      types:
+        Bloodloss: 60
+        Asphyxiation: 4
+        Slash: 200
+        Blunt: 30
+
+
 - type: entity
   parent: MobMouse
   id: MobMouseAdmeme
