@@ -1,0 +1,13 @@
+- type: rumor
+  id: PrayBasic
+  name: Voice from the Gods
+  description: "There is power in prayer here."
+  cashReward: 0
+  reputationReward: 10
+  completionType: Pray
+  rewardRumors: 1
+  possibleFollowups:
+    - PowerBasic
+    - BountyBasic
+    - ExterminateBasic
+    - DiscoverSmallSalvage

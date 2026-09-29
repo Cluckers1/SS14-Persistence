@@ -165,9 +165,15 @@ public sealed partial class JobNetMenu : DefaultWindow
             ReputationBoxFragment repLabel = new(faction, rep);
             ReputationsGrid.AddChild(repLabel);
         }
+        var rind = 0;
         foreach(var rumor in state.Rumors)
         {
             RumorBoxFragment rumorLabel = new(rumor);
+            rumorLabel.CancelBtn.OnPressed += args =>
+            {
+                if(Owner != null) Owner.CancelRumor(rind);
+            };
+            rind++;
             CurrentGrid.AddChild(rumorLabel);
         }
 

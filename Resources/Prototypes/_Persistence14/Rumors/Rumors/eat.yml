@@ -1,0 +1,19 @@
+- type: rumor
+  id: EatBasic
+  name: Replenish
+  description: "Eat Something!"
+  cashReward: 0
+  reputationReward: 10
+  completionType: Eat
+  possibleFlavors:
+    - sweet
+    - salty
+    - sour
+    - oily
+    - cheesy
+  rewardRumors: 1
+  possibleFollowups:
+    - PowerBasic
+    - BountyBasic
+    - ExterminateBasic
+    - DiscoverSmallSalvage

@@ -26,6 +26,21 @@ public sealed partial class RumorBoxFragment : PanelContainer
         };
         TitleLabel.Text = activeRumor.Name;
         ContentLabel.Text = activeRumor.Description;
-        RewardLabel.Text = $"[color=green]${activeRumor.CashReward}\n{activeRumor.ReputationReward} REP ({factionProto.Name})[/color]";
+        RewardLabel.Text = "";
+        
+        if(activeRumor.CashReward != 0)
+        {
+            RewardLabel.Text += $"[color=green]${activeRumor.CashReward}[/color]\n";
+        }
+        if(activeRumor.ReputationReward != 0)
+        {
+            RewardLabel.Text += $"[color=orange]{activeRumor.ReputationReward} REP ({factionProto.Name})[/color]\n";
+        }
+        var originalProto = _protoManager.Index<RumorPrototype>(activeRumor.OriginalPrototype);
+        if(originalProto.RewardRumors != 0)
+        {
+            RewardLabel.Text += $"[color=yellow]This will lead to a rewarding rumor[/color]";
+        }
+        
     }
 }

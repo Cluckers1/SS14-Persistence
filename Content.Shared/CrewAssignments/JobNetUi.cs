@@ -73,6 +73,15 @@ public sealed class JobNetSelectMessage : BoundUserInterfaceMessage
     }
 }
 
+[Serializable, NetSerializable]
+public sealed class JobNetCancelRumorMessage : BoundUserInterfaceMessage
+{
+    public int ID;
+    public JobNetCancelRumorMessage(int id)
+    {
+        ID = id;
+    }
+}
 
 [Serializable, NetSerializable]
 public sealed class JobNetPurchaseMessage : BoundUserInterfaceMessage

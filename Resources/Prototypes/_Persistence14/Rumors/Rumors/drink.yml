@@ -1,0 +1,18 @@
+- type: rumor
+  id: DrinkBasic
+  name: Drinkalot
+  description: "Drink up!"
+  cashReward: 0
+  reputationReward: 10
+  completionType: Drink
+  possibleFlavors:
+    - cola
+    - energydrink
+    - drgibb
+    - gingersoda
+  rewardRumors: 1
+  possibleFollowups:
+    - PowerBasic
+    - BountyBasic
+    - ExterminateBasic
+    - DiscoverSmallSalvage

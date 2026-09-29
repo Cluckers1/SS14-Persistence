@@ -10,6 +10,8 @@ using Content.Server.Database;
 using Content.Server.DoAfter;
 using Content.Server.Interaction;
 using Content.Server.NameIdentifier;
+using Content.Shared._Persistence14.Rumors.Components;
+using Content.Shared._Persistence14.Rumors.Systems;
 using Content.Shared.Access.Components;
 using Content.Shared.Cargo;
 using Content.Shared.Cargo.Components;
@@ -65,6 +67,7 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
     [Dependency] private SharedCuffableSystem _cuffable = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private NameIdentifierSystem _nameIdentifier = default!;
+    [Dependency] private RumorsSystem _rumors = default!;
     public override void ReagentObjectiveComplete(JobNetComponent component, ProtoId<PrecursorObjectivePrototype> objective)
     {
         if (_proto.TryIndex(objective, out PrecursorObjectivePrototype? proto) && proto != null)
@@ -102,11 +105,23 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         SubscribeLocalEvent<JobNetComponent, OpenJobNetImplantEvent>(OnImplantActivate);
         SubscribeLocalEvent<JobNetComponent, JobNetSelectMessage>(OnSelect);
         SubscribeLocalEvent<JobNetComponent, JobNetPurchaseMessage>(OnPurchase);
+        SubscribeLocalEvent<JobNetComponent, JobNetCancelRumorMessage>(OnCancelRumor);
         SubscribeLocalEvent<PrecursorExtractorComponent, AfterInteractEvent>(AfterInteractOn);
         SubscribeLocalEvent<PrecursorExtractorComponent, PrecursorExtractorDoAfterEvent>(OnDoAfter);
 
 
         InitializeUi();
+    }
+
+    private void OnCancelRumor(Entity<JobNetComponent> ent, ref JobNetCancelRumorMessage args)
+    {
+        if (!TryComp<RumorGetterComponent>(ent, out var getter) || getter == null) return;
+        _rumors.CancelRumorByIndex(getter, args.ID);
+        EntityUid? player = null;
+        var comp = Transform(ent);
+        player = comp.ParentUid;
+        if (player != null)
+            UpdateUserInterface(player, ent);
     }
 
     public void CompleteDealerBounty(EntityUid uid, JobNetComponent component)

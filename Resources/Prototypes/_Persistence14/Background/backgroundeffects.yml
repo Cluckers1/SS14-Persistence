@@ -62,7 +62,7 @@
   reputationGains:
     Zenith: 200
   extraFactionRumors:
-    Zenith: 1
+    Zenith: 4
 
 - type: backgroundEffect
   id: TraitOriginGreen

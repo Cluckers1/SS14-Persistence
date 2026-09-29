@@ -59,4 +59,9 @@ public sealed class JobNetBoundUserInterface : BoundUserInterface
 
 
     }
+
+    public void CancelRumor(int ind)
+    {
+        SendMessage(new JobNetCancelRumorMessage(ind));
+    }
 }
