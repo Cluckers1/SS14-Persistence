@@ -14,3 +14,6 @@ berry_moffin_recipe = berry moffin recipe
 cotton_pancake_recipe = cotton pancake recipe
 cotton_buttered_toast_recipe = cotton buttered toast recipe
 cotton_french_toast_recipe = cotton french toast recipe
+pastry_recipe = pastry base recipe
+plain_donut_recipe = plain donut recipe
+plain_jelly_donut_recipe = plain jelly donut recipe
