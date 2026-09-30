@@ -664,7 +664,7 @@ public sealed partial class RumorsSystem : EntitySystem
         }
         if(rumor.CompletionType == CompletionType.Pray)
         {
-            addon += $"\nPray at an altar";
+            addon += $"\nPray or reflect at an altar ";
             if (!_pid.TryResolveId(active.Targets[0], out var targetStation) || targetStation == null) return rumor.Description;
             addon += $"while onboard {Name(targetStation)}";
         }

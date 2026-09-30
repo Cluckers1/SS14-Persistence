@@ -17,6 +17,7 @@
     - /Maps/Rumors/Salvage/Medium/security-chunk.yml
   cashReward: 2500
   reputationReward: 50
+  descriptionAddon: "Board the grid!"
 
 - type: rumor
   id: DiscoverSmallScience
@@ -32,6 +33,7 @@
     - /Maps/Rumors/Salvage/Medium/medium-1-sci.yml
   cashReward: 2500
   reputationReward: 50
+  descriptionAddon: "Board the grid!"
 
 - type: rumor
   id: DiscoverSmallShadow
@@ -45,6 +47,7 @@
     - /Maps/Rumors/Salvage/Medium/wrecklaimer-1anomcult2t1g.yml
   cashReward: 2500
   reputationReward: 50
+  descriptionAddon: "Board the grid!"
 
 - type: rumor
   id: DiscoverSmallCriminal
@@ -59,3 +62,4 @@
     - /Maps/Rumors/Salvage/Medium/rigged_outpost-multi1anom.yml
   cashReward: 2500
   reputationReward: 50
+  descriptionAddon: "Board the grid!"

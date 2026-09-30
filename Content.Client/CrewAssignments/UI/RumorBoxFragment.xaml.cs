@@ -45,7 +45,7 @@ public sealed partial class RumorBoxFragment : PanelContainer
         if(originalProto.RewardRumors != 0)
         {
             if (newline) RewardLabel.Text += "\n";
-            RewardLabel.Text += $"\n[color=yellow]This will lead to a rewarding rumor[/color]";
+            RewardLabel.Text += $"[color=yellow]This will lead to a rewarding rumor[/color]";
         }
         
     }

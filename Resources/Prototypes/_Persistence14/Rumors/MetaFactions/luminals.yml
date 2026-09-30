@@ -4,7 +4,7 @@
   description: "The Luminals are beings of light and sound."
   rumors:
     - PrayBasicFriendly
-    - DrinkBasicEvil
+    - DrinkBasicFriendly
   color: Yellow
   levels:
     Luminals2: 150

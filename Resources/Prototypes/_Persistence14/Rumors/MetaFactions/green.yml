@@ -5,7 +5,7 @@
   rumors:
     - DrinkBasicFriendly
     - EatBasicFriendly
-    - DrinkBasicEvil
+    - PrayBasicFriendly
   color: Green
   levels:
     Green2: 150

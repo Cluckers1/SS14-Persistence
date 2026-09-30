@@ -32,6 +32,8 @@
     - ExterminateGeneral
     - DiscoverSmallScience
     - DiscoverSmallSalvage
+    - BountyBasicGeneral
+    - BountyBasicScience
 
 - type: rumor
   id: DrinkBasicEvil
@@ -57,3 +59,4 @@
     - DiscoverSmallCriminal
     - DiscoverSmallShadow
     - ExterminateCult
+    - BountyBasicWeapon

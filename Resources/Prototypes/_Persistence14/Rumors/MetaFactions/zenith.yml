@@ -5,7 +5,7 @@
   rumors:
     - DrinkBasicFriendly
     - EatBasicFriendly
-    - PrayBasicFriendly
+    - DrinkBasicEvil
   color: Red
   levels:
     Zenith2: 150

@@ -8,6 +8,7 @@
   cashReward: 5000
   reputationReward: 70
   completionType: Exterminate
+  descriptionAddon: "Kill all hostile creatures aboard!"
 
 - type: rumor
   id: ExterminateGeneral
@@ -21,6 +22,7 @@
   cashReward: 5000
   reputationReward: 70
   completionType: Exterminate
+  descriptionAddon: "Kill all hostile creatures aboard!"
 
 - type: rumor
   id: ExterminateLuminal
@@ -32,3 +34,4 @@
   cashReward: 5000
   reputationReward: 70
   completionType: Exterminate
+  descriptionAddon: "Kill all hostile creatures aboard!"
