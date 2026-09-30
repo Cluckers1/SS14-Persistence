@@ -1,9 +1,34 @@
 - type: rumor
-  id: ExterminateBasic
-  name: Bug Hunt
-  description: "Kill everything on board the grid!"
+  id: ExterminateCult
+  name: Dark Hunt
+  description: "Kill everything on board"
   eventGrids:
-    - /Maps/Salvage/meatball.yml
-  cashReward: 2500
-  reputationReward: 50
+    - /Maps/Rumors/Exterminate/meatball.yml
+    - /Maps/Rumors/Exterminate/tick-colony.yml
+  cashReward: 5000
+  reputationReward: 70
+  completionType: Exterminate
+
+- type: rumor
+  id: ExterminateGeneral
+  name: Dark Hunt
+  description: "We need a wreck cleared of creatures!"
+  eventGrids:
+    - /Maps/Rumors/Exterminate/atmos_interchange.yml
+    - /Maps/Rumors/Exterminate/jokers_ruins.yml
+    - /Maps/Rumors/Exterminate/wh-salvage-dangerdiner.yml
+    - /Maps/Rumors/Exterminate/ruined_prison_ship-4e1g.yml
+  cashReward: 5000
+  reputationReward: 70
+  completionType: Exterminate
+
+- type: rumor
+  id: ExterminateLuminal
+  name: Cleansing Light
+  description: "Cleanse the hostiles from the grid!"
+  eventGrids:
+    - /Maps/Rumors/Exterminate/vegan-meatball.yml
+    - /Maps/Rumors/Exterminate/medium-silent-orchestra.yml
+  cashReward: 5000
+  reputationReward: 70
   completionType: Exterminate

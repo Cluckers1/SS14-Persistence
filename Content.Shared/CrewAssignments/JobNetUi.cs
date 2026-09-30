@@ -33,10 +33,11 @@ public sealed class JobNetUpdateState : BoundUserInterfaceState
     public int Spendable;
     public string SectorStatus;
     public Dictionary<ProtoId<MetaFactionPrototype>, int> MetaFactionReputations = new();
-
     public List<ActiveRumor> Rumors = new();
+    public TimeSpan? RumorCooldown;
 
-    public JobNetUpdateState(Dictionary<int, string>? stations, string? assignmentName, int? wage, int selectedStation, TimeSpan? remainingMinutes, List<WorldObjectivesEntry> currentObjectives, List<WorldObjectivesEntry> completedObjectives, List<CodexEntry> codexEntries, ProtoId<NetworkLevelPrototype> level, int balance, bool spendAuth, int spent, int spendable, string sectorStatus, Dictionary<ProtoId<MetaFactionPrototype>, int> metaFactionReputations, List<ActiveRumor> rumors)
+
+    public JobNetUpdateState(Dictionary<int, string>? stations, string? assignmentName, int? wage, int selectedStation, TimeSpan? remainingMinutes, List<WorldObjectivesEntry> currentObjectives, List<WorldObjectivesEntry> completedObjectives, List<CodexEntry> codexEntries, ProtoId<NetworkLevelPrototype> level, int balance, bool spendAuth, int spent, int spendable, string sectorStatus, Dictionary<ProtoId<MetaFactionPrototype>, int> metaFactionReputations, List<ActiveRumor> rumors, TimeSpan? rumorCooldown)
     {
         Stations = stations;
         AssignmentName = assignmentName;
@@ -54,6 +55,7 @@ public sealed class JobNetUpdateState : BoundUserInterfaceState
         SectorStatus = sectorStatus;
         MetaFactionReputations = metaFactionReputations;
         Rumors = rumors;
+        RumorCooldown = rumorCooldown;
     }
 }
 
@@ -82,6 +84,19 @@ public sealed class JobNetCancelRumorMessage : BoundUserInterfaceMessage
         ID = id;
     }
 }
+
+[Serializable, NetSerializable]
+public sealed class JobNetTransferRumorMessage : BoundUserInterfaceMessage
+{
+    public int ID;
+    public string Target;
+    public JobNetTransferRumorMessage(int id, string target)
+    {
+        ID = id;
+        Target = target;
+    }
+}
+
 
 [Serializable, NetSerializable]
 public sealed class JobNetPurchaseMessage : BoundUserInterfaceMessage

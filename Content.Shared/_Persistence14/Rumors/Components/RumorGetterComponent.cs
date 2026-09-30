@@ -16,8 +16,8 @@ public sealed partial class RumorGetterComponent : Component
     [DataField]
     public TimeSpan NextRumor = TimeSpan.FromMinutes(30);
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
-    public TimeSpan LastRumorTime = TimeSpan.Zero;
+    [DataField]
+    public TimeSpan RumorCooldownLength = TimeSpan.FromMinutes(30);
 
 
 }

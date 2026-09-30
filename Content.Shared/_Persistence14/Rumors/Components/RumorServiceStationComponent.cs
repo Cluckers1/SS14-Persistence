@@ -10,5 +10,6 @@ namespace Content.Shared._Persistence14.Rumors.Components;
 [RegisterComponent]
 public sealed partial class RumorServiceStationComponent : Component
 {
-
+    [DataField]
+    public string Tag = "";
 }

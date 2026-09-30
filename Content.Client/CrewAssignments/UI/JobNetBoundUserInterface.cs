@@ -64,4 +64,9 @@ public sealed class JobNetBoundUserInterface : BoundUserInterface
     {
         SendMessage(new JobNetCancelRumorMessage(ind));
     }
+
+    internal void TransferRumor(int rumorIndex, string text)
+    {
+        SendMessage(new JobNetTransferRumorMessage(rumorIndex, text));
+    }
 }

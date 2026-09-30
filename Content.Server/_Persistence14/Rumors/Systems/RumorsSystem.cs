@@ -4,6 +4,7 @@ using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Cargo.Systems;
 using Content.Server.Chat.Managers;
+using Content.Server.CrewAssignments.Systems;
 using Content.Server.CrewRecords.Systems;
 using Content.Server.Database;
 using Content.Server.Database.Migrations.Postgres;
@@ -77,6 +78,7 @@ public sealed partial class RumorsSystem : EntitySystem
     [Dependency] private NameIdentifierSystem _nameIdentifier = default!;
     [Dependency] private FlavorProfileSystem _flavorProfile = default!;
     [Dependency] private CargoSystem _cargo = default!;
+    [Dependency] private JobNetSystem _jobnet = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -356,11 +358,10 @@ public sealed partial class RumorsSystem : EntitySystem
                     TrySpawnRumor(player.Value, rumor);
                 }
             }
-
-            var timePassed = _timing.CurTime - comp.LastRumorTime;
-            if (timePassed >= comp.NextRumor)
+            comp.NextRumor -= TimeSpan.FromSeconds(frameTime);
+            if (comp.NextRumor <= TimeSpan.Zero)
             {
-                comp.LastRumorTime = _timing.CurTime;
+                comp.NextRumor = comp.RumorCooldownLength;
                 AssignRumor(comp, player.Value);
             }
         }
@@ -409,6 +410,7 @@ public sealed partial class RumorsSystem : EntitySystem
             comp.Rumors.Add(newRumor);
             NotifyPlayer(player, $"Your job network reports you have recieved a new rumor: {newRumor.Name}");
         }
+        _jobnet.UpdateUserInterface(player, comp.Owner);
     }
 
     public void NotifyPlayer(EntityUid player, string msg, SoundSpecifier? sound = null)
@@ -542,6 +544,7 @@ public sealed partial class RumorsSystem : EntitySystem
             List<EntityUid> possibleService = new();
             while (serviceQuery.MoveNext(out var uid, out var comp))
             {
+                if (comp.Tag != rumorProto.TargetTag) continue;
                 possibleService.Add(uid);
             }
             if (possibleService.Count < 1) return null;
@@ -553,6 +556,7 @@ public sealed partial class RumorsSystem : EntitySystem
             List<EntityUid> possibleService = new();
             while (prayerQuery.MoveNext(out var uid, out var comp))
             {
+                if (comp.Tag != rumorProto.TargetTag) continue;
                 possibleService.Add(uid);
             }
             if (possibleService.Count < 1) return null;
@@ -583,11 +587,11 @@ public sealed partial class RumorsSystem : EntitySystem
             if (active.Targets.Count < 1) return rumor.Description;
             if(rumor.CompletionType == CompletionType.Eat)
             {
-                addon += $"\nEat something that tastes:\n";
+                addon += $"\nEat something that tastes";
             }
             else if (rumor.CompletionType == CompletionType.Drink)
             {
-                addon += $"\nDrink something that tastes:\n";
+                addon += $"\nDrink something that tastes:";
             }
 
             bool first = true;
@@ -601,21 +605,21 @@ public sealed partial class RumorsSystem : EntitySystem
                 }
             }
             if (!_pid.TryResolveId(active.Targets[0], out var targetStation) || targetStation == null) return rumor.Description; 
-            addon += $"\nwhile onboard {Name(targetStation)}";
+            addon += $" while onboard {Name(targetStation)}";
         }
         if(rumor.CompletionType == CompletionType.Pray)
         {
-            addon += $"\nPray at an altar\n";
+            addon += $"\nPray at an altar";
             if (!_pid.TryResolveId(active.Targets[0], out var targetStation) || targetStation == null) return rumor.Description;
-            addon += $"\nwhile onboard {Name(targetStation)}";
+            addon += $"while onboard {Name(targetStation)}";
         }
         if(rumor.CompletionType == CompletionType.Bounty)
         {
             if (active.Bounty == null) return rumor.Description;
             var ts = _cargo.GetTradeStationByID(active.Bounty.TradeStationUID);
             if (ts == null) return rumor.Description;
-            addon += $"\nComplete the bounty {active.Bounty.Id}\n";
-            addon += $"Available at {Name(ts.Value)}";
+            addon += $"\nComplete the bounty {active.Bounty.Id}";
+            addon += $" available at {Name(ts.Value)}";
         }
         addon += rumor.DescriptionAddon;
         
@@ -775,10 +779,36 @@ public sealed partial class RumorsSystem : EntitySystem
         return false;
     }
 
-    public void CancelRumorByIndex(RumorGetterComponent getter, int ID)
+    public void CancelRumorByIndex(RumorGetterComponent getter, int iD)
     {
-        if (getter.Rumors.Count < ID) return;
-        getter.Rumors.RemoveAt(ID-1);
+        if (getter.Rumors.Count-1 < iD) return;
+        getter.Rumors.RemoveAt(iD);
+    }
+
+    public void TransferRumorByIndex(RumorGetterComponent getter, int iD, string target, EntityUid player)
+    {
+        if (target == Name(player)) return;
+        if (getter.Rumors.Count - 1 < iD) return;
+        var rumor = getter.Rumors[iD];
+        var targetGetter = GetRumorGetterByName(target);
+        if(targetGetter == null || targetGetter.Rumors.Count > 4)
+        {
+            NotifyPlayer(player, $"You cannot transfer the rumor to {target} at this time.");
+            return;
+        }
+        else
+        {
+            var targetImplant = Transform(targetGetter.Owner);
+            var targetPlayer = targetImplant.ParentUid;
+            if (targetPlayer == null)
+            {
+                NotifyPlayer(player, $"You cannot transfer the rumor to {target} at this time.");
+                return;
+            }
+            NotifyPlayer(targetPlayer, $"{Name(player)} has transfered a rumor to you.");
+            AssignRumor(targetGetter, targetPlayer, null, rumor);
+            getter.Rumors.Remove(rumor);
+        }
     }
 }
 

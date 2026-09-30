@@ -1,7 +1,7 @@
 - type: rumor
-  id: DrinkBasic
-  name: Drinkalot
-  description: "Drink up!"
+  id: DrinkBasicFriendly
+  name: Small Break
+  description: "Take a small break to find rumors"
   cashReward: 0
   reputationReward: 10
   completionType: Drink
@@ -10,9 +10,50 @@
     - energydrink
     - drgibb
     - gingersoda
+    - coffee
+    - tea
+    - water
+    - icedtea
+    - milk
+    - rootbeersoda
+    - beer
+    - mead
+    - cognac
+    - vermouth
+    - ale
+    - vodka
+    - tequila
+    - sake
+    - rum
+    - shittywine
+    - gin
   rewardRumors: 1
   possibleFollowups:
-    - PowerBasic
-    - BountyBasic
-    - ExterminateBasic
+    - ExterminateGeneral
+    - DiscoverSmallScience
     - DiscoverSmallSalvage
+
+- type: rumor
+  id: DrinkBasicEvil
+  name: Fruitful Whispers
+  description: "Lucrative opportunities await"
+  cashReward: 0
+  reputationReward: 10
+  completionType: Drink
+  possibleFlavors:
+    - beer
+    - mead
+    - cognac
+    - vermouth
+    - ale
+    - vodka
+    - tequila
+    - sake
+    - rum
+    - shittywine
+    - gin
+  rewardRumors: 1
+  possibleFollowups:
+    - DiscoverSmallCriminal
+    - DiscoverSmallShadow
+    - ExterminateCult

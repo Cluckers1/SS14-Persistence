@@ -3,7 +3,9 @@
   name: Strange Signal
   description: "Unknown Entities control the Shadow Universe."
   rumors:
-    - DiscoverSmallSalvageShadow
+    - DrinkBasicEvil
+    - EatBasicEvil
+    - PrayEvil
   color: DarkGray
   levels:
     Shadow2: 150

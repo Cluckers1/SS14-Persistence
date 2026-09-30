@@ -11,5 +11,5 @@ namespace Content.Shared._Persistence14.Rumors.Components;
 public sealed partial class RumorPrayerStationComponent : Component
 {
     [DataField]
-    string Tag = "";
+    public string Tag = "";
 }

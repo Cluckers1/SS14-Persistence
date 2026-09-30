@@ -106,6 +106,7 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         SubscribeLocalEvent<JobNetComponent, JobNetSelectMessage>(OnSelect);
         SubscribeLocalEvent<JobNetComponent, JobNetPurchaseMessage>(OnPurchase);
         SubscribeLocalEvent<JobNetComponent, JobNetCancelRumorMessage>(OnCancelRumor);
+        SubscribeLocalEvent<JobNetComponent, JobNetTransferRumorMessage>(OnTransferRumor);
         SubscribeLocalEvent<PrecursorExtractorComponent, AfterInteractEvent>(AfterInteractOn);
         SubscribeLocalEvent<PrecursorExtractorComponent, PrecursorExtractorDoAfterEvent>(OnDoAfter);
 
@@ -113,15 +114,19 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         InitializeUi();
     }
 
+    private void OnTransferRumor(Entity<JobNetComponent> ent, ref JobNetTransferRumorMessage args)
+    {
+        if (!TryComp<RumorGetterComponent>(ent, out var getter) || getter == null) return;
+        _rumors.TransferRumorByIndex(getter, args.ID, args.Target, args.Actor);
+        EntityUid? player = null;
+        UpdateUserInterface(args.Actor, ent);
+    }
+
     private void OnCancelRumor(Entity<JobNetComponent> ent, ref JobNetCancelRumorMessage args)
     {
         if (!TryComp<RumorGetterComponent>(ent, out var getter) || getter == null) return;
         _rumors.CancelRumorByIndex(getter, args.ID);
-        EntityUid? player = null;
-        var comp = Transform(ent);
-        player = comp.ParentUid;
-        if (player != null)
-            UpdateUserInterface(player, ent);
+        UpdateUserInterface(args.Actor, ent);
     }
 
     public void CompleteDealerBounty(EntityUid uid, JobNetComponent component)

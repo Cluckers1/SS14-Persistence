@@ -12,6 +12,8 @@ namespace Content.Client.CrewAssignments.UI;
 public sealed partial class RumorBoxFragment : PanelContainer
 {
     [Dependency] private IPrototypeManager _protoManager = default!;
+
+    public int RumorIndex = 0;
     public RumorBoxFragment(ActiveRumor activeRumor)
     {
         RobustXamlLoader.Load(this);

@@ -5,6 +5,11 @@
             <Control HorizontalExpand="True" />
             <Button Name="CancelBtn" Text="Abandon" Access="Public" />
         </BoxContainer>
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+            <Control HorizontalExpand="True" />
+            <LineEdit MinWidth="200" Name="TransferLE" Access="Public" PlaceHolder="Transfer to..(Full Name)" />
+            <Button Name="TransferBtn" Text="Transfer" Access="Public" />
+        </BoxContainer>
         <RichTextLabel Name="ContentLabel" Text="Rumor content" />
         <RichTextLabel Name="RewardLabel" Text="Rumor reward" />
     </BoxContainer>

@@ -21,7 +21,7 @@ public sealed partial class JobNetMenu : DefaultWindow
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     public TimeSpan UntilNextPay = TimeSpan.Zero;
     public TimeSpan UntilNextPrec = TimeSpan.Zero;
-    public TimeSpan UntilNextRogue = TimeSpan.Zero;
+    public TimeSpan UntilNextRumor = TimeSpan.Zero;
     public SpriteSystem? _spriteSystem;
     public JobNetBoundUserInterface? Owner;
     public Action<string>? OnLabelButtonPressed;
@@ -165,17 +165,28 @@ public sealed partial class JobNetMenu : DefaultWindow
             ReputationBoxFragment repLabel = new(faction, rep);
             ReputationsGrid.AddChild(repLabel);
         }
-        var rind = 0;
+        int rind = 0;
         foreach(var rumor in state.Rumors)
         {
             RumorBoxFragment rumorLabel = new(rumor);
+            rumorLabel.RumorIndex = rind;
+            rind++;
             rumorLabel.CancelBtn.OnPressed += args =>
             {
-                if(Owner != null) Owner.CancelRumor(rind);
+                if(Owner != null) Owner.CancelRumor(rumorLabel.RumorIndex);
             };
-            rind++;
+            rumorLabel.TransferBtn.OnPressed += args =>
+            {
+                if (Owner != null) Owner.TransferRumor(rumorLabel.RumorIndex, rumorLabel.TransferLE.Text);
+            };
             CurrentGrid.AddChild(rumorLabel);
         }
+        if(state.RumorCooldown != null)
+        {
+            RumorCooldownLbl.Text = $"Next rumor in:{state.RumorCooldown.Value.ToString("mm\\:ss")}";
+            UntilNextRumor = state.RumorCooldown.Value;
+        }
+        RumorLimitLbl.Text = $"{state.Rumors.Count.ToString()}/4 Available";
 
     }
 
@@ -193,6 +204,11 @@ public sealed partial class JobNetMenu : DefaultWindow
         if (UntilNextPay > TimeSpan.Zero)
         {
             TimeLabel.Text = UntilNextPay.ToString("mm\\:ss");
+        }
+        UntilNextRumor -= TimeSpan.FromSeconds(deltaSeconds);
+        if (UntilNextRumor > TimeSpan.Zero)
+        {
+            RumorCooldownLbl.Text = UntilNextRumor.ToString("mm\\:ss");
         }
     }
 

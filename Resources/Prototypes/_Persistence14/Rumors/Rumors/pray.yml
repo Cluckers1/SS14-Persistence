@@ -1,13 +1,28 @@
 - type: rumor
-  id: PrayBasic
+  id: PrayBasicFriendly
   name: Voice from the Gods
-  description: "There is power in prayer here."
+  description: "The Threshold hears every prayer."
   cashReward: 0
   reputationReward: 10
-  completionType: Pray
+  completionType: PrayFriendly
   rewardRumors: 1
   possibleFollowups:
-    - PowerBasic
-    - BountyBasic
-    - ExterminateBasic
-    - DiscoverSmallSalvage
+    - ExterminateLuminal
+    - DiscoverSmallShadow
+    - DiscoverSmallScience
+
+
+- type: rumor
+  id: PrayBasicEvil
+  name: Dark Whispers
+  description: "First beckon the knowledge at an altar."
+  cashReward: 0
+  reputationReward: 10
+  completionType: PrayEvil
+  rewardRumors: 1
+  possibleFollowups:
+    - ExterminateCult
+    - DiscoverSmallShadow
+    - DiscoverSmallCriminal
+  targetTag: "Evil"
+

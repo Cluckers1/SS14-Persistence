@@ -129,8 +129,7 @@
 
                     <BoxContainer Orientation="Horizontal">
                         <Control HorizontalExpand="True" />
-                        <Label Text="Purchase Upgrade:"
-                          StyleClasses="LabelKeyText" />
+                        <Label Text="Purchase Upgrade:" StyleClasses="LabelKeyText" />
                         <Button Name="LevelPurchaseButton" Access="Public" />
                     </BoxContainer>
                 </BoxContainer>
@@ -141,7 +140,13 @@
                 <BoxContainer Orientation="Vertical">
                     <TabContainer VerticalExpand="True">
                         <BoxContainer Name="Current" Orientation="Vertical">
-                            <GridContainer Name="CurrentGrid" Columns="2" />
+                            <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                                <RichTextLabel Name="RumorLimitLbl" />
+                                <Control HorizontalExpand="True" />
+                                <Label Text="Next Rumor:" StyleClasses="LabelKeyText" />
+                                <RichTextLabel Name="RumorCooldownLbl" />
+                            </BoxContainer>
+                            <GridContainer Name="CurrentGrid" Columns="1" />
                         </BoxContainer>
                         <BoxContainer Name="Reputations" Orientation="Vertical">
                             <GridContainer Name="ReputationsGrid" Columns="2" />

@@ -177,9 +177,11 @@ public sealed partial class JobNetSystem
         ProtoId<NetworkLevelPrototype> currentLevel = "NetworkLevel1";
         Dictionary<ProtoId<MetaFactionPrototype>, int> metaFactionReputations = new();
         List<ActiveRumor> rumors = new();
+        TimeSpan? rumorCooldown = null;
         if(TryComp<RumorGetterComponent>(jobnet, out var rumorGetter))
         {
             rumors = rumorGetter.Rumors;
+            rumorCooldown = rumorGetter.NextRumor;
         }
 
         if (_meta.MetaRecords != null)
@@ -202,10 +204,11 @@ public sealed partial class JobNetSystem
             currentObjectives = new();
             codexEntries = new();
         }
+
         var balance = 0;
         _bank.TryGetBalance(user.Value, out balance);
 
-        var state = new JobNetUpdateState(possibleStations, assignmentName, wage, selectedstation, remainingTime, currentObjectives, completedObjectives, codexEntries, currentLevel, balance, spendAuth, spent, spendable, sectorStatus, metaFactionReputations, rumors);
+        var state = new JobNetUpdateState(possibleStations, assignmentName, wage, selectedstation, remainingTime, currentObjectives, completedObjectives, codexEntries, currentLevel, balance, spendAuth, spent, spendable, sectorStatus, metaFactionReputations, rumors, rumorCooldown);
         _ui.SetUiState(jobnet, JobNetUiKey.Key, state);
     }
 
