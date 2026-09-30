@@ -31,9 +31,6 @@
     - /Maps/Rumors/Salvage/Medium/outpost-arm-1art1anom.yml
     - /Maps/Rumors/Salvage/Medium/medium-1-sci.yml
   cashReward: 2500
-  cashReward: 2500
-  cashReward: 2500
-  cashReward: 2500
   reputationReward: 50
 
 - type: rumor
