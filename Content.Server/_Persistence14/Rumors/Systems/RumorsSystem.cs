@@ -404,9 +404,13 @@ public sealed partial class RumorsSystem : EntitySystem
             var implant = Transform(uid);
             player = implant.ParentUid;
             if (player == null) return;
-
             foreach (var rumor in comp.Rumors)
             {
+                if(rumor.DebugComplete)
+                {
+                    CompleteRumor((uid, comp), player.Value, rumor);
+                    continue;
+                }
 
                 if (rumor.ShouldSpawn)
                 {
