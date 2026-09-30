@@ -285,6 +285,7 @@
   - type: Speech
     speechSounds: Alto
     allowedEmotes: ['Weh', 'Squeak']
+  - type: YingletAccent
   - type: Vocal
     emoteSounds: MaleHuman # TODO: Add yinglet sounds
   - type: TypingIndicator
