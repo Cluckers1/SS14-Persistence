@@ -392,7 +392,7 @@ public sealed partial class RumorsSystem : EntitySystem
         var gridDeleteQuery = EntityQueryEnumerator<GridSelfDeleteComponent>();
         while (gridDeleteQuery.MoveNext(out var uid, out var comp))
         {
-            if (_timing.CurTime < comp.DeleteTime)
+            if (_timing.CurTime > comp.DeleteTime)
             {
                 SelfDeleteGrid(uid);
             }

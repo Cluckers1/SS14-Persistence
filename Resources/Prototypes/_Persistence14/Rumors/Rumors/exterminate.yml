@@ -3,8 +3,8 @@
   name: Dark Hunt
   description: "Kill everything on board"
   eventGrids:
-    - /Maps/Rumors/Exterminate/meatball.yml
-    - /Maps/Rumors/Exterminate/tick-colony.yml
+    - /Maps/Rumors/Exterminate/Medium/meatball.yml
+    - /Maps/Rumors/Exterminate/Medium/tick-colony.yml
   cashReward: 5000
   reputationReward: 70
   completionType: Exterminate
@@ -14,10 +14,10 @@
   name: Dark Hunt
   description: "We need a wreck cleared of creatures!"
   eventGrids:
-    - /Maps/Rumors/Exterminate/atmos_interchange.yml
-    - /Maps/Rumors/Exterminate/jokers_ruins.yml
-    - /Maps/Rumors/Exterminate/wh-salvage-dangerdiner.yml
-    - /Maps/Rumors/Exterminate/ruined_prison_ship-4e1g.yml
+    - /Maps/Rumors/Exterminate/Medium/atmos_interchange.yml
+    - /Maps/Rumors/Exterminate/Medium/jokers_ruins.yml
+    - /Maps/Rumors/Exterminate/Medium/wh-salvage-dangerdiner.yml
+    - /Maps/Rumors/Exterminate/Medium/ruined_prison_ship-4e1g.yml
   cashReward: 5000
   reputationReward: 70
   completionType: Exterminate
@@ -27,8 +27,8 @@
   name: Cleansing Light
   description: "Cleanse the hostiles from the grid!"
   eventGrids:
-    - /Maps/Rumors/Exterminate/vegan-meatball.yml
-    - /Maps/Rumors/Exterminate/medium-silent-orchestra.yml
+    - /Maps/Rumors/Exterminate/Medium/vegan-meatball.yml
+    - /Maps/Rumors/Exterminate/Medium/medium-silent-orchestra.yml
   cashReward: 5000
   reputationReward: 70
   completionType: Exterminate
