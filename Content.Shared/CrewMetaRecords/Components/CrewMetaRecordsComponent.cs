@@ -90,12 +90,6 @@ public partial class CrewMetaRecord
     public ProtoId<UniverseOriginPrototype> Origin = "Zenith";
     [DataField]
     public ProtoId<MotivePrototype> Motive = "Wealth";
-
-    public ProtoId<AlignmentPrototype> Alignment = "TrueNeutral";
-    [DataField]
-    public ProtoId<UniverseOriginPrototype> Origin = "Zenith";
-    [DataField]
-    public ProtoId<MotivePrototype> Motive = "Wealth";
     [DataField]
     public Dictionary<ProtoId<MetaFactionPrototype>, int> MetaFactionReputations = new();
     [DataField]
