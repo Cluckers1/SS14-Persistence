@@ -29,19 +29,23 @@ public sealed partial class RumorBoxFragment : PanelContainer
         TitleLabel.Text = activeRumor.Name;
         ContentLabel.Text = activeRumor.Description;
         RewardLabel.Text = "";
-        
+        bool newline = false;
         if(activeRumor.CashReward != 0)
         {
-            RewardLabel.Text += $"[color=green]${activeRumor.CashReward}[/color]\n";
+            RewardLabel.Text += $"[color=green]${activeRumor.CashReward}[/color]";
+            newline = true;
         }
         if(activeRumor.ReputationReward != 0)
         {
-            RewardLabel.Text += $"[color=orange]{activeRumor.ReputationReward} REP ({factionProto.Name})[/color]\n";
+            if (newline) RewardLabel.Text += "\n";
+            RewardLabel.Text += $"[color=orange]{activeRumor.ReputationReward} REP ({factionProto.Name})[/color]";
+            newline = true;
         }
         var originalProto = _protoManager.Index<RumorPrototype>(activeRumor.OriginalPrototype);
         if(originalProto.RewardRumors != 0)
         {
-            RewardLabel.Text += $"[color=yellow]This will lead to a rewarding rumor[/color]";
+            if (newline) RewardLabel.Text += "\n";
+            RewardLabel.Text += $"\n[color=yellow]This will lead to a rewarding rumor[/color]";
         }
         
     }

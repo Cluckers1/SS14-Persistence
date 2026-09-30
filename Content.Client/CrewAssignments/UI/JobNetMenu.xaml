@@ -13,7 +13,7 @@
         <TabContainer Name="MasterTabContainer"  VerticalExpand="True">
             <BoxContainer Orientation="Vertical" Access="Public">
                 <Control MinHeight ="30" />
-                <BoxContainer Orientation="Horizontal">
+                <BoxContainer Orientation="Horizontal" Margin="10 10 10 10">
                     <Label Text="Currently Working For:" Margin="0 0 10 0"
                          StyleClasses="LabelKeyText" />
                     <OptionButton Name="PossibleJobs" Access="Public"/>
@@ -43,6 +43,11 @@
                         <Label Text="Spending Limit:" Margin="0 0 10 0"
                           StyleClasses="LabelKeyText" />
                         <Label Name="SpendingLabel" Text="$0/$100" Margin="0 0 5 0" />
+                    </BoxContainer>
+                    <BoxContainer Orientation="Horizontal" Name="SLDetails">
+                        <Label Text="Rumor Tax:" Margin="0 0 10 0"
+                          StyleClasses="LabelKeyText" />
+                        <Label Name="RumorTaxLabel" Text="0%" Margin="0 0 5 0" />
                     </BoxContainer>
                     <Control MinHeight ="30" />
                 </BoxContainer>

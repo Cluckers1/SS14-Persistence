@@ -126,6 +126,7 @@ public sealed partial class JobNetSystem
         var spendable = 0;
         var sectorChaos = 0;
         var sectorStatus = "";
+        int rumorTax = 0;
         foreach (var station in stations)
         {
             if (TryComp<CrewRecordsComponent>(station, out var crewRecord) && crewRecord != null)
@@ -147,6 +148,7 @@ public sealed partial class JobNetSystem
                                 {
                                     if (crewAssignments.TryGetAssignment(record.AssignmentID, out var assignment) && assignment != null)
                                     {
+                                        rumorTax = stationData.SalesTax;
                                         assignmentName = assignment.Name;
                                         wage = assignment.Wage;
                                         selectedstation = stationData.UID;
@@ -168,8 +170,6 @@ public sealed partial class JobNetSystem
                     }
                 }
             }
-
-
         }
         List<WorldObjectivesEntry> currentObjectives;
         List<WorldObjectivesEntry> completedObjectives;
@@ -208,7 +208,7 @@ public sealed partial class JobNetSystem
         var balance = 0;
         _bank.TryGetBalance(user.Value, out balance);
 
-        var state = new JobNetUpdateState(possibleStations, assignmentName, wage, selectedstation, remainingTime, currentObjectives, completedObjectives, codexEntries, currentLevel, balance, spendAuth, spent, spendable, sectorStatus, metaFactionReputations, rumors, rumorCooldown);
+        var state = new JobNetUpdateState(possibleStations, assignmentName, wage, selectedstation, remainingTime, currentObjectives, completedObjectives, codexEntries, currentLevel, balance, spendAuth, spent, spendable, sectorStatus, metaFactionReputations, rumors, rumorCooldown, rumorTax);
         _ui.SetUiState(jobnet, JobNetUiKey.Key, state);
     }
 

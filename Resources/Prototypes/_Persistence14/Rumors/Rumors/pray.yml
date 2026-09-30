@@ -4,7 +4,7 @@
   description: "The Threshold hears every prayer."
   cashReward: 0
   reputationReward: 10
-  completionType: PrayFriendly
+  completionType: Pray
   rewardRumors: 1
   possibleFollowups:
     - ExterminateLuminal
@@ -18,7 +18,7 @@
   description: "First beckon the knowledge at an altar."
   cashReward: 0
   reputationReward: 10
-  completionType: PrayEvil
+  completionType: Pray
   rewardRumors: 1
   possibleFollowups:
     - ExterminateCult

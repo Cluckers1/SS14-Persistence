@@ -13,6 +13,7 @@ using Content.Server.Movement.Systems;
 using Content.Server.NameIdentifier;
 using Content.Server.Power.SMES;
 using Content.Server.Salvage.Magnet;
+using Content.Server.Station.Systems;
 using Content.Shared._Persistence14.PersistentIdentifier;
 using Content.Shared._Persistence14.Rumors.Components;
 using Content.Shared._Persistence14.Rumors.Prototypes;
@@ -52,6 +53,7 @@ using System.Numerics;
 using System.Text;
 using System.Xml.Linq;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static System.Collections.Specialized.BitVector32;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Content.Shared._Persistence14.Rumors.Systems;
@@ -79,6 +81,7 @@ public sealed partial class RumorsSystem : EntitySystem
     [Dependency] private FlavorProfileSystem _flavorProfile = default!;
     [Dependency] private CargoSystem _cargo = default!;
     [Dependency] private JobNetSystem _jobnet = default!;
+    [Dependency] private StationSystem _station = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -122,6 +125,11 @@ public sealed partial class RumorsSystem : EntitySystem
             if (rumor.CompletionType == CompletionType.Eat)
             {
                 if (ent.Comp.Edible != "Food") continue;
+            }
+            else if (rumor.CompletionType == CompletionType.Drink)
+            {
+
+                if (ent.Comp.Edible != "Drink") continue;
             }
             else
             {
@@ -304,14 +312,61 @@ public sealed partial class RumorsSystem : EntitySystem
         metaRecord.MetaFactionReputations.TryGetValue(rumor.Faction, out var rep);
         reputation += rep;
         metaRecord.MetaFactionReputations[rumor.Faction] = reputation + rumor.ReputationReward;
-        var bank = _bank.GetMoneyAccountsComponent();
-        if (bank == null) return;
-        if (bank.TryGetAccount(name, out var account) && account != null)
+        int finalCashReward = rumor.CashReward;
+        if (rumor.CashReward > 0)
         {
-            account.Balance += rumor.CashReward;
-        }
+            var rumorTax = 0;
+            EntityUid? taxingStation = null;
+            if (TryComp<JobNetComponent>(ent, out var jobnet) && jobnet != null)
+            {
+                if (jobnet.WorkingFor != null && jobnet.WorkingFor != 0)
+                {
+                    var sId = _station.GetStationByID(jobnet.WorkingFor.Value);
+                    if (sId != null)
+                    {
+                        if (TryComp<StationDataComponent>(sId, out var sD) && sD != null)
+                        {
+                            rumorTax = sD.SalesTax;
+                            taxingStation = sId;
+                        }
+                    }
+                }
+            }
+            if(rumorTax > 0)
+            {
+                float taxmult = (float)rumorTax / 100f;
+                var taxpaid = (float)finalCashReward * taxmult;
+                var taxPaidInt = (int)Math.Round(taxpaid);
+                finalCashReward -= taxPaidInt;
+                if (taxPaidInt > 0)
+                {
+                    if (taxingStation != null)
+                    {
+                        if (TryComp<StationBankAccountComponent>(taxingStation, out var taxBankAccount) && taxBankAccount != null)
+                        {
+                            _cargo.UpdateBankAccount((taxingStation.Value, taxBankAccount), taxPaidInt, "Cargo");
+                        }
+                    }
+                }
+            }
+            var bank = _bank.GetMoneyAccountsComponent();
+            if (bank == null) return;
+            if (bank.TryGetAccount(name, out var account) && account != null)
+            {
+                account.Balance += rumor.CashReward;
+            }
 
-        NotifyPlayer(player, $"You have completed the {rumor.Name} rumor! You have gained {rumor.ReputationReward} reputation with the {rumor.Faction} and ${rumor.CashReward}!", new SoundPathSpecifier("/Audio/Effects/kaching.ogg"));
+        }
+        string msg = $"You have completed the {rumor.Name} rumor!";
+        if(rumor.ReputationReward > 0)
+        {
+            msg += $"\nYou have gained {rumor.ReputationReward} reputation with the {rumor.Faction}";
+        }
+        if (finalCashReward > 0)
+        {
+            msg += $"\nYou have earned ${finalCashReward}";
+        }
+        NotifyPlayer(player, msg, new SoundPathSpecifier("/Audio/Effects/kaching.ogg"));
         var originalProto = _protoMan.Index<RumorPrototype>(rumor.OriginalPrototype);
         if (originalProto.RewardRumors > 0)
         {
@@ -580,7 +635,7 @@ public sealed partial class RumorsSystem : EntitySystem
         else if(active.GridsToSpawn == 1 && active.EventGrids.Count > 0)
         {
             if (active.TargetPosition == null) return rumor.Description;
-            addon += $"\nA grid will arrive as you approach\n[color=yellow]({Math.Round(active.TargetPosition.Value.Position.X)}, {Math.Round(active.TargetPosition.Value.Position.Y)})[/color]\nExplore it!";
+            addon += $"\nA grid will arrive as you approach\n[color=yellow]({Math.Round(active.TargetPosition.Value.Position.X)}, {Math.Round(active.TargetPosition.Value.Position.Y)})[/color]";
         }
         if(rumor.CompletionType == CompletionType.Eat || rumor.CompletionType == CompletionType.Drink)
         {

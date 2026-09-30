@@ -52,6 +52,7 @@ public sealed partial class JobNetMenu : DefaultWindow
         var localPlayer = dependencies.Resolve<IPlayerManager>().LocalEntity;
         PossibleJobs.Clear();
         PossibleJobs.AddItem("Off Duty", 0);
+        RumorTaxLabel.Text = $"{state.RumorTax.ToString()}% of rumor money rewards paid to your employer.";
         if (state.Stations != null)
         {
             int ind = 1;
