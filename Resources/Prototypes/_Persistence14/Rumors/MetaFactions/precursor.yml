@@ -5,7 +5,7 @@
   rumors:
     - DrinkBasicEvil
     - EatBasicEvil
-    - PrayEvil
+    - PrayBasicEvil
   color: Purple
   levels:
     Precursor2: 150

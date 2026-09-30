@@ -366,7 +366,7 @@ public sealed partial class RumorsSystem : EntitySystem
         {
             msg += $"\nYou have earned ${finalCashReward}";
         }
-        NotifyPlayer(player, msg, new SoundPathSpecifier("/Audio/Effects/kaching.ogg"));
+        NotifyPlayer(player, msg, new SoundPathSpecifier("/Audio/Effects/kaching.ogg"), ent);
         var originalProto = _protoMan.Index<RumorPrototype>(rumor.OriginalPrototype);
         if (originalProto.RewardRumors > 0)
         {
@@ -468,7 +468,7 @@ public sealed partial class RumorsSystem : EntitySystem
         _jobnet.UpdateUserInterface(player, comp.Owner);
     }
 
-    public void NotifyPlayer(EntityUid player, string msg, SoundSpecifier? sound = null)
+    public void NotifyPlayer(EntityUid player, string msg, SoundSpecifier? sound = null, EntityUid? source = null)
     {
         if (TryComp<ActorComponent>(player, out var actor) && actor != null && actor.PlayerSession != null)
         {
@@ -480,9 +480,9 @@ public sealed partial class RumorsSystem : EntitySystem
                 actor.PlayerSession.Channel
                 );
         }
-        if (sound != null)
+        if (sound != null && source != null)
         {
-            _audio.PlayEntity(sound, player, player);
+            _audio.PlayEntity(sound, player, source.Value);
         }
     }
     private void TrySpawnRumor(EntityUid player, ActiveRumor rumor)

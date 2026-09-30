@@ -177,7 +177,7 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         var comp = Transform(uid);
         player = comp.ParentUid;
         if (player == null) return;
-        _audio.PlayEntity(component.PaySuccessSound, player.Value, player.Value);
+        _audio.PlayEntity(component.PaySuccessSound, player.Value, component.Owner);
         var meta = _meta.GetMetaRecordsComponent();
         if (meta != null)
             meta.SectorChaos += amount;
@@ -371,95 +371,6 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         }
 
     }
-
-    private void OnPurchasePrecursor(EntityUid uid, JobNetComponent component, JobNetPurchasePrecursorMessage args)
-    {
-        EntityUid? player = null;
-        var comp = Transform(uid);
-        if (comp != null)
-        {
-            player = comp.ParentUid;
-        }
-        if (!TryComp<ActorComponent>(player, out var actor) || actor == null || actor.PlayerSession == null) return;
-        var prod = _proto.Index<CargoProductPrototype>(args.ID);
-        if (prod == null) return;
-        int requiredLevel = 0;
-        if (prod.Group == "syndicatemarket") requiredLevel = 1;
-        if (prod.Group == "syndicatemarket2") requiredLevel = 2;
-        if (prod.Group == "syndicatemarket3") requiredLevel = 3;
-        if (prod.Group == "syndicatemarket4") requiredLevel = 4;
-        var level = _proto.Index(component.RogueLevel);
-        if (level.ItemLevel < requiredLevel)
-        {
-            _audio.PlayEntity(component.ErrorSound, player.Value, player.Value);
-            var msg = $"You do not have the rogue level required to purchase this.";
-            if (msg != null)
-                _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                    msg,
-                    msg,
-                    player.Value,
-                    false,
-                    actor.PlayerSession.Channel
-                    );
-            return;
-        }
-        if (prod.Cost > component.Precursor)
-        {
-            _audio.PlayEntity(component.ErrorSound, player.Value, player.Value);
-            var msg = $"You have insufficent stored precursor. You need {prod.Cost - component.Precursor} more precursor.";
-            if (msg != null)
-                _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                    msg,
-                    msg,
-                    player.Value,
-                    false,
-                    actor.PlayerSession.Channel
-                    );
-            return;
-        }
-        var query = EntityQueryEnumerator<CargoTelepadComponent>();
-        var found = false;
-        var userMapPos = _transform.GetMapCoordinates(player.Value);
-        while (query.MoveNext(out var telepad, out var telepadcomp))
-        {
-            var targetMapPos = _transform.GetMapCoordinates(telepad);
-            var calculatedDistance = targetMapPos.Position - userMapPos.Position;
-            var total = calculatedDistance.Length();
-            if (total <= 3)
-            {
-                var teleTransform = Transform(telepad);
-                var newEntity = Spawn(prod.Product, teleTransform.Coordinates);
-                _audio.PlayEntity(component.PaySuccessSound, player.Value, player.Value);
-                component.Precursor -= prod.Cost;
-                found = true;
-                break;
-            }
-        }
-        if (!found)
-        {
-            _audio.PlayEntity(component.ErrorSound, player.Value, player.Value);
-            var msg = $"You must be next to a telepad to make purchases.";
-            if (msg != null)
-                _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                    msg,
-                    msg,
-                    player.Value,
-                    false,
-                    actor.PlayerSession.Channel
-                    );
-            return;
-        }
-        UpdateUserInterface(args.Actor, uid, component);
-    }
-
-    private void OnSelectRogueNet(EntityUid uid, JobNetComponent component, JobNetSelectRogueNetMessage args)
-    {
-        if (component.NetworkType != RogueNetworkType.None) return;
-        if (component.RogueLevel == "RogueLevel1") return;
-        component.NetworkType = args.Net;
-        UpdateUserInterface(args.Actor, uid, component);
-    }
-
     private void OnJobNetOpenAttempt(EntityUid uid, JobNetComponent component, ActivatableUIOpenAttemptEvent args)
     {
         if (!_mind.TryGetMind(args.User, out var mind, out _))
@@ -647,7 +558,7 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
                                     {
                                         if (money < assignment.Wage)
                                         {
-                                            _audio.PlayEntity(component.ErrorSound, player.Value, player.Value);
+                                            _audio.PlayEntity(component.ErrorSound, player.Value, component.Owner);
                                             var msg = $"{stationData.StationName} has failed to pay you your ${assignment.Wage} due to insufficient funds.";
                                             if (msg != null)
                                                 _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
@@ -661,7 +572,7 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
                                         }
                                         if (bank.TryGetAccount(name, out var account) && account != null)
                                         {
-                                            _audio.PlayEntity(component.PaySuccessSound, player.Value, player.Value);
+                                            _audio.PlayEntity(component.PaySuccessSound, player.Value, component.Owner);
                                             account.Balance += assignment.Wage;
                                             _cargo.TryAdjustBankAccount(station.Value, "Cargo", -assignment.Wage);
                                             var msg = $"You have received ${assignment.Wage} for working as a {assignment.Name} for {stationData.StationName}.";
@@ -678,7 +589,7 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
                                     }
                                     else
                                     {
-                                        _audio.PlayEntity(component.ErrorSound, player.Value, player.Value);
+                                        _audio.PlayEntity(component.ErrorSound, player.Value, component.Owner);
                                         var msg = $"{stationData.StationName} has failed to pay you your ${assignment.Wage} due to an invalid account.";
                                         if (msg != null)
                                             _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,

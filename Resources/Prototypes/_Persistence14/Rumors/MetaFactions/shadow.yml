@@ -5,7 +5,7 @@
   rumors:
     - DrinkBasicEvil
     - EatBasicEvil
-    - PrayEvil
+    - PrayBasicEvil
   color: DarkGray
   levels:
     Shadow2: 150
