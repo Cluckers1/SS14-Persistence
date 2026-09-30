@@ -663,13 +663,13 @@ public sealed partial class RumorsSystem : EntitySystem
                     addon += ",";
                 }
             }
-            if (!_pid.TryResolveId(active.Targets[0], out var targetStation) || targetStation == null) return rumor.Description; 
+            if (!_pid.TryResolveId(active.Targets[0], out var targetStation)) return rumor.Description; 
             addon += $" while onboard {Name(targetStation)}";
         }
         if(rumor.CompletionType == CompletionType.Pray)
         {
             addon += $"\nPray or reflect at an altar ";
-            if (!_pid.TryResolveId(active.Targets[0], out var targetStation) || targetStation == null) return rumor.Description;
+            if (!_pid.TryResolveId(active.Targets[0], out var targetStation)) return rumor.Description;
             addon += $"while onboard {Name(targetStation)}";
         }
         if(rumor.CompletionType == CompletionType.Bounty)
@@ -859,7 +859,7 @@ public sealed partial class RumorsSystem : EntitySystem
         {
             var targetImplant = Transform(targetGetter.Owner);
             var targetPlayer = targetImplant.ParentUid;
-            if (targetPlayer == null)
+            if (!targetPlayer.IsValid())
             {
                 NotifyPlayer(player, $"You cannot transfer the rumor to {target} at this time.");
                 return;

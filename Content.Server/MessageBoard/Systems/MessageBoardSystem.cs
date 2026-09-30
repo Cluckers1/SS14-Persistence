@@ -59,7 +59,6 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
     {
         bool isAdmin = _adminManager.IsAdmin(args.Actor);
 
-        MessageBoardEntry? entry = null;
         var metaRecord = _crewMetaRecordsSystem.MetaRecords;
         if (metaRecord == null) return;
         metaRecord.TryGetRecord(Name(args.Actor), out var authorRecord);
@@ -91,7 +90,7 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
         if (recipientJobnet == null) return;
         var implantXform = Transform(recipientJobnet.Owner);
         var recipientPlayer = implantXform.ParentUid;
-        if (recipientPlayer == null) return;
+        if (!recipientPlayer.IsValid()) return;
         NotifyPlayer(recipientPlayer, $"(DM) {Name(args.Actor)} sends: '{args.Body}'");
         _jobNet.UpdateUserInterface(recipientPlayer, recipientJobnet.Owner, recipientJobnet);
         UpdateDirectMessageByName(args.Recipient);

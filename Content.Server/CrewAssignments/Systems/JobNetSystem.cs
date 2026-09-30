@@ -61,7 +61,6 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
     [Dependency] private CrewManifestSystem _crewManifest = default!;
     [Dependency] private IdCardSystem _card = default!;
     [Dependency] private CodewordSystem _codeword = default!;
-    [Dependency] private TransformSystem _transform = default!;
     [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private SharedInteractionSystem _interactionSystem = default!;
     [Dependency] private SharedCuffableSystem _cuffable = default!;
@@ -119,7 +118,6 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
     {
         if (!TryComp<RumorGetterComponent>(ent, out var getter) || getter == null) return;
         _rumors.TransferRumorByIndex(getter, args.ID, args.Target, args.Actor);
-        EntityUid? player = null;
         UpdateUserInterface(args.Actor, ent);
     }
 
