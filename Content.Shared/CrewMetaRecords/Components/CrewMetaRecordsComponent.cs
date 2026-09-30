@@ -84,6 +84,13 @@ public partial class CrewMetaRecord
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextMessageBoardComment = TimeSpan.Zero;
 
+    [DataField]
+    public ProtoId<AlignmentPrototype> Alignment = "Neutral";
+    [DataField]
+    public ProtoId<UniverseOriginPrototype> Origin = "Zenith";
+    [DataField]
+    public ProtoId<MotivePrototype> Motive = "Wealth";
+
     public ProtoId<AlignmentPrototype> Alignment = "TrueNeutral";
     [DataField]
     public ProtoId<UniverseOriginPrototype> Origin = "Zenith";

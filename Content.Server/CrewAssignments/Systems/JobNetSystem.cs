@@ -111,6 +111,7 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         SubscribeLocalEvent<PrecursorExtractorComponent, PrecursorExtractorDoAfterEvent>(OnDoAfter);
 
 
+
         InitializeUi();
     }
 

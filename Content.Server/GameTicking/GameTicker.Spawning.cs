@@ -204,7 +204,6 @@ namespace Content.Server.GameTicking
                     if (character.Motive != null) createdRecord.Motive = character.Motive.Value;
                 }
             }
-
             var mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(station.Value, jobId, character);
             DebugTools.AssertNotNull(mobMaybe);
             var mob = mobMaybe!.Value;
