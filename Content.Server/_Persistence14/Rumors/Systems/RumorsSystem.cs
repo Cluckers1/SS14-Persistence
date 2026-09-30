@@ -650,7 +650,7 @@ public sealed partial class RumorsSystem : EntitySystem
             }
             else if (rumor.CompletionType == CompletionType.Drink)
             {
-                addon += $"\nDrink something that tastes:";
+                addon += $"\nDrink something that tastes";
             }
 
             bool first = true;
