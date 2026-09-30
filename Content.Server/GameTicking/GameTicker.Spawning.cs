@@ -264,7 +264,6 @@ namespace Content.Server.GameTicking
                 return;
             if (TryRejoin(player)) return;
             var silent = true;
-            var lateJoin = true;
             HumanoidCharacterProfile? character = GetPlayerProfile(player);
             if (character == null) return;
             EntityUid station;
