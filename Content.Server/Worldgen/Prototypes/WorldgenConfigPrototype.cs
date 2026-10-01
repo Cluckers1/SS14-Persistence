@@ -1,4 +1,3 @@
-using Content.Server.Worldgen.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
 
@@ -30,9 +29,8 @@ public sealed partial class WorldgenConfigPrototype : IPrototype
         // Add all components required by the prototype. Engine update for this whenst.
         foreach (var data in Components.Values)
         {
-            var comp = (Component) serialization.CreateCopy(data.Component, notNullableOverride: true);
-            if (entityManager.HasComponent<WorldControllerComponent>(target)) return;
-            entityManager.AddComponent(target, comp);
+            var comp = (Component)serialization.CreateCopy(data.Component, notNullableOverride: true);
+            if (!entityManager.HasComponent(target, comp.GetType())) entityManager.AddComponent(target, comp, true, null);
         }
     }
 }

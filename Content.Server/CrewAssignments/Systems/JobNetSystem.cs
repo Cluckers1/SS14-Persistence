@@ -10,6 +10,8 @@ using Content.Server.Database;
 using Content.Server.DoAfter;
 using Content.Server.Interaction;
 using Content.Server.NameIdentifier;
+using Content.Shared._Persistence14.Rumors.Components;
+using Content.Shared._Persistence14.Rumors.Systems;
 using Content.Shared.Access.Components;
 using Content.Shared.Cargo;
 using Content.Shared.Cargo.Components;
@@ -59,12 +61,12 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
     [Dependency] private CrewManifestSystem _crewManifest = default!;
     [Dependency] private IdCardSystem _card = default!;
     [Dependency] private CodewordSystem _codeword = default!;
-    [Dependency] private TransformSystem _transform = default!;
     [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private SharedInteractionSystem _interactionSystem = default!;
     [Dependency] private SharedCuffableSystem _cuffable = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private NameIdentifierSystem _nameIdentifier = default!;
+    [Dependency] private RumorsSystem _rumors = default!;
     public override void ReagentObjectiveComplete(JobNetComponent component, ProtoId<PrecursorObjectivePrototype> objective)
     {
         if (_proto.TryIndex(objective, out PrecursorObjectivePrototype? proto) && proto != null)
@@ -102,11 +104,28 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         SubscribeLocalEvent<JobNetComponent, OpenJobNetImplantEvent>(OnImplantActivate);
         SubscribeLocalEvent<JobNetComponent, JobNetSelectMessage>(OnSelect);
         SubscribeLocalEvent<JobNetComponent, JobNetPurchaseMessage>(OnPurchase);
+        SubscribeLocalEvent<JobNetComponent, JobNetCancelRumorMessage>(OnCancelRumor);
+        SubscribeLocalEvent<JobNetComponent, JobNetTransferRumorMessage>(OnTransferRumor);
         SubscribeLocalEvent<PrecursorExtractorComponent, AfterInteractEvent>(AfterInteractOn);
         SubscribeLocalEvent<PrecursorExtractorComponent, PrecursorExtractorDoAfterEvent>(OnDoAfter);
 
 
+
         InitializeUi();
+    }
+
+    private void OnTransferRumor(Entity<JobNetComponent> ent, ref JobNetTransferRumorMessage args)
+    {
+        if (!TryComp<RumorGetterComponent>(ent, out var getter) || getter == null) return;
+        _rumors.TransferRumorByIndex(getter, args.ID, args.Target, args.Actor);
+        UpdateUserInterface(args.Actor, ent);
+    }
+
+    private void OnCancelRumor(Entity<JobNetComponent> ent, ref JobNetCancelRumorMessage args)
+    {
+        if (!TryComp<RumorGetterComponent>(ent, out var getter) || getter == null) return;
+        _rumors.CancelRumorByIndex(getter, args.ID);
+        UpdateUserInterface(args.Actor, ent);
     }
 
     public void CompleteDealerBounty(EntityUid uid, JobNetComponent component)
@@ -157,7 +176,7 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         var comp = Transform(uid);
         player = comp.ParentUid;
         if (player == null) return;
-        _audio.PlayEntity(component.PaySuccessSound, player.Value, player.Value);
+        _audio.PlayEntity(component.PaySuccessSound, player.Value, component.Owner);
         var meta = _meta.GetMetaRecordsComponent();
         if (meta != null)
             meta.SectorChaos += amount;
@@ -351,95 +370,6 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         }
 
     }
-
-    private void OnPurchasePrecursor(EntityUid uid, JobNetComponent component, JobNetPurchasePrecursorMessage args)
-    {
-        EntityUid? player = null;
-        var comp = Transform(uid);
-        if (comp != null)
-        {
-            player = comp.ParentUid;
-        }
-        if (!TryComp<ActorComponent>(player, out var actor) || actor == null || actor.PlayerSession == null) return;
-        var prod = _proto.Index<CargoProductPrototype>(args.ID);
-        if (prod == null) return;
-        int requiredLevel = 0;
-        if (prod.Group == "syndicatemarket") requiredLevel = 1;
-        if (prod.Group == "syndicatemarket2") requiredLevel = 2;
-        if (prod.Group == "syndicatemarket3") requiredLevel = 3;
-        if (prod.Group == "syndicatemarket4") requiredLevel = 4;
-        var level = _proto.Index(component.RogueLevel);
-        if (level.ItemLevel < requiredLevel)
-        {
-            _audio.PlayEntity(component.ErrorSound, player.Value, player.Value);
-            var msg = $"You do not have the rogue level required to purchase this.";
-            if (msg != null)
-                _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                    msg,
-                    msg,
-                    player.Value,
-                    false,
-                    actor.PlayerSession.Channel
-                    );
-            return;
-        }
-        if (prod.Cost > component.Precursor)
-        {
-            _audio.PlayEntity(component.ErrorSound, player.Value, player.Value);
-            var msg = $"You have insufficent stored precursor. You need {prod.Cost - component.Precursor} more precursor.";
-            if (msg != null)
-                _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                    msg,
-                    msg,
-                    player.Value,
-                    false,
-                    actor.PlayerSession.Channel
-                    );
-            return;
-        }
-        var query = EntityQueryEnumerator<CargoTelepadComponent>();
-        var found = false;
-        var userMapPos = _transform.GetMapCoordinates(player.Value);
-        while (query.MoveNext(out var telepad, out var telepadcomp))
-        {
-            var targetMapPos = _transform.GetMapCoordinates(telepad);
-            var calculatedDistance = targetMapPos.Position - userMapPos.Position;
-            var total = calculatedDistance.Length();
-            if (total <= 3)
-            {
-                var teleTransform = Transform(telepad);
-                var newEntity = Spawn(prod.Product, teleTransform.Coordinates);
-                _audio.PlayEntity(component.PaySuccessSound, player.Value, player.Value);
-                component.Precursor -= prod.Cost;
-                found = true;
-                break;
-            }
-        }
-        if (!found)
-        {
-            _audio.PlayEntity(component.ErrorSound, player.Value, player.Value);
-            var msg = $"You must be next to a telepad to make purchases.";
-            if (msg != null)
-                _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                    msg,
-                    msg,
-                    player.Value,
-                    false,
-                    actor.PlayerSession.Channel
-                    );
-            return;
-        }
-        UpdateUserInterface(args.Actor, uid, component);
-    }
-
-    private void OnSelectRogueNet(EntityUid uid, JobNetComponent component, JobNetSelectRogueNetMessage args)
-    {
-        if (component.NetworkType != RogueNetworkType.None) return;
-        if (component.RogueLevel == "RogueLevel1") return;
-        component.NetworkType = args.Net;
-        UpdateUserInterface(args.Actor, uid, component);
-    }
-
     private void OnJobNetOpenAttempt(EntityUid uid, JobNetComponent component, ActivatableUIOpenAttemptEvent args)
     {
         if (!_mind.TryGetMind(args.User, out var mind, out _))
@@ -627,7 +557,7 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
                                     {
                                         if (money < assignment.Wage)
                                         {
-                                            _audio.PlayEntity(component.ErrorSound, player.Value, player.Value);
+                                            _audio.PlayEntity(component.ErrorSound, player.Value, component.Owner);
                                             var msg = $"{stationData.StationName} has failed to pay you your ${assignment.Wage} due to insufficient funds.";
                                             if (msg != null)
                                                 _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
@@ -641,7 +571,7 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
                                         }
                                         if (bank.TryGetAccount(name, out var account) && account != null)
                                         {
-                                            _audio.PlayEntity(component.PaySuccessSound, player.Value, player.Value);
+                                            _audio.PlayEntity(component.PaySuccessSound, player.Value, component.Owner);
                                             account.Balance += assignment.Wage;
                                             _cargo.TryAdjustBankAccount(station.Value, "Cargo", -assignment.Wage);
                                             var msg = $"You have received ${assignment.Wage} for working as a {assignment.Name} for {stationData.StationName}.";
@@ -658,7 +588,7 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
                                     }
                                     else
                                     {
-                                        _audio.PlayEntity(component.ErrorSound, player.Value, player.Value);
+                                        _audio.PlayEntity(component.ErrorSound, player.Value, component.Owner);
                                         var msg = $"{stationData.StationName} has failed to pay you your ${assignment.Wage} due to an invalid account.";
                                         if (msg != null)
                                             _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,

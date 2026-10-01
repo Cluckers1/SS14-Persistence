@@ -10,6 +10,7 @@ using Content.Shared.CrewAssignments;
 using Content.Shared.CrewAssignments.Components;
 using Content.Shared.CrewAssignments.Prototypes;
 using Content.Shared.CrewAssignments.Systems;
+using Content.Shared.CrewMetaRecords;
 using Content.Shared.CrewRecords.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Implants.Components;
@@ -126,6 +127,7 @@ public sealed partial class JobNetSystem
         var spendable = 0;
         var sectorChaos = 0;
         var sectorStatus = "";
+        int rumorTax = 0;
         foreach (var station in stations)
         {
             if (TryComp<CrewRecordsComponent>(station, out var crewRecord) && crewRecord != null)
@@ -147,6 +149,7 @@ public sealed partial class JobNetSystem
                                 {
                                     if (crewAssignments.TryGetAssignment(record.AssignmentID, out var assignment) && assignment != null)
                                     {
+                                        rumorTax = stationData.SalesTax;
                                         assignmentName = assignment.Name;
                                         wage = assignment.Wage;
                                         selectedstation = stationData.UID;
@@ -168,8 +171,6 @@ public sealed partial class JobNetSystem
                     }
                 }
             }
-
-
         }
         List<WorldObjectivesEntry> currentObjectives;
         List<WorldObjectivesEntry> completedObjectives;
@@ -177,9 +178,12 @@ public sealed partial class JobNetSystem
         ProtoId<NetworkLevelPrototype> currentLevel = "NetworkLevel1";
         Dictionary<ProtoId<MetaFactionPrototype>, int> metaFactionReputations = new();
         List<ActiveRumor> rumors = new();
-        if(TryComp<RumorGetterComponent>(jobnet, out var rumorGetter))
+        TimeSpan? rumorCooldown = null;
+        Dictionary<string, DirectMessageConversation>? directMessages = null;
+        if (TryComp<RumorGetterComponent>(jobnet, out var rumorGetter))
         {
             rumors = rumorGetter.Rumors;
+            rumorCooldown = rumorGetter.NextRumor;
         }
 
         if (_meta.MetaRecords != null)
@@ -191,6 +195,7 @@ public sealed partial class JobNetSystem
             {
                 currentLevel = record.Level;
                 metaFactionReputations = record.MetaFactionReputations;
+                directMessages = record.DirectMessageConversations;
 
             }
             sectorChaos = _meta.MetaRecords.SectorChaos;
@@ -202,10 +207,11 @@ public sealed partial class JobNetSystem
             currentObjectives = new();
             codexEntries = new();
         }
+
         var balance = 0;
         _bank.TryGetBalance(user.Value, out balance);
 
-        var state = new JobNetUpdateState(possibleStations, assignmentName, wage, selectedstation, remainingTime, currentObjectives, completedObjectives, codexEntries, currentLevel, balance, spendAuth, spent, spendable, sectorStatus, metaFactionReputations, rumors);
+        var state = new JobNetUpdateState(possibleStations, assignmentName, wage, selectedstation, remainingTime, currentObjectives, completedObjectives, codexEntries, currentLevel, balance, spendAuth, spent, spendable, sectorStatus, metaFactionReputations, rumors, rumorCooldown, rumorTax, directMessages);
         _ui.SetUiState(jobnet, JobNetUiKey.Key, state);
     }
 

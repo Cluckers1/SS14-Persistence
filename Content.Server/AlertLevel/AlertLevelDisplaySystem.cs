@@ -14,6 +14,19 @@ public sealed partial class AlertLevelDisplaySystem : EntitySystem
         SubscribeLocalEvent<AlertLevelChangedEvent>(OnAlertChanged);
         SubscribeLocalEvent<AlertLevelDisplayComponent, ComponentInit>(OnDisplayInit);
         SubscribeLocalEvent<AlertLevelDisplayComponent, PowerChangedEvent>(OnPowerChanged);
+        SubscribeLocalEvent<AlertLevelDisplayComponent, ComponentStartup>(OnComponentStartup);
+    }
+
+    private void OnComponentStartup(Entity<AlertLevelDisplayComponent> ent, ref ComponentStartup args)
+    {
+        if (TryComp(ent, out AppearanceComponent? appearance))
+        {
+            var stationUid = _stationSystem.GetOwningStation(ent);
+            if (stationUid != null && TryComp(stationUid, out AlertLevelComponent? alert))
+            {
+                _appearance.SetData(ent, AlertLevelDisplay.CurrentLevel, alert.CurrentAlertLevel, appearance);
+            }
+        }
     }
 
     private void OnAlertChanged(ref AlertLevelChangedEvent args)

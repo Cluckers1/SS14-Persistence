@@ -1,4 +1,4 @@
-﻿using Content.Shared._Funkystation.WashingMachine;
+using Content.Shared._Funkystation.WashingMachine;
 using Content.Shared._Funkystation.Stains.Components;
 using Content.Shared._Funkystation.Stains.Systems;
 using Content.Shared.Chemistry.EntitySystems;
@@ -36,6 +36,12 @@ public sealed partial class WashingMachineSystem : SharedWashingMachineSystem
         base.Initialize();
         SubscribeLocalEvent<WashingMachineComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<WashingMachineComponent, BreakageEventArgs>(OnBreak);
+        SubscribeLocalEvent<WashingMachineComponent, ComponentStartup>(OnComponentStartup);
+    }
+
+    private void OnComponentStartup(Entity<WashingMachineComponent> ent, ref ComponentStartup args)
+    {
+        Appearance.SetData(ent.Owner, WashingMachineVisuals.State, ent.Comp.State);
     }
 
     private void OnMapInit(Entity<WashingMachineComponent> ent, ref MapInitEvent args)

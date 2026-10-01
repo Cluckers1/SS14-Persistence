@@ -3,7 +3,9 @@
   name: Syndicate
   description: "The Syndicate controls the Precursor Universe."
   rumors:
-    - DiscoverSmallSalvageSyndicate
+    - DrinkBasicEvil
+    - EatBasicEvil
+    - PrayBasicEvil
   color: Purple
   levels:
     Precursor2: 150

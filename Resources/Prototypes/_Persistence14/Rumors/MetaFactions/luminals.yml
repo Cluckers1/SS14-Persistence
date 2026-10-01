@@ -3,7 +3,8 @@
   name: The Luminals
   description: "The Luminals are beings of light and sound."
   rumors:
-    - DiscoverSmallSalvage
+    - PrayBasicFriendly
+    - DrinkBasicFriendly
   color: Yellow
   levels:
     Luminals2: 150

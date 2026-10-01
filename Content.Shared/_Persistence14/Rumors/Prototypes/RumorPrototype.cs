@@ -1,5 +1,6 @@
 using Content.Shared.Cargo;
 using Content.Shared.Cargo.Prototypes;
+using Content.Shared.Nutrition;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -32,12 +33,32 @@ public sealed partial class RumorPrototype : IPrototype
     public float SpawnDistance { get; set; } = 500f;
 
     [DataField]
+    public TimeSpan GridLifetime { get; set; } = TimeSpan.FromHours(1);
+    [DataField]
+    public bool DespawnGrids { get; set; } = true;
+    [DataField]
     public int CashReward { get; set; } = 0;
     [DataField]
     public int ReputationReward { get; set; } = 0;
     [DataField]
     public List<ProtoId<CargoBountyPrototype>> PossibleBounties { get; set; } = new();
+    [DataField]
+    public string DescriptionAddon { get; set; } = "";
 
+    [DataField]
+    public List<ProtoId<FlavorPrototype>> PossibleFlavors = new();
+
+    [DataField]
+    public int FlavorsToPick = 1;
+    [DataField]
+    public int ConsumptionTarget = 40;
+    [DataField]
+    public List<ProtoId<RumorPrototype>> PossibleFollowups = new();
+    [DataField]
+    public int RewardRumors = 0;
+
+    [DataField]
+    public string TargetTag = "";
 }
 public enum CompletionType
 {
@@ -46,7 +67,10 @@ public enum CompletionType
     Power,
     Rescue,
     Move,
-    Bounty
+    Bounty,
+    Eat,
+    Drink,
+    Pray
 
 }
 
@@ -90,4 +114,19 @@ public partial class ActiveRumor
     [DataField]
     public CargoBountyData? Bounty = null;
 
+    [DataField]
+    public List<ProtoId<FlavorPrototype>> TargetFlavors = new();
+    [DataField]
+    public int CurrentConsumption = 0;
+
+    [DataField]
+    public ProtoId<RumorPrototype> OriginalPrototype;
+
+    [DataField]
+    public bool DebugComplete = false;
+
+    public ActiveRumor(ProtoId<RumorPrototype> originalPrototype)
+    {
+        OriginalPrototype = originalPrototype;
+    }
 }

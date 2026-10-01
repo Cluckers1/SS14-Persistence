@@ -95,6 +95,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         SubscribeLocalEvent<SolutionComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<SolutionComponent, MapInitEvent>(OnSolutionInit);
         SubscribeLocalEvent<SolutionComponent, ComponentShutdown>(OnSolutionShutdown);
+        SubscribeLocalEvent<SolutionComponent, ComponentStartup>(OnComponentStartup);
 
         SubscribeLocalEvent<ExaminableSolutionComponent, ExaminedEvent>(OnExamineSolution);
         SubscribeLocalEvent<ExaminableSolutionComponent, GetVerbsEvent<ExamineVerb>>(OnSolutionExaminableVerb);
@@ -103,6 +104,12 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         SubscribeLocalEvent<SolutionManagerComponent, ComponentShutdown>(OnManagerShutdown);
         SubscribeLocalEvent<SolutionManagerComponent, EntInsertedIntoContainerMessage>(OnSolutionAdded);
         SubscribeLocalEvent<SolutionManagerComponent, EntRemovedFromContainerMessage>(OnSolutionRemoved);
+    }
+
+    private void OnComponentStartup(Entity<SolutionComponent> ent, ref ComponentStartup args)
+    {
+        var owner = GetSolutionOwner(ent);
+        UpdateAppearance(owner, ent);
     }
 
     private void OnSolutionGetState(Entity<SolutionComponent> ent, ref ComponentGetState args)

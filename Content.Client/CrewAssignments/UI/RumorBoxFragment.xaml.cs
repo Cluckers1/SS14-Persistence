@@ -12,6 +12,8 @@ namespace Content.Client.CrewAssignments.UI;
 public sealed partial class RumorBoxFragment : PanelContainer
 {
     [Dependency] private IPrototypeManager _protoManager = default!;
+
+    public int RumorIndex = 0;
     public RumorBoxFragment(ActiveRumor activeRumor)
     {
         RobustXamlLoader.Load(this);
@@ -26,6 +28,25 @@ public sealed partial class RumorBoxFragment : PanelContainer
         };
         TitleLabel.Text = activeRumor.Name;
         ContentLabel.Text = activeRumor.Description;
-        RewardLabel.Text = $"[color=green]${activeRumor.CashReward}\n{activeRumor.ReputationReward} REP ({factionProto.Name})[/color]";
+        RewardLabel.Text = "";
+        bool newline = false;
+        if(activeRumor.CashReward != 0)
+        {
+            RewardLabel.Text += $"[color=green]${activeRumor.CashReward}[/color]";
+            newline = true;
+        }
+        if(activeRumor.ReputationReward != 0)
+        {
+            if (newline) RewardLabel.Text += "\n";
+            RewardLabel.Text += $"[color=orange]{activeRumor.ReputationReward} REP ({factionProto.Name})[/color]";
+            newline = true;
+        }
+        var originalProto = _protoManager.Index<RumorPrototype>(activeRumor.OriginalPrototype);
+        if(originalProto.RewardRumors != 0)
+        {
+            if (newline) RewardLabel.Text += "\n";
+            RewardLabel.Text += $"[color=yellow]This will lead to a rewarding rumor[/color]";
+        }
+        
     }
 }

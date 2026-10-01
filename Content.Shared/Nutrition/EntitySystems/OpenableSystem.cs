@@ -27,6 +27,7 @@ public sealed partial class OpenableSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<OpenableComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<OpenableComponent, ComponentStartup>(OnStartup);
         SubscribeLocalEvent<OpenableComponent, UseInHandEvent>(OnUse);
         // always try to unlock first before opening
         SubscribeLocalEvent<OpenableComponent, ActivateInWorldEvent>(OnActivated, after: new[] { typeof(LockSystem) });
@@ -41,6 +42,11 @@ public sealed partial class OpenableSystem : EntitySystem
 
 #if DEBUG
         SubscribeLocalEvent<OpenableComponent, MapInitEvent>(OnMapInit);
+    }
+
+    private void OnStartup(Entity<OpenableComponent> ent, ref ComponentStartup args)
+    {
+        UpdateAppearance(ent, ent.Comp);
     }
 
     private void OnMapInit(Entity<OpenableComponent> ent, ref MapInitEvent args)

@@ -42,6 +42,12 @@ public partial class MobStateSystem
         SubscribeLocalEvent<MobStateComponent, UpdateCanMoveEvent>(CheckAct);
         SubscribeLocalEvent<MobStateComponent, StandAttemptEvent>(CheckAct);
         SubscribeLocalEvent<MobStateComponent, PointAttemptEvent>(CheckAct);
+        SubscribeLocalEvent<MobStateComponent, ComponentStartup>(OnComponentStartup);
+    }
+
+    private void OnComponentStartup(Entity<MobStateComponent> ent, ref ComponentStartup args)
+    {
+        OnStateEnteredSubscribers(ent, ent.Comp, ent.Comp.CurrentState);
     }
 
     [SubscribeLocalEvent]

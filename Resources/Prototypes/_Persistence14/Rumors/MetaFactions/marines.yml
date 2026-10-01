@@ -3,7 +3,9 @@
   name: UNMC Marines
   description: "The UNMC controls the Marines Universe."
   rumors:
-    - DiscoverSmallSalvage
+    - DrinkBasicFriendly
+    - EatBasicFriendly
+    - DrinkBasicEvil
   color: Olive
   levels:
     Marines2: 150

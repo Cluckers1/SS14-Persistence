@@ -54,7 +54,7 @@
 
 - type: backgroundEffect
   id: TraitOriginZenith
-  description: "[color=green]You will gain the 'Oath to Queen Valeria' trait."
+  description: "[color=green]You will gain the 'Worked with Solar Legion' trait."
   traits:
     - OriginZenith
   equipment:
@@ -66,7 +66,7 @@
 
 - type: backgroundEffect
   id: TraitOriginGreen
-  description: "[color=green]You will gain the 'Nanotrasen Contract' trait."
+  description: "[color=green]You will gain the 'Known to Nanotrasen' trait."
   traits:
     - OriginGreen
   equipment:
@@ -78,7 +78,7 @@
 
 - type: backgroundEffect
   id: TraitOriginMarine
-  description: "[color=green]You will gain the 'Enlisted in Xeno Wars' trait."
+  description: "[color=green]You will gain the 'Familiar with the UNMC' trait."
   traits:
     - OriginMarine
   equipment:
