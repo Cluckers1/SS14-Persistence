@@ -12,6 +12,12 @@ public sealed partial class SealableSystem : EntitySystem
 
         SubscribeLocalEvent<SealableComponent, ExaminedEvent>(OnExamined, after: new[] { typeof(OpenableSystem) });
         SubscribeLocalEvent<SealableComponent, OpenableOpenedEvent>(OnOpened);
+        SubscribeLocalEvent<SealableComponent, ComponentStartup>(OnComponentStartup);
+    }
+
+    private void OnComponentStartup(Entity<SealableComponent> ent, ref ComponentStartup args)
+    {
+        UpdateAppearance(ent, ent.Comp);
     }
 
     private void OnExamined(EntityUid uid, SealableComponent comp, ExaminedEvent args)
