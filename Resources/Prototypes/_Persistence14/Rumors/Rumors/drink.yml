@@ -6,7 +6,6 @@
   reputationReward: 10
   completionType: Drink
   possibleFlavors:
-    - cola
     - energydrink
     - drgibb
     - gingersoda
