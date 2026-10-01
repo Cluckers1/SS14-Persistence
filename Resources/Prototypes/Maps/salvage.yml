@@ -177,3 +177,15 @@
   id: OutpostArm
   mapPath: /Maps/Salvage/outpost-arm.yml
   sizeString: salvage-map-wreck-size-large
+
+#Persistence 14
+- type: salvageMap
+  id: SyndiShipVaultSmall
+  mapPath: /Prototypes/_Persistence14/Maps/Rumors/syndi-ship-vault-small.yml
+  sizeString: salvage-map-wreck-size-small
+
+#Persistence 14
+- type: salvageMap
+  id: TickCaves
+  mapPath: /Prototypes/_Persistence14/Maps/Rumors/tick-caves.yml
+  sizeString: salvage-map-wreck-size-small
