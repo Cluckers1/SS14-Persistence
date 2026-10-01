@@ -34,7 +34,7 @@ public sealed partial class ConversationWindow : DefaultWindow
         foreach (var message in entry.Messages)
         {
             var finalTime = message.SendTime.AddYears(yearOffset);
-            Label label = new();
+            RichTextLabel label = new();
             label.Text = $"{message.Sender} ({finalTime}): {message.Body}";
             MessagesBC.AddChild(label);
 
@@ -45,10 +45,12 @@ public sealed partial class ConversationWindow : DefaultWindow
     {
         Entry = entry;
         MessagesBC.DisposeAllChildren();
+        var yearOffset = _cfg.GetCVar(CCVars.YearOffset);
         foreach (var message in entry.Messages)
         {
-            Label label = new();
-            label.Text = $"{message.Sender} ({message.SendTime}): {message.Body}";
+            var finalTime = message.SendTime.AddYears(yearOffset);
+            RichTextLabel label = new();
+            label.Text = $"{message.Sender} ({finalTime}): {message.Body}";
             MessagesBC.AddChild(label);
 
         }

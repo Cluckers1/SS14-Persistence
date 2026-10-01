@@ -58,7 +58,7 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
     private void OnSendDirectMessagePublic(Entity<MessageBoardComponent> ent, ref MessageBoardSendDirectMessagePublicMessage args)
     {
         bool isAdmin = _adminManager.IsAdmin(args.Actor);
-
+        if (args.Recipient == Name(args.Actor)) return;
         var metaRecord = _crewMetaRecordsSystem.MetaRecords;
         if (metaRecord == null) return;
         metaRecord.TryGetRecord(Name(args.Actor), out var authorRecord);

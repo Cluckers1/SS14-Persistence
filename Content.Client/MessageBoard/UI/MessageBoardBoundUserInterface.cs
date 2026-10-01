@@ -190,6 +190,14 @@ public sealed class MessageBoardBoundUserInterface : BoundUserInterface
                 var conversationWindow = new ConversationWindow(conversation, isAdmin, playerName, author);
                 _conversationWindow = conversationWindow;
                 conversationWindow.OpenCentered();
+                conversationWindow.SendBtn.OnPressed += (sendArgs) =>
+                {
+                    var message = conversationWindow.SendLE.Text;
+                    if (message == string.Empty) return;
+                    var recipient = conversationWindow.RecipientName;
+                    conversationWindow.SendLE.Text = string.Empty;
+                    SendMessage(new MessageBoardSendDirectMessagePublicMessage(recipient, message));
+                };
             };
             if (_conversationWindow != null && _conversationWindow.RecipientName == kv.Key)
             {
