@@ -44,10 +44,7 @@ public sealed partial class OpenableSystem : EntitySystem
         SubscribeLocalEvent<OpenableComponent, MapInitEvent>(OnMapInit);
     }
 
-    private void OnStartup(Entity<OpenableComponent> ent, ref ComponentStartup args)
-    {
-        UpdateAppearance(ent, ent.Comp);
-    }
+
 
     private void OnMapInit(Entity<OpenableComponent> ent, ref MapInitEvent args)
     {
@@ -58,6 +55,10 @@ public sealed partial class OpenableSystem : EntitySystem
     }
 #endif
 
+    private void OnStartup(Entity<OpenableComponent> ent, ref ComponentStartup args)
+    {
+        UpdateAppearance(ent, ent.Comp);
+    }
     private void OnInit(Entity<OpenableComponent> ent, ref ComponentInit args)
     {
         UpdateAppearance(ent, ent.Comp);
