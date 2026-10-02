@@ -187,7 +187,7 @@
 #Persistence 14
 - type: salvageMap
   id: TickCaves
-  mapPath: /Maps/Rumors/Exterminate/tick-caves.yml
+  mapPath: /Maps/Rumors/Exterminate/Medium/tick-caves.yml
   sizeString: salvage-map-wreck-size-small
 
 #Persistence 14
