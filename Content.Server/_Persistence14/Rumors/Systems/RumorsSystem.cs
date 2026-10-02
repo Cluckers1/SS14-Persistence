@@ -1,29 +1,22 @@
 using Content.Server._NF.Bank;
-using Content.Server.Administration.Managers;
-using Content.Server.Atmos.Components;
-using Content.Server.Atmos.EntitySystems;
 using Content.Server.Cargo.Systems;
 using Content.Server.Chat.Managers;
 using Content.Server.CrewAssignments.Systems;
 using Content.Server.CrewRecords.Systems;
-using Content.Server.Database;
-using Content.Server.Database.Migrations.Postgres;
-using Content.Server.Mind;
 using Content.Server.Movement.Systems;
 using Content.Server.NameIdentifier;
-using Content.Server.Power.SMES;
 using Content.Server.Salvage.Magnet;
 using Content.Server.Station.Systems;
 using Content.Shared._Persistence14.PersistentIdentifier;
 using Content.Shared._Persistence14.Rumors.Components;
 using Content.Shared._Persistence14.Rumors.Prototypes;
-using Content.Shared.Administration;
-using Content.Shared.Atmos.Components;
 using Content.Shared.Cargo;
 using Content.Shared.Cargo.Components;
 using Content.Shared.Cargo.Prototypes;
 using Content.Shared.CrewAssignments.Components;
-using Content.Shared.Mind;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Nutrition;
@@ -33,7 +26,6 @@ using Content.Shared.Power;
 using Content.Shared.Power.Components;
 using Content.Shared.Prayer;
 using Content.Shared.Station.Components;
-using NetCord;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.EntitySerialization.Systems;
@@ -44,17 +36,8 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Serilog.Parsing;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Xml.Linq;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using static System.Collections.Specialized.BitVector32;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Content.Shared._Persistence14.Rumors.Systems;
 
@@ -70,7 +53,7 @@ public sealed partial class RumorsSystem : EntitySystem
     [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private EntityQuery<SalvageMobRestrictionsComponent> _salvMobQuery = default!;
-
+    [Dependency] private EntityQuery<RumorHealingTargetComponent> _healingTargetQuery = default!;
     [Dependency] private EntityQuery<RumorPowerTargetComponent> _powerTargetQuery = default!;
     [Dependency] private IChatManager _chatManager = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
@@ -82,15 +65,130 @@ public sealed partial class RumorsSystem : EntitySystem
     [Dependency] private CargoSystem _cargo = default!;
     [Dependency] private JobNetSystem _jobnet = default!;
     [Dependency] private StationSystem _station = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<RumorHealingTargetComponent, MapInitEvent>(OnHealingTargetInit);
+        SubscribeLocalEvent<RumorHealingTargetComponent, DamageChangedEvent>(OnHealingTargetDamageChanged);
+        SubscribeLocalEvent<RumorHealingTargetComponent, GridUidChangedEvent>(OnHealingTargetGridChanged);
         SubscribeLocalEvent<RumorGetterComponent, ComponentInit>(OnComponentInit);
-        SubscribeLocalEvent<RumorGetterComponent, GridUidChangedEvent>(OnGridChanged);
+        SubscribeLocalEvent<RumorGetterComponent, GridUidChangedEvent>(OnRumorGetterGridChanged);
         SubscribeLocalEvent<RumorExterminationTargetComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<RumorPowerTargetComponent, ChargeChangedEvent>(OnBatteryChargeChanged);
         SubscribeLocalEvent<EdibleComponent, IngestedRumorEvent>(OnEdibleIngested);
         SubscribeLocalEvent<PrayableComponent, PrayedEvent>(OnPrayed);
+    }
+
+    private void OnHealingTargetGridChanged(Entity<RumorHealingTargetComponent> ent, ref GridUidChangedEvent args)
+    {
+        if (!TryComp<PersistentIdentifierComponent>(ent, out var pid) || pid == null) return;
+        _pid.TryGetId((ent, pid), out var pID);
+        if (pID == null) return;
+        var xform = Transform(ent);
+        var grid = xform.GridUid;
+        if (grid == null) return;
+        if (!TryComp<PersistentIdentifierComponent>(grid, out var gridPID) || gridPID == null) return;
+        if (!TryComp<DamageableComponent>(ent, out var damageable) || damageable == null) return;
+        if (_damageable.TryGetDamageGreaterThan((ent.Owner, damageable), 10, out _))
+        {
+            return;
+        }
+        _pid.TryGetId((grid.Value, gridPID), out var gID);
+        if (gID == null) return;
+        var query = EntityQueryEnumerator<RumorGetterComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            foreach (var rumor in comp.Rumors.ShallowClone())
+            {
+                if (rumor.CompletionType == CompletionType.Rescue)
+                {
+                    if (rumor.Targets.Contains(pID))
+                    {
+
+                        if (gID == rumor.TargetStation)
+                        {
+                            rumor.Targets.Remove(pID);
+                            QueueDel(ent.Owner);
+                            if (rumor.Targets.Count == 0)
+                            {
+                                EntityUid? player = null;
+                                var implant = Transform(uid);
+                                player = implant.ParentUid;
+                                if (player == null) return;
+                                CompleteRumor((uid, comp), player.Value, rumor);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void OnHealingTargetDamageChanged(Entity<RumorHealingTargetComponent> ent, ref DamageChangedEvent args)
+    {
+        if (!TryComp<PersistentIdentifierComponent>(ent, out var pid) || pid == null) return;
+        _pid.TryGetId((ent, pid), out var pID);
+        if(pID == null) return;
+        var xform = Transform(ent);
+        var grid = xform.GridUid;
+        if(grid == null) return;
+        if(!TryComp<PersistentIdentifierComponent>(grid, out var gridPID) || gridPID == null) return;
+        if (_damageable.TryGetDamageGreaterThan((ent.Owner, args.Damageable), 10, out _))
+        {
+            return;
+        }
+        _pid.TryGetId((grid.Value, gridPID), out var gID);
+        if (gID == null) return;
+        var query = EntityQueryEnumerator<RumorGetterComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            foreach (var rumor in comp.Rumors.ShallowClone())
+            {
+                if (rumor.CompletionType == CompletionType.Rescue)
+                {
+                    if (rumor.Targets.Contains(pID))
+                    {
+                        
+                        if(gID == rumor.TargetStation)
+                        {
+                            rumor.Targets.Remove(pID);
+                            QueueDel(ent.Owner);
+                            if (rumor.Targets.Count == 0)
+                            {
+                                EntityUid? player = null;
+                                var implant = Transform(uid);
+                                player = implant.ParentUid;
+                                if (player == null) return;
+                                CompleteRumor((uid, comp), player.Value, rumor);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void OnHealingTargetInit(Entity<RumorHealingTargetComponent> ent, ref MapInitEvent args)
+    {
+        _meta.AddFlag(ent, MetaDataFlags.ExtraTransformEvents);
+        int damageTypes = _random.Next(ent.Comp.MinDamageTypes, ent.Comp.MaxDamageTypes+1);
+        int damageTotal = _random.Next(ent.Comp.MinDamageAmount, ent.Comp.MaxDamageAmount + 1);
+        var damageTypesList = ent.Comp.PossibleDamageTypes.ToList();
+        for (int i = 0; i < damageTypes; i++)
+        {
+            var damageType = _random.PickAndTake(damageTypesList);
+            var damageAmount = _random.Next(1, damageTotal + 1);
+            damageTotal -= damageAmount;
+            DamageSpecifier damage = new(_protoMan.Index(damageType), damageAmount);
+            _damageable.TryChangeDamage(ent.Owner, damage, true);
+            if (damageTotal <= 0)
+            {
+                break;
+            }
+
+        }
     }
 
     private void OnPrayed(Entity<PrayableComponent> ent, ref PrayedEvent args)
@@ -269,7 +367,7 @@ public sealed partial class RumorsSystem : EntitySystem
         }
     }
 
-    private void OnGridChanged(Entity<RumorGetterComponent> ent, ref GridUidChangedEvent args)
+    private void OnRumorGetterGridChanged(Entity<RumorGetterComponent> ent, ref GridUidChangedEvent args)
     {
         EntityUid? player = null;
         var implant = Transform(ent);
@@ -577,6 +675,21 @@ public sealed partial class RumorsSystem : EntitySystem
             final.SpawnDistance = rumorProto.SpawnDistance;
             final.GridsToSpawn = rumorProto.GridsToSpawn;
         }
+        if(rumorProto.CompletionType == CompletionType.Rescue)
+        {
+            var query = EntityQueryEnumerator<TradeStationComponent>();
+            List<EntityUid> possibleTrade = new();
+            while (query.MoveNext(out var uid, out var comp))
+            {
+                if (TryComp<StationMemberComponent>(uid, out var sm))
+                {
+                    possibleTrade.Add(uid);
+                }
+            }
+            if (possibleTrade.Count < 1) return null;
+            var chosenUID = _random.Pick(possibleTrade);
+            final.TargetStation = _pid.EnsureId(chosenUID);
+        }
         if(rumorProto.PossibleBounties.Count > 0)
         {
             var chosenBounty = _random.Pick(rumorProto.PossibleBounties);
@@ -636,12 +749,18 @@ public sealed partial class RumorsSystem : EntitySystem
             if (active.TargetPosition == null) return rumor.Description;
             addon += $"\n{active.GridsToSpawn} grids will arrive as you approach\n[color=yellow]{Math.Round(active.TargetPosition.Value.Position.X)}, {Math.Round(active.TargetPosition.Value.Position.Y)})";
         }
-        else if(active.GridsToSpawn == 1 && active.EventGrids.Count > 0)
+        else if (active.GridsToSpawn == 1 && active.EventGrids.Count > 0)
         {
             if (active.TargetPosition == null) return rumor.Description;
             addon += $"\nA grid will arrive as you approach\n[color=yellow]({Math.Round(active.TargetPosition.Value.Position.X)}, {Math.Round(active.TargetPosition.Value.Position.Y)})[/color]";
         }
-        if(rumor.CompletionType == CompletionType.Eat || rumor.CompletionType == CompletionType.Drink)
+        if(rumor.CompletionType == CompletionType.Rescue)
+        {
+            if (active.TargetStation == null) return rumor.Description;
+            if (!_pid.TryResolveId(active.TargetStation, out var targetStation)) return rumor.Description;
+            addon += $"\nRevive and heal the crew on the grids and bring them to {Name(targetStation)}.";
+        }
+        if (rumor.CompletionType == CompletionType.Eat || rumor.CompletionType == CompletionType.Drink)
         {
             if (active.Targets.Count < 1) return rumor.Description;
             if(rumor.CompletionType == CompletionType.Eat)
@@ -792,7 +911,13 @@ public sealed partial class RumorsSystem : EntitySystem
                         continue;
                     rumor.Targets.Add(_pid.EnsureId(child));
                 }
-                
+                if (rumor.CompletionType == CompletionType.Rescue)
+                {
+                    if (!_healingTargetQuery.TryGetComponent(child, out _))
+                        continue;
+                    rumor.Targets.Add(_pid.EnsureId(child));
+                }
+
             }
         }
         _mapSystem.DeleteMap(salvMapXform.MapID);

@@ -1,0 +1,10 @@
+- type: rumor
+  id: RescueBasic
+  name: Rescue Time
+  description: "Rescue our lost crew members!"
+  eventGrids:
+    - /Maps/Rumors/Rescue/Medium/medium-ruined-emergency-shuttle-2t1g3v.yml
+  cashReward: 5000
+  reputationReward: 70
+  completionType: Rescue
+  descriptionAddon: "Rescue all humanoid crew aboard!"

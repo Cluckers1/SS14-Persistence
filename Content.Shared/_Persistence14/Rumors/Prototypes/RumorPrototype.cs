@@ -30,7 +30,7 @@ public sealed partial class RumorPrototype : IPrototype
     [DataField]
     public int GridsToSpawn { get; set; } = 1;
     [DataField]
-    public float SpawnDistance { get; set; } = 500f;
+    public float SpawnDistance { get; set; } = 50f;
 
     [DataField]
     public TimeSpan GridLifetime { get; set; } = TimeSpan.FromHours(1);
@@ -124,7 +124,8 @@ public partial class ActiveRumor
 
     [DataField]
     public bool DebugComplete = false;
-
+    [DataField]
+    public string TargetStation = "";
     public ActiveRumor(ProtoId<RumorPrototype> originalPrototype)
     {
         OriginalPrototype = originalPrototype;
