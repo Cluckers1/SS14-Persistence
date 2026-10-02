@@ -181,11 +181,23 @@
 #Persistence 14
 - type: salvageMap
   id: SyndiShipVaultSmall
-  mapPath: /Prototypes/_Persistence14/Maps/Rumors/syndi-ship-vault-small.yml
+  mapPath: /Maps/Rumors/Salvage/Small/syndi-ship-vault-small.yml
   sizeString: salvage-map-wreck-size-small
 
 #Persistence 14
 - type: salvageMap
   id: TickCaves
-  mapPath: /Prototypes/_Persistence14/Maps/Rumors/tick-caves.yml
+  mapPath: /Maps/Rumors/Exterminate/tick-caves.yml
+  sizeString: salvage-map-wreck-size-small
+
+#Persistence 14
+- type: salvageMap
+  id: SyndiCharge
+  mapPath: /Maps/Rumors/Charge/syndi-charge.yml
+  sizeString: salvage-map-wreck-size-small
+
+#Persistence 14
+- type: salvageMap
+  id: LumiCharge
+  mapPath: /Maps/Rumors/Charge/lumi-charge.yml
   sizeString: salvage-map-wreck-size-small
