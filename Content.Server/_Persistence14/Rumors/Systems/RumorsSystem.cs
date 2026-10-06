@@ -80,6 +80,49 @@ public sealed partial class RumorsSystem : EntitySystem
         SubscribeLocalEvent<PrayableComponent, PrayedEvent>(OnPrayed);
     }
 
+    private void GenerateRumorRewards(Entity<RumorGetterComponent> ent)
+    {
+        ent.Comp.RumorRewards = new();
+        var factions = _protoMan.EnumeratePrototypes<MetaFactionPrototype>().ToList();
+        foreach (var faction in factions)
+        {
+            ent.Comp.RumorRewards[faction.ID] = new();
+            foreach (var level in faction.Levels)
+            {
+                ent.Comp.RumorRewards[faction.ID][level.Key.Id] = new();
+                var levelProto = _protoMan.Index<MetaFactionLevelPrototype>(level.Key);
+                var possibleRewards = levelProto.RumorRewards.ShallowClone();
+                for (var i = 0; i < levelProto.RewardsToOffer; i++)
+                {
+                    var reward = _random.PickAndTake(possibleRewards);
+                    ActiveRumorReward? activeReward = RealizeReward(reward);
+                    if(activeReward == null) continue;
+                    ent.Comp.RumorRewards[faction.ID][level.Key.Id].Add(activeReward);
+                }
+            }
+        }
+    }
+
+    private ActiveRumorReward? RealizeReward(ProtoId<RumorRewardPrototype> reward)
+    {
+        ActiveRumorReward final = new();
+        final.Reward = reward;
+        var query = EntityQueryEnumerator<TradeStationComponent>();
+        Dictionary<int, string> possibleTrade = new();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (TryComp<StationMemberComponent>(uid, out var sm))
+            {
+                possibleTrade[comp.UID] = Name(uid);
+            }
+        }
+        if (possibleTrade.Count < 1) return null;
+        var chosenUID = _random.Pick(possibleTrade);
+        final.TradeStationUID = chosenUID.Key;
+        final.TradeStationName = chosenUID.Value;
+        return final;
+    }
+
     private void OnHealingTargetGridChanged(Entity<RumorHealingTargetComponent> ent, ref GridUidChangedEvent args)
     {
         if (!TryComp<PersistentIdentifierComponent>(ent, out var pid) || pid == null) return;
@@ -520,6 +563,7 @@ public sealed partial class RumorsSystem : EntitySystem
             {
                 comp.NextRumor = comp.RumorCooldownLength;
                 AssignRumor(comp, player.Value);
+                GenerateRumorRewards((uid, comp));
             }
         }
         base.Update(frameTime);
@@ -992,6 +1036,58 @@ public sealed partial class RumorsSystem : EntitySystem
             NotifyPlayer(targetPlayer, $"{Name(player)} has transfered a rumor to you.");
             AssignRumor(targetGetter, targetPlayer, null, rumor);
             getter.Rumors.Remove(rumor);
+        }
+    }
+
+    public void PurchaseRumorReward(RumorGetterComponent getter, ProtoId<RumorRewardPrototype> rewardID, ProtoId<MetaFactionLevelPrototype> levelID, ProtoId<MetaFactionPrototype> factionID, EntityUid actor)
+    {
+        foreach (var kv in getter.RumorRewards)
+        {
+            var faction = _protoMan.Index<MetaFactionPrototype>(kv.Key);
+            if (faction == null || faction.ID != factionID) continue;
+            foreach (var level in kv.Value)
+            {
+                var levelProto = _protoMan.Index<MetaFactionLevelPrototype>(level.Key);
+                if (levelProto == null || levelProto.ID != levelID) continue;
+                foreach (var reward in level.Value)
+                {
+                    if (reward.Reward != rewardID) continue;
+                    if (reward.Purchased)
+                    {
+                        return;
+                    }
+                    var rewardProto = _protoMan.Index<RumorRewardPrototype>(reward.Reward);
+                    if (_crewMeta.MetaRecords == null) return;
+                    if (!_crewMeta.MetaRecords.TryGetRecord(Name(actor), out var metaRecord) || metaRecord == null)
+                    {
+                        return;
+                    }
+                    if (!metaRecord.MetaFactionReputations.TryGetValue(faction.ID, out var rep))
+                    {
+                        NotifyPlayer(actor, $"You do not have any reputation with the {faction.Name} network.");
+                        return;
+                    }
+                    var repReq = faction.Levels[levelID];
+                    if (rep < repReq)
+                    {
+                        NotifyPlayer(actor, $"You do not have enough reputation with the {faction.Name} network to purchase this reward.");
+                        return;
+                    }
+
+                    var bank = _bank.GetMoneyAccountsComponent();
+                    if (bank == null) return;
+                    if (!bank.TryGetAccount(Name(actor), out var account) || account == null) return;
+                    if(account.Balance < rewardProto.Price)
+                    {
+                        NotifyPlayer(actor, $"You do not have enough money to purchase the {rewardProto.Name} reward from the {faction.Name} network.");
+                        return;
+                    }
+                    account.Balance -= rewardProto.Price;
+                    reward.Purchased = true;
+                    _cargo.TryFulfillOrderRumor(reward, "Paper", Name(actor));
+                    NotifyPlayer(actor, $"The {rewardProto.Name} has been delivered to {reward.TradeStationName}.");
+                }
+            }
         }
     }
 }
