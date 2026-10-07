@@ -118,13 +118,13 @@
     - map: [ "suitstorage" ]
 
     # Stuff that goes in front of equipment
+    - map: [ "enum.HumanoidVisualLayers.Tail" ]
+    - map: [ "enum.HumanoidVisualLayers.TailOverlay" ]
     - map: [ "enum.HumanoidVisualLayers.SnoutCover" ]
     - map: [ "enum.HumanoidVisualLayers.FacialHair" ]
     - map: [ "enum.HumanoidVisualLayers.Hair" ]
     - map: [ "enum.HumanoidVisualLayers.HeadSide" ]
     - map: [ "enum.HumanoidVisualLayers.HeadTop" ]
-    - map: [ "enum.HumanoidVisualLayers.Tail" ]
-    - map: [ "enum.HumanoidVisualLayers.TailOverlay" ]
 
     # Stuff that goes in front of stuff that goes in front of equipment
     - map: [ "ears" ] # Non-Default, headphones need to render over ears
