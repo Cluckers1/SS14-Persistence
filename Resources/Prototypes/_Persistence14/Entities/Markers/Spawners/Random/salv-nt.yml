@@ -25,7 +25,7 @@
       weight: 6
     - id: ClothingHandsGlovesCombat
       weight: 5
-    - id: AnitPoisonMedipen
+    - id: AntiPoisonMedipen
       weight: 1
     - id: AirlossAutoInjector
       weight: 4

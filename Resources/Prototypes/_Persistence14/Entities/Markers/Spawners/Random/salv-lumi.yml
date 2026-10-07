@@ -6,7 +6,7 @@
       weight: 2
     - id: ClothingMaskGasExplorer
       weight: 4
-    - id: ClothingHandsGlovesYellow
+    - id: ClothingHandsGlovesColorYellow
       weight: 5
     - id: CrystalSpawner
       weight: 5

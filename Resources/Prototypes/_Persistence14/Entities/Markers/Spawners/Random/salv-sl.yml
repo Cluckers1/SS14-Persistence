@@ -23,7 +23,7 @@
       weight: 6
     - id: ClothingHandsGlovesCombat
       weight: 5
-    - id: AnitPoisonMedipen
+    - id: AntiPoisonMedipen
       weight: 2
     - id: ClothingEyesGlassesCommand
       weight: 2
