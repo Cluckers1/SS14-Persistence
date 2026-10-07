@@ -1,0 +1,29 @@
+- type: entityTable
+  id: LuminalLootBasicEntityTable
+  table: !type:GroupSelector
+    children:
+    - id: FoodBurgerEmpowered
+      weight: 2
+    - id: ClothingMaskGasExplorer
+      weight: 4
+    - id: ClothingHandsGlovesYellow
+      weight: 5
+    - id: CrystalSpawner
+      weight: 5
+    - id: AnomalyTrapBluespace
+      weight: 0.5
+    - id: AnomalyFloraBulb
+      weight: 3
+
+- type: entity
+  name: luminal basic loot spawner
+  id: LootSpawnerLuminalLootBasic
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Objects/Weapons/Melee/cult_dagger.rsi
+    - type: EntityTableSpawner
+      table: !type:NestedSelector
+        tableId: LuminalLootBasicEntityTable

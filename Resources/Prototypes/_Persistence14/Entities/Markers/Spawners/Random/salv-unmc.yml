@@ -1,0 +1,66 @@
+- type: entityTable
+  id: UNMCArmorEntityTable
+  table: !type:GroupSelector
+    children:
+    - id: ClothingOuterVestWebMerc
+      weight: 3
+    - id: ClothingOuterCoatDetectiveLoadoutGrey
+      weight: 3
+    - id: ClothingShoesBootsCombatFilled
+      weight: 5
+    - id: ClothingHeadHelmetMerc
+      weight: 4
+    - id: ClothingHandsMercGlovesCombat
+      weight: 5
+    - id: ClothingBeltMercWebbing
+      weight: 4
+    - id: ClothingMaskGasMerc
+      weight: 4
+
+- type: entityTable
+  id: UNMCLootBasicEntityTable
+  table: !type:GroupSelector
+    children:
+    - id: CombatKnife
+      weight: 3
+    - id: BoxMRE
+      weight: 6
+    - id: ClothingHandsMercGlovesCombat
+      weight: 5
+    - id: ClothingHandsKnuckleDusters
+      weight: 4
+    - id: WeaponSniperMosin
+      weight: 0.4
+    - id: ClothingEyesGlassesSecurity
+      weight: 2
+    - id: MagazineLightRifle
+      weight: 3
+
+
+- type: entity
+  name: UNMC armor spawner
+  id: LootSpawnerUNMCArmor
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Clothing/OuterClothing/Vests/mercwebvest.rsi
+    - type: EntityTableSpawner
+      table: !type:NestedSelector
+        tableId: UNMCArmorEntityTable
+
+- type: entity
+  name: UNMC basic loot spawner
+  id: LootSpawnerUNMCLootBasic
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Objects/Weapons/Melee/combat_knife.rsi
+          state: icon
+    - type: EntityTableSpawner
+      table: !type:NestedSelector
+        tableId: UNMCLootBasicEntityTable
+

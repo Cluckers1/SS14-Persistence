@@ -1,0 +1,64 @@
+- type: entityTable
+  id: NTArmorEntityTable
+  table: !type:GroupSelector
+    children:
+    - id: ClothingOuterVestNT
+      weight: 3
+    - id: EmergencyMedipen
+      weight: 5
+    - id: ClothingBeltMilitaryWebbingERT
+      weight: 4
+    - id: ClothingMaskGasCentcom
+      weight: 4
+    - id: ClothingHandsGlovesCombat
+      weight: 5
+    - id: ClothingShoesBootsCombatFilled
+      weight: 4
+
+- type: entityTable
+  id: NTLootBasicEntityTable
+  table: !type:GroupSelector
+    children:
+    - id: CombatKnife
+      weight: 3
+    - id: EmergencyMedipen
+      weight: 6
+    - id: ClothingHandsGlovesCombat
+      weight: 5
+    - id: AnitPoisonMedipen
+      weight: 1
+    - id: AirlossAutoInjector
+      weight: 4
+    - id: ClothingEyesGlassesCommand
+      weight: 2
+    - id: ClothingShoesBootsCombatFilled
+      weight: 3
+
+
+- type: entity
+  name: NT armor spawner
+  id: LootSpawnerNTArmor
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Clothing/OuterClothing/Vests/pressvest.rsi
+    - type: EntityTableSpawner
+      table: !type:NestedSelector
+        tableId: NTArmorEntityTable
+
+- type: entity
+  name: NT basic loot spawner
+  id: LootSpawnerNTLootBasic
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Objects/Weapons/Melee/combat_knife.rsi
+          state: icon
+    - type: EntityTableSpawner
+      table: !type:NestedSelector
+        tableId: NTLootBasicEntityTable
+

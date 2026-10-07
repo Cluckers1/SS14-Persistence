@@ -1,0 +1,75 @@
+- type: entityTable
+  id: SLArmorEntityTable
+  table: !type:GroupSelector
+    children:
+    - id: ClothingOuterArmorBasic
+      weight: 3
+    - id: ClothingBeltSecurityWebbing
+      weight: 4
+    - id: ClothingMaskGasExplorer
+      weight: 4
+    - id: ClothingHandsGlovesCombat
+      weight: 5
+    - id: ClothingShoesBootsCombatFilled
+      weight: 4
+
+- type: entityTable
+  id: SLLootBasicEntityTable
+  table: !type:GroupSelector
+    children:
+    - id: CombatKnife
+      weight: 3
+    - id: EmergencyMedipen
+      weight: 6
+    - id: ClothingHandsGlovesCombat
+      weight: 5
+    - id: AnitPoisonMedipen
+      weight: 2
+    - id: ClothingEyesGlassesCommand
+      weight: 2
+    - id: ClothingShoesBootsCombatFilled
+      weight: 3
+
+
+
+- type: entity
+  name: Solar Legion armor spawner
+  id: LootSpawnerSLArmor
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: _Persistence14/Objects/Fun/Plushies/Isolde.rsi
+          state: icon
+    - type: EntityTableSpawner
+      table: !type:NestedSelector
+        tableId: SLArmorEntityTable
+
+- type: entity
+  name: Solar Legion basic loot spawner
+  id: LootSpawnerSLLootBasic
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: _Persistence14/Objects/Fun/Plushies/Llewellyn.rsi
+          state: icon
+    - type: EntityTableSpawner
+      table: !type:NestedSelector
+        tableId: SLLootBasicEntityTable
+
+- type: entity
+  name: Solar Legion plushies spawner
+  id: SpawnerSLPlushies
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: _Persistence14/Objects/Fun/Plushies/Llewellyn.rsi
+          state: icon
+    - type: EntityTableSpawner
+      table: !type:NestedSelector
+        tableId: AllPersistencePlushiesTable

@@ -1,0 +1,61 @@
+- type: entityTable
+  id: SyndieArmorEntityTable
+  table: !type:GroupSelector
+    children:
+    - id: ClothingOuterCoatSyndieCapArmored
+      weight: 3
+    - id: ClothingOuterWinterSyndieCapArmored
+      weight: 3
+    - id: ClothingBeltMilitaryWebbing
+      weight: 4
+    - id: ClothingMaskGasSyndicate
+      weight: 5
+    - id: ClothingHandsGlovesCombat
+      weight: 5
+
+- type: entityTable
+  id: SyndieLootBasicEntityTable
+  table: !type:GroupSelector
+    children:
+    - id: ToolboxSyndicateFilled
+      weight: 2
+    - id: SoapSyndie
+      weight: 6
+    - id: GlovesBoxingRiggedRandomSpawner
+      weight: 5
+    - id: ClothingHandsKnuckleDustersSyndicate
+      weight: 4
+    - id: ThrowingKnife
+      weight: 0.5
+    - id: DehydratedSpaceCarp
+      weight: 3
+
+
+- type: entity
+  name: syndicate armor spawner
+  id: LootSpawnerSyndieArmor
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Clothing/OuterClothing/Coats/syndicate/coatsyndiecaparmored.rsi
+    - type: EntityTableSpawner
+      table: !type:NestedSelector
+        tableId: SyndieArmorEntityTable
+
+
+- type: entity
+  name: syndicate basic loot spawner
+  id: LootSpawnerSyndieLootBasic
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Clothing/Hands/Gloves/KnuckleDusters/syndicateknuckleduster.rsi
+          state: syndicateknuckleduster
+    - type: EntityTableSpawner
+      table: !type:NestedSelector
+        tableId: SyndieLootBasicEntityTable
+
