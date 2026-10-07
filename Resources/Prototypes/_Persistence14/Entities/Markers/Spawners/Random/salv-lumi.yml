@@ -23,7 +23,7 @@
     - type: Sprite
       layers:
         - state: red
-        - sprite: Objects/Weapons/Melee/cult_dagger.rsi
+        - sprite: Structures/Specific/Anomalies/Cores/bluespace_core.rsi
     - type: EntityTableSpawner
       table: !type:NestedSelector
         tableId: LuminalLootBasicEntityTable
