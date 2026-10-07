@@ -225,8 +225,8 @@
 - type: entity
   parent: ClothingOuterVestWeb
   id: ClothingOuterVestNT
-  name: NT Vest
-  description: A specialized armor suit designed for the unique challenges of Persistence 14.
+  name: Nanotrasen vest
+  description: A specialized vest designed by Nanotrasen.
   components:
   - type: Sprite
     sprite: Clothing/OuterClothing/Vests/pressvest.rsi
