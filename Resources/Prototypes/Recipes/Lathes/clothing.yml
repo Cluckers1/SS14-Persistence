@@ -188,6 +188,7 @@
     Cloth: 500
     Glass: 200
 
+#Persistence 14 handy flag recipes
 - type: latheRecipe
   abstract: true
   id: BaseHandyFlag
@@ -3220,7 +3221,7 @@
     Glass: 100
     Plastic: 100
 
-#Handy Flags
+#Persistence 14 handy flag recipes
 
 - type: latheRecipe
   parent: BaseHandyFlag
@@ -3241,6 +3242,11 @@
   parent: BaseHandyFlag
   id: PirateHandyFlag
   result: PirateHandyFlag
+
+- type: latheRecipe
+  parent: BaseHandyFlag
+  id: NTHandyFlag
+  result: NTHandyFlag
 
 # Bandanas
 
