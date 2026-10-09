@@ -18,7 +18,62 @@
   rumorRewards:
     - PrecursorUpgradeModule
     - TradeGood
-  rewardsToOffer: 1
+    - PrecursorMerchCrate
+    - PrecursorPJs
+    - PrecursorCarpSuitBag
+    - PrecursorViper
+    - PrecursorCobra
+    - PrecursorPython
+    - PrecursorESword
+    - PrecursorEDagger
+    - PrecursorECrossbow
+    - PrecursorGlovesNorthStar
+    - PrecursorKnifeKit
+    - PrecursorKnuckleDusters
+    - PrecursorEShield
+    - PrecursorRiggedBoxingGloves
+    - PrecursorHushpup
+    - PrecursorC-20r
+    - PrecursorL-6SawBundle
+    - PrecursorMicrowave
+    - PrecursorHypopen
+    - PrecursorHypoDart
+    - PrecursorChemKit
+    - PrecursorHyperzinePen
+    - PrecursorHyperzineKit
+    - PrecursorCigarettes
+    - PrecursorDefib
+    - PrecursorJaws
+    - PrecursorAccessBreaker
+    - PrecursorStealthBox
+    - PrecursorChameleonProjector
+    - PrecursorFlashCamera
+    - PrecursorDecoy
+    - PrecursorRadioJammer
+    - PrecursorSoapSyndie
+    - PrecursorSoapSyndieCluster
+    - PrecursorToolbox
+    - PrecursorCameraBug
+    - PrecursorStorageImplanter
+    - PrecursorFreedomImplanter
+    - PrecursorScramImplanter
+    - PrecursorFakeMindshield
+    - PrecursorVoiceMaskImplanter
+    - PrecursorWebbing
+    - PrecursorChameleon
+    - PrecursorNoSlips
+    - PrecursorVestArmor
+    - PrecursorVestArmorElite
+    - PrecursorHardsuitSyndie
+    - PrecursorMagBoots
+    - PrecursorSyndieEva
+    - PrecursorCarpHardsuit
+    - PrecursorRaidSuit
+    - PrecursorHardsuitSyndieElite
+    - PrecursorHardsuitSyndieJug
+
+  rewardsToOffer: 50
+
 
 - type: metaFactionLevel
   id: Precursor3
