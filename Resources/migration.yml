@@ -50,16 +50,16 @@ CartridgeLightRifleHighVelocity: CartridgeLightRifle
 CartridgeMagnumHighVelocity: CartridgeMagnum
 CartridgePistolHighVelocity: CartridgePistol
 CartridgeRifleHighVelocity: CartridgeRifle
-MagazineBoxCaselessRifleHighVelocity: MagazineBoxCaselessRifle
+
 MagazineBoxLightRifleHighVelocity: MagazineBoxLightRifle
 MagazineBoxMagnumHighVelocity: MagazineBoxMagnum
 MagazineBoxPistolHighVelocity: MagazineBoxPistol
 MagazineBoxRifleHighVelocity: MagazineBoxRifle
-MagazineCaselessRifleHighVelocity: MagazinePistolCaselessRifle
+
 MagazineCaselessRifleShortHighVelocity: null
 MagazineLightRifleHighVelocity: MagazineLightRifle
 MagazineMagnumSubMachineGunHighVelocity: null
-MagazinePistolCaselessRifleHighVelocity: MagazinePistolCaselessRifle
+
 MagazinePistolHighCapacityHighVelocity: MagazinePistolHighCapacity
 MagazinePistolHighVelocity: MagazinePistol
 MagazinePistolSubMachineGunHighVelocity: MagazinePistolSubMachineGun
@@ -300,12 +300,12 @@ CartridgeRifleRubber: CartridgeRifle
 CartridgeCaselessRifleRubber: CartridgeCaselessRifle
 MagazinePistolRubber: MagazinePistol
 MagazinePistolSubMachineGunRubber: MagazinePistolSubMachineGun
-MagazinePistolCaselessRifleRubber: MagazinePistolCaselessRifle
+
 MagazineMagnumRubber: MagazineMagnum
 MagazineMagnumSubMachineGunRubber: null
 MagazineLightRifleRubber: MagazineLightRifle
 MagazineRifleRubber: MagazineRifle
-MagazineCaselessRifleRubber: MagazinePistolCaselessRifle
+
 MagazineCaselessRifleShortRubber: null
 SpeedLoaderPistolRubber: null
 SpeedLoaderMagnumRubber: SpeedLoaderMagnum
@@ -315,7 +315,7 @@ MagazineBoxMagnumRubber: MagazineBoxMagnum
 MagazineBoxLightRifleRubber: MagazineBoxLightRifle
 MagazineBoxRifleRubber: MagazineBoxRifle
 MagazineBoxRifleBigRubber: MagazineBoxRifleBig
-MagazineBoxCaselessRifleRubber: MagazineBoxCaselessRifle
+
 BoxMagazinePistolRubber: BoxMagazinePistol
 BoxMagazinePistolHighCapacityRubber: BoxMagazinePistolHighCapacity
 BoxMagazinePistolSubMachineGunRubber: BoxMagazinePistolSubMachineGun
@@ -754,7 +754,7 @@ DebugSMES: SMESBasicEmpty
 DebugSubstation: SubstationBasicEmpty
 DebugSubstationWall: BaseSubstationWall
 DebugAPC: BaseAPC
-MagazineCaselessRifle: MagazinePistolCaselessRifle
+
 MagazineCaselessRiflePractice: MagazinePistolCaselessRiflePractice
 SpeedLoaderPistol: null
 SpeedLoaderPistolPractice: null

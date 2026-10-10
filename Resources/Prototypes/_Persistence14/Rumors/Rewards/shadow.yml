@@ -6,4 +6,4 @@
   product: ShadowUpgradeModule
   icon:
     sprite: _Persistence14/Objects/Specific/Upgrades/modules.rsi
-    state: shadow
+    state: shadow-full

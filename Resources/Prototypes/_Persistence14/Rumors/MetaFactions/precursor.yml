@@ -22,57 +22,26 @@
     - PrecursorPJs
     - PrecursorCarpSuitBag
     - PrecursorViper
-    - PrecursorCobra
     - PrecursorPython
-    - PrecursorESword
-    - PrecursorEDagger
-    - PrecursorECrossbow
-    - PrecursorGlovesNorthStar
     - PrecursorKnifeKit
     - PrecursorKnuckleDusters
-    - PrecursorEShield
     - PrecursorRiggedBoxingGloves
-    - PrecursorHushpup
-    - PrecursorC-20r
-    - PrecursorL-6SawBundle
     - PrecursorMicrowave
-    - PrecursorHypopen
-    - PrecursorHypoDart
     - PrecursorChemKit
     - PrecursorHyperzinePen
-    - PrecursorHyperzineKit
     - PrecursorCigarettes
     - PrecursorDefib
     - PrecursorJaws
-    - PrecursorAccessBreaker
     - PrecursorStealthBox
-    - PrecursorChameleonProjector
     - PrecursorFlashCamera
     - PrecursorDecoy
-    - PrecursorRadioJammer
     - PrecursorSoapSyndie
-    - PrecursorSoapSyndieCluster
     - PrecursorToolbox
-    - PrecursorCameraBug
-    - PrecursorStorageImplanter
-    - PrecursorFreedomImplanter
-    - PrecursorScramImplanter
     - PrecursorFakeMindshield
-    - PrecursorVoiceMaskImplanter
     - PrecursorWebbing
-    - PrecursorChameleon
-    - PrecursorNoSlips
-    - PrecursorVestArmor
-    - PrecursorVestArmorElite
-    - PrecursorHardsuitSyndie
     - PrecursorMagBoots
     - PrecursorSyndieEva
-    - PrecursorCarpHardsuit
-    - PrecursorRaidSuit
-    - PrecursorHardsuitSyndieElite
-    - PrecursorHardsuitSyndieJug
-
-  rewardsToOffer: 50
+  rewardsToOffer: 1
 
 
 - type: metaFactionLevel
@@ -81,9 +50,45 @@
   rumorRewards:
     - PrecursorUpgradeModule
     - TradeGood
+    - PrecursorCobra
+    - PrecursorECrossbow
+    - PrecursorGlovesNorthStar
+    - PrecursorHushpup
+    - PrecursorHypopen
+    - PrecursorHypoDart
+    - PrecursorHyperzineKit
+    - PrecursorAccessBreaker
+    - PrecursorRadioJammer
+    - PrecursorSoapSyndieCluster
+    - PrecursorCameraBug
+    - PrecursorStorageImplanter
+    - PrecursorFreedomImplanter
+    - PrecursorNoSlips
+    - PrecursorVestArmor
+    - PrecursorVestArmorElite
+    - PrecursorHardsuitSyndie
+    - PrecursorCarpHardsuit
+    - PrecursorRaidSuit
   rewardsToOffer: 2
 
 - type: metaFactionLevel
   id: Precursor4
   name: Master Agent
+  rumorRewards:
+    - PrecursorUpgradeModule
+    - TradeGood
+    - PrecursorESword
+    - PrecursorEDagger
+    - PrecursorECrossbow
+    - PrecursorGlovesNorthStar
+    - PrecursorEShield
+    - PrecursorC-20r
+    - PrecursorL-6SawBundle
+    - PrecursorChameleonProjector
+    - PrecursorScramImplanter
+    - PrecursorVoiceMaskImplanter
+    - PrecursorChameleon
+    - PrecursorHardsuitSyndieElite
+    - PrecursorHardsuitSyndieJug
+  rewardsToOffer: 3
 

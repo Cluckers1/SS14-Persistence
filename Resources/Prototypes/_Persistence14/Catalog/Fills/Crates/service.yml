@@ -21,9 +21,9 @@
         children:
         - id: BalloonNT
           amount: 2
-        - id: NanotrasenFlipo
+        - id: NanotrasenFlippo
         - id: NTHandyFlag
-        - id: TowlColorNT
+        - id: TowelColorNT
         - id: PlayingCardDeckBoxNanotrasen
         - id: ClothingUniformJumpsuitNanotrasen
         - id: ClothingNeckCloakNanotrasen
