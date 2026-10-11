@@ -43,7 +43,7 @@
   name: Phoron Shipment
   description: "Phoron the material of tomorrow. You seem trustworthy enough for a small amount of it."
   price: 6000
-  product: CrateMaterialPlasma
+  product: CrateMaterialPhoron10
   icon:
     sprite: Objects/Materials/Sheets/other.rsi
     state: phoron_2
