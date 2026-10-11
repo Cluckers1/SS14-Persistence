@@ -1,0 +1,38 @@
+- type: codexEntry
+  id: Precursor101
+  name: 101
+  content: "UNFILLED"
+  order: 0
+  category: Precursor
+  unlockHint: "Use a Codex Fragment"
+- type: codexEntry
+  id: Precursor102
+  name: 102
+  content: "UNFILLED"
+  order: 1
+  category: Precursor
+  unlockHint: "Use a Codex Fragment"
+
+- type: codexEntry
+  id: Precursor103
+  name: 103
+  content: "UNFILLED"
+  order: 2
+  category: Precursor
+  unlockHint: "Use a Codex Fragment"
+
+- type: codexEntry
+  id: Precursor104
+  name: 104
+  content: "UNFILLED"
+  order: 3
+  category: Precursor
+  unlockHint: "Use a Codex Fragment"
+
+- type: codexEntry
+  id: Precursor105
+  name: 105
+  content: "UNFILLED"
+  order: 4
+  category: Precursor
+  unlockHint: "Use a Codex Fragment"

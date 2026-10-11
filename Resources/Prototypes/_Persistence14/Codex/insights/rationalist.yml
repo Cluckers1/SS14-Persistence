@@ -23,6 +23,7 @@
   description: Sense the location of the nearest anomaly.
   components:
   - type: Action
+    useDelay: 30
   - type: Sprite
     sprite: Clothing/Neck/Misc/pins.rsi
     layers:
@@ -35,3 +36,28 @@
   name: Beggars Choice
   content: "Gain the ability to reroll one node in an artifact."
 
+- type: trait
+  id: ArtifactReroll
+  name: Beggars Choice
+  description: "Gain the ability to reroll one node in an artifact."
+  selectable: false
+  components:
+    - type: ActionGrant
+      actions:
+        - ActionArtifactReroll
+      autoDelete: true
+
+- type: entity
+  parent: BaseAction
+  id: ActionArtifactReroll
+  name: Sense Anomaly
+  description: Sense the location of the nearest anomaly.
+  components:
+  - type: Action
+    useDelay: 30
+  - type: Sprite
+    sprite: Clothing/Neck/Misc/pins.rsi
+    layers:
+    - state: flower
+  - type: InstantAction
+    event: !type:ArtifactRerollEvent

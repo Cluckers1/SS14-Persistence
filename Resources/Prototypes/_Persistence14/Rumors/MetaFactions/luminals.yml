@@ -10,6 +10,7 @@
     Luminals2: 150
     Luminals3: 500
     Luminals4: 1000
+  order: 5
 
 - type: metaFactionLevel
   id: Luminals2
@@ -17,6 +18,7 @@
   rumorRewards:
     - LuminalUpgradeModule
     - TradeGood
+    - LuminalCodexFragment
   rewardsToOffer: 1
 
 - type: metaFactionLevel
@@ -25,9 +27,14 @@
   rumorRewards:
     - LuminalUpgradeModule
     - TradeGood
+    - LuminalCodexFragment
   rewardsToOffer: 2
 
 - type: metaFactionLevel
   id: Luminals4
   name: Prophet
-
+  rumorRewards:
+    - LuminalUpgradeModule
+    - TradeGood
+    - LuminalCodexFragment
+  rewardsToOffer: 3

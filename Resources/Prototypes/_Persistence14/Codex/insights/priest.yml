@@ -1,0 +1,34 @@
+- type: insightTrait
+  id: Priest1
+  name: Powerful Prayer
+  content: "Gain the ability to pray with holy books. Your prayers are more visible to the Gods."
+  next: Priest2
+
+- type: trait
+  id: Priest1
+  name: Powerful Prayer
+  description: "Gain the ability to pray with holy books. Your prayers are more visible to the Gods."
+  selectable: false
+  components:
+    - type: BibleUser
+
+- type: entity
+  parent: BaseAction
+  id: ActionAnomalySense
+  name: Sense Anomaly
+  description: Sense the location of the nearest anomaly.
+  components:
+  - type: Action
+    useDelay: 30
+  - type: Sprite
+    sprite: Clothing/Neck/Misc/pins.rsi
+    layers:
+    - state: flower
+  - type: InstantAction
+    event: !type:SenseAnomalyEvent
+
+
+- type: insightTrait
+  id: Priest2
+  name: Miracle Worker
+  content: "Gain the ability to pray with holy books. Your prayers are more visible to the Gods."

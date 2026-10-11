@@ -19,16 +19,21 @@
   order: 3
 
 - type: codexCategory
+  id: Precursor
+  name: Syndicate
+  order: 4
+
+- type: codexCategory
   id: Shadow
   name: The Elders
-  order: 4
+  order: 5
 
 - type: codexCategory
   id: Marine
   name: UNMC Remnant
-  order: 5
+  order: 6
 
 - type: codexCategory
   id: Luminal
   name: Luminals
-  order: 5
+  order: 7

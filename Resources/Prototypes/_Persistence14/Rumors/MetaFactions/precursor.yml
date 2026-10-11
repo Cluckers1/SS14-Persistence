@@ -11,6 +11,7 @@
     Precursor2: 150
     Precursor3: 500
     Precursor4: 1000
+  order: 2
 
 - type: metaFactionLevel
   id: Precursor2

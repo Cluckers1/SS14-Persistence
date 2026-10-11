@@ -197,7 +197,7 @@ public sealed partial class JobNetMenu : DefaultWindow
         CurrentGrid.RemoveAllChildren();
         ReputationsGrid.RemoveAllChildren();
         Dictionary<ProtoId<MetaFactionPrototype>, int> reputations = new();
-        foreach (var faction in metaFactions.OrderBy(p => p.Name).ToList())
+        foreach (var faction in metaFactions.OrderBy(p => p.Order).ThenBy(p => p.Name).ToList())
         {
             int rep = 0;
             if (state.MetaFactionReputations.TryGetValue(faction.ID, out var repVal))

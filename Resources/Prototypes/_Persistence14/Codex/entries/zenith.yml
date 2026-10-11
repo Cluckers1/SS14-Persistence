@@ -5,6 +5,7 @@
   order: 0
   category: Zenith
   unlockHint: "Use a Codex Fragment"
+
 - type: codexEntry
   id: Zenith102
   name: 102

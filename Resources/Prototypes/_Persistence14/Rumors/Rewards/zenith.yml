@@ -7,3 +7,13 @@
   icon:
     sprite: _Persistence14/Objects/Specific/Upgrades/modules.rsi
     state: solar-legion-full
+
+- type: rumorReward
+  id: ZenithCodexFragment
+  name: Codex Fragment (Solar Legion)
+  description: "Will unlock a codex entry when used."
+  price: 2000
+  product: ZenithCodexFragment
+  icon:
+    sprite: _Persistence14/Objects/Specific/Upgrades/modules.rsi
+    state: nanotrasen-full

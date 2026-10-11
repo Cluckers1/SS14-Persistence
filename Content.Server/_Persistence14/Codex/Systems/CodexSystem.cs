@@ -6,8 +6,10 @@ using Content.Shared._Persistence14.Codex;
 using Content.Shared._Persistence14.Codex.Components;
 using Content.Shared._Persistence14.Codex.Prototypes;
 using Content.Shared._Persistence14.Rumors.Components;
+using Content.Shared.Anomaly.Components;
 using Content.Shared.CrewAssignments;
 using Content.Shared.CrewAssignments.Components;
+using Content.Shared.EntityEffects.Effects.Body;
 using Content.Shared.Examine;
 using Content.Shared.GridControl.Components;
 using Content.Shared.Interaction;
@@ -21,6 +23,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace Content.Server._Persistence14.Codex.Systems;
@@ -34,6 +37,7 @@ public sealed partial class CodexSystem : EntitySystem
     [Dependency] private TraitSystem _trait = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -43,6 +47,14 @@ public sealed partial class CodexSystem : EntitySystem
 
     }
 
+    public float? GetRange(EntityUid start, EntityUid destination)
+    {
+        var startXform = Transform(start);
+        var destinationXform = Transform(destination);
+        if (startXform.MapID != destinationXform.MapID) return null;
+        var dist = Vector2.Distance(startXform.MapPosition.Position, destinationXform.MapPosition.Position);
+        return dist;
+    }
     public override void Update(float frameTime)
     {
         var passiveUnlockerQuery = EntityQueryEnumerator<CodexPassiveUnlockerComponent>();
@@ -61,7 +73,7 @@ public sealed partial class CodexSystem : EntitySystem
         }
         base.Update(frameTime);
     }
-
+    
     private void PassiveUnlockerCheck(EntityUid uid, CodexPassiveUnlockerComponent comp)
     {
         if (_crewMetaRecords.MetaRecords == null) return;
@@ -126,7 +138,34 @@ public sealed partial class CodexSystem : EntitySystem
 
     private void OnSenseAnomaly(Entity<ActorComponent> ent, ref SenseAnomalyEvent args)
     {
-
+        EntityUid? closest = null;
+        float? distance = null;
+        foreach(var arti in _lookup.GetEntitiesInRange<AnomalyComponent>(Transform(ent).Coordinates, 1000))
+        {
+            if (closest == null || distance == null)
+            {
+                distance = GetRange(ent, arti);
+                closest = arti;
+            }
+            else
+            {
+                var range = GetRange(ent, arti);
+                if (range != null && range < distance)
+                {
+                    closest = arti;
+                    distance = range;
+                }
+            }
+        }
+        if(closest != null)
+        {
+            var active = Transform(closest.Value);
+            NotifyPlayer(ent, $"You sense an anomaly; {Name(closest.Value)} is at {Math.Round(active.MapPosition.Position.X)}, {Math.Round(active.MapPosition.Position.Y)}");
+        }
+        else
+        {
+            NotifyPlayer(ent, "There are no anomalies within a 1000m range.");
+        }
     }
 
     public void UnlockEntry(EntityUid mob, ProtoId<CodexEntryPrototype> codex)

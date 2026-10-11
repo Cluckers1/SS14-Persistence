@@ -11,6 +11,7 @@
     Shadow2: 150
     Shadow3: 500
     Shadow4: 1000
+  order: 4
 
 - type: metaFactionLevel
   id: Shadow2
@@ -18,6 +19,7 @@
   rumorRewards:
     - ShadowUpgradeModule
     - TradeGood
+    - ShadowCodexFragment
   rewardsToOffer: 1
 
 - type: metaFactionLevel
@@ -26,10 +28,16 @@
   rumorRewards:
     - ShadowUpgradeModule
     - TradeGood
+    - ShadowCodexFragment
   rewardsToOffer: 2
 
 - type: metaFactionLevel
   id: Shadow4
   name: Cult Leader
+  rumorRewards:
+    - ShadowUpgradeModule
+    - TradeGood
+    - ShadowCodexFragment
+  rewardsToOffer: 3
 
 

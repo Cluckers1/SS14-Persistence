@@ -81,3 +81,57 @@
       - Zenith104
       - Zenith105
 
+- type: entity
+  id: GreenCodexFragment
+  parent: BaseCodexFragment
+  name: codex fragment (Nanotrasen)
+  components:
+  - type: Sprite
+    layers:
+    - state: solar-legion
+    - state: icon-SL
+  - type: CodexFragment
+    possibleEntries:
+      - Green101
+      - Green102
+      - Green103
+      - Green104
+      - Green105
+
+
+- type: entity
+  id: PrecursorCodexFragment
+  parent: BaseCodexFragment
+  name: codex fragment (Syndicate)
+  components:
+  - type: Sprite
+    layers:
+    - state: solar-legion
+    - state: icon-SL
+  - type: CodexFragment
+    possibleEntries:
+      - Precursor101
+      - Precursor102
+      - Precursor103
+      - Precursor104
+      - Precursor105
+
+
+- type: entity
+  id: LuminalCodexFragment
+  parent: BaseCodexFragment
+  name: codex fragment (Luminal)
+  components:
+  - type: Sprite
+    layers:
+    - state: solar-legion
+    - state: icon-SL
+  - type: CodexFragment
+    possibleEntries:
+      - Luminal101
+      - Luminal102
+      - Luminal103
+      - Luminal104
+      - Luminal105
+
+
