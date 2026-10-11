@@ -36,7 +36,7 @@
   product: CentCommFlippo
   icon:
     sprite: Objects/Tools/Lighters/centcomm.rsi
-    type: icon
+    state: icon
 
 - type: rumorReward
   id: GreenPhoronCrate
