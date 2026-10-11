@@ -1,0 +1,12 @@
+- type: insightCategory
+  id: Rationalist
+  name: Rationalist
+  order: 1
+  firstTrait: AnomalySense
+
+- type: insightCategory
+  id: Magician
+  name: Magician
+  order: 1
+  firstTrait: MagicTest1
+  color: Green

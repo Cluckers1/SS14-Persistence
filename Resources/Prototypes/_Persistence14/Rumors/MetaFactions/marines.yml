@@ -1,6 +1,6 @@
 - type: metaFaction
   id: Marines
-  name: UNMC Marines
+  name: UNMC Remnant
   description: "The UNMC controls the Marines Universe."
   rumors:
     - DrinkBasicFriendly

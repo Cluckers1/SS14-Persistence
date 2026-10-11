@@ -1,3 +1,4 @@
+using Content.Server._Persistence14.Codex.Systems;
 using Content.Server.CrewRecords.Systems;
 using Content.Server.Traits;
 using Content.Shared._Persistence14.Background.Prototypes;
@@ -24,7 +25,7 @@ public sealed partial class CharacterBackgroundSystem : EntitySystem
     [Dependency] private TraitSystem _traitSystem = default!;
     [Dependency] private CrewMetaRecordsSystem _crewMetaRecords = default!;
     [Dependency] private RumorsSystem _rumors = default!;
-
+    [Dependency] private CodexSystem _codex = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -121,6 +122,10 @@ public sealed partial class CharacterBackgroundSystem : EntitySystem
                         _rumors.AssignRumor(rumorEnt, args.Mob, kv.Key);
                     }
                 }
+            }
+            foreach (var codex in effectProto.CodexEntries)
+            {
+                _codex.UnlockEntry(mob, codex);
             }
         }
     }

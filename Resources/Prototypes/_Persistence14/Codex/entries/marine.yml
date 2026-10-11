@@ -1,0 +1,38 @@
+- type: codexEntry
+  id: Marine101
+  name: 101
+  content: "UNFILLED"
+  order: 0
+  category: Marine
+  unlockHint: "Use a Codex Fragment"
+- type: codexEntry
+  id: Marine102
+  name: 102
+  content: "UNFILLED"
+  order: 1
+  category: Marine
+  unlockHint: "Use a Codex Fragment"
+
+- type: codexEntry
+  id: Marine103
+  name: 103
+  content: "UNFILLED"
+  order: 2
+  category: Marine
+  unlockHint: "Use a Codex Fragment"
+
+- type: codexEntry
+  id: Marine104
+  name: 104
+  content: "UNFILLED"
+  order: 3
+  category: Marine
+  unlockHint: "Use a Codex Fragment"
+
+- type: codexEntry
+  id: Marine105
+  name: 105
+  content: "UNFILLED"
+  order: 4
+  category: Marine
+  unlockHint: "Use a Codex Fragment"

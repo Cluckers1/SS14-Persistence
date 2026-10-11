@@ -1,0 +1,11 @@
+- type: insightTrait
+  id: MagicTest1
+  name: Dark Vision
+  content: "Gain the ability to detect the coordinates of the nearest anomaly."
+  next: MagicTest2
+
+- type: insightTrait
+  id: MagicTest2
+  name: Summon
+  content: "Gain the ability to reroll one node in an artifact."
+

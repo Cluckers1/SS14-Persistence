@@ -44,12 +44,17 @@ public sealed partial class ActionGrantSystem : EntitySystem
             if (actionEnt != null)
                 ent.Comp.ActionEntities.Add(actionEnt.Value);
         }
+        if(ent.Comp.AutoDelete)
+        {
+            RemCompDeferred(ent, ent.Comp);
+        }
+        
     }
 
     [SubscribeLocalEvent]
     private void OnShutdown(Entity<ActionGrantComponent> ent, ref ComponentShutdown args)
     {
-        if (!ent.Comp.RemoveOnShutdown)
+        if (!ent.Comp.RemoveOnShutdown || ent.Comp.AutoDelete)
             return;
 
         foreach (var actionEnt in ent.Comp.ActionEntities)

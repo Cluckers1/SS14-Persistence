@@ -1,6 +1,7 @@
 using Content.Client.Message;
 using Content.Client.MessageBoard.UI;
 using Content.Client.Store.Ui;
+using Content.Shared._Persistence14.Codex.Prototypes;
 using Content.Shared._Persistence14.Rumors.Prototypes;
 using Content.Shared.Cargo.Components;
 using Content.Shared.CrewAssignments;
@@ -14,6 +15,7 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using System.Linq;
 using static Robust.Client.UserInterface.Controls.MenuBar;
 
 namespace Content.Client.CrewAssignments.UI;
@@ -36,7 +38,7 @@ public sealed partial class JobNetMenu : DefaultWindow
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
         MasterTabContainer.SetTabTitle(0, "Job Network");
-        MasterTabContainer.SetTabTitle(1, "History");
+        MasterTabContainer.SetTabTitle(1, "Insights");
         MasterTabContainer.SetTabTitle(2, "Sector");
         MasterTabContainer.SetTabTitle(3, "Upgrades");
         MasterTabContainer.SetTabTitle(4, "Rumors");
@@ -121,27 +123,49 @@ public sealed partial class JobNetMenu : DefaultWindow
             CompletedObjectives.AddChild(entry);
         }
 
-        CodexContainer.RemoveAllChildren();
 
         var charName = "";
         if (localPlayer != null)
             charName = _entityManager.GetComponent<MetaDataComponent>(localPlayer.Value).EntityName;
-        int totalNum = 0;
-        int lockedNum = 0;
-        foreach (var codexEntry in state.CodexEntries)
+
+        var codexCategories = _prototypeManager.EnumeratePrototypes<CodexCategoryPrototype>();
+        Dictionary<ProtoId<CodexCategoryPrototype>, List<ProtoId<CodexEntryPrototype>>> sortedCodex = new();
+        foreach (var codexCategory in codexCategories.OrderBy(P => P.Order).ThenBy(p => p.Name).ToList())
         {
-            totalNum++;
-            Button button = new();
-            if (!codexEntry.Visible && !codexEntry.Whitelist.Contains(charName))
-            {
-                lockedNum++;
-                button.Disabled = true;
-            }
-            button.Text = codexEntry.Title;
-            button.OnPressed += _ => OnSelectCodex(codexEntry.Title, codexEntry.Description);
-            CodexContainer.AddChild(button);
+            sortedCodex[codexCategory.ID] = new();
         }
-        UnlockedNumberLabel.Text = $"[head=3][color=yellow]{totalNum - lockedNum}/{totalNum}[/color] Codex Entries Unlocked[/head]";
+        var codexEntries = _prototypeManager.EnumeratePrototypes<CodexEntryPrototype>();
+        foreach (var codexEntry in codexEntries.OrderBy(P => P.Order).ThenBy(p => p.Name).ToList())
+        {
+            if(sortedCodex.ContainsKey(codexEntry.Category))
+            {
+                sortedCodex[codexEntry.Category].Add(codexEntry.ID);
+            }
+        }
+        CodexCategoryTC.RemoveAllChildren();
+        foreach (var kv in sortedCodex)
+        {
+            var codexCat = kv.Key;
+            var entryList = kv.Value;
+            var codexCatProto = _prototypeManager.Index(codexCat);
+            CodexPageFragment codexPage = new(this);
+            codexPage.Name = codexCatProto.Name;
+            codexPage.UpdateState(codexCat, entryList, state.CodexEntries);
+            CodexCategoryTC.AddChild(codexPage);
+        }
+        LevelBar.MaxValue = 5;
+        LevelBar.Value = state.CodexUnlocksSince;
+        ContentLabel.Text = $"{state.CodexUnlocksSince} / 5";
+        InsightPoints.Text = state.UnspentInsights.ToString();
+        var insightCategories = _prototypeManager.EnumeratePrototypes<InsightCategoryPrototype>();
+        InsightsBox.RemoveAllChildren();
+        foreach (var insightCategory in insightCategories.OrderBy(p => p.Order)
+                                                         .ThenBy(p => p.Name)
+                                                         .ToList())
+        {
+            InsightBoxFragment box = new(insightCategory, state.UnlockedInsights, state.UnspentInsights > 0, this);
+            InsightsBox.AddChild(box);
+        }
         _prototypeManager.Resolve(state.Level, out var levelProto);
         if (levelProto != null)
         {
@@ -173,7 +197,7 @@ public sealed partial class JobNetMenu : DefaultWindow
         CurrentGrid.RemoveAllChildren();
         ReputationsGrid.RemoveAllChildren();
         Dictionary<ProtoId<MetaFactionPrototype>, int> reputations = new();
-        foreach (var faction in metaFactions)
+        foreach (var faction in metaFactions.OrderBy(p => p.Name).ToList())
         {
             int rep = 0;
             if (state.MetaFactionReputations.TryGetValue(faction.ID, out var repVal))

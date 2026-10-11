@@ -26,4 +26,7 @@ public sealed partial class ActionGrantComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool RemoveOnShutdown = true;
+
+    [DataField]
+    public bool AutoDelete = false;
 }

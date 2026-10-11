@@ -1,0 +1,38 @@
+- type: codexEntry
+  id: Green101
+  name: 101
+  content: "UNFILLED"
+  order: 0
+  category: Green
+  unlockHint: "Use a Codex Fragment"
+- type: codexEntry
+  id: Green102
+  name: 102
+  content: "UNFILLED"
+  order: 1
+  category: Green
+  unlockHint: "Use a Codex Fragment"
+
+- type: codexEntry
+  id: Green103
+  name: 103
+  content: "UNFILLED"
+  order: 2
+  category: Green
+  unlockHint: "Use a Codex Fragment"
+
+- type: codexEntry
+  id: Green104
+  name: 104
+  content: "UNFILLED"
+  order: 3
+  category: Green
+  unlockHint: "Use a Codex Fragment"
+
+- type: codexEntry
+  id: Green105
+  name: 105
+  content: "UNFILLED"
+  order: 4
+  category: Green
+  unlockHint: "Use a Codex Fragment"

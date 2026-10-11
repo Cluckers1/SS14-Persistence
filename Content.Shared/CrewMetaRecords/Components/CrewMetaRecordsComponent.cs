@@ -1,4 +1,5 @@
 using Content.Shared._Persistence14.Background.Prototypes;
+using Content.Shared._Persistence14.Codex.Prototypes;
 using Content.Shared._Persistence14.Resonance.Prototypes;
 using Content.Shared._Persistence14.Rumors.Prototypes;
 using Content.Shared.CrewAssignments.Prototypes;
@@ -83,13 +84,10 @@ public partial class CrewMetaRecord
     public DateTime LatestIDTime;
     [DataField]
     public ProtoId<NetworkLevelPrototype> Level = "NetworkLevel1";
-
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextMessageBoardEntry = TimeSpan.Zero;
-
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextMessageBoardComment = TimeSpan.Zero;
-
     [DataField]
     public ProtoId<AlignmentPrototype> Alignment = "Neutral";
     [DataField]
@@ -102,9 +100,18 @@ public partial class CrewMetaRecord
     public Dictionary<ProtoId<MetaFactionPrototype>, int> MetaFactionReputations = new();
     [DataField]
     public Dictionary<string, DirectMessageConversation> DirectMessageConversations { get; set; } = new();
-
     [DataField]
     public List<ProtoId<TraitPrototype>> Traits = new();
+    [DataField]
+    public List<ProtoId<CodexEntryPrototype>> UnlockedEntries = new();
+    [DataField]
+    public List<ProtoId<InsightTraitPrototype>> UnlockedInsights = new();
+    [DataField]
+    public int CodexUnlocksSince = 0;
+    [DataField]
+    public int UnspentInsights = 0;
+    [DataField]
+    public Dictionary<ProtoId<CodexEntryPrototype>, int> PassiveProgressEntries = new();
     public CrewMetaRecord(string name)
     {
         Name = name;

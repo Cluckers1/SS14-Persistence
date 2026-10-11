@@ -1,6 +1,6 @@
 - type: metaFaction
   id: Shadow
-  name: Strange Signal
+  name: The Elders
   description: "Unknown Entities control the Shadow Universe."
   rumors:
     - DrinkBasicEvil

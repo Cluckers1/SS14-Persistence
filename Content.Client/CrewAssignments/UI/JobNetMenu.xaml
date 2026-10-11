@@ -45,14 +45,53 @@
                     </BoxContainer>
                     <Control MinHeight ="30" />
                     <BoxContainer Orientation="Horizontal" Name="RumorTaxDetails">
-                        <Label Text="Rumor Tax:" Margin="0 0 10 0"
-                          StyleClasses="LabelKeyText" />
+                        <Label Text="Rumor Tax:" Margin="0 0 10 0" StyleClasses="LabelKeyText" />
                         <Label Name="RumorTaxLabel" Text="0%" Margin="0 0 5 0" />
                     </BoxContainer>
                 </BoxContainer>
             </BoxContainer>
             <BoxContainer Orientation="Vertical" Access="Public">
                 <TabContainer Name="HistoryTabContainer"  VerticalExpand="True">
+                    <ScrollContainer Name="Codex" VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
+                        <BoxContainer Orientation="Vertical">
+                            <TabContainer VerticalExpand="True" HorizontalExpand="True" Name="CodexCategoryTC">
+                                
+                            </TabContainer>
+                        </BoxContainer>
+                    </ScrollContainer>
+                    <ScrollContainer Name="Insights" VerticalExpand="True" HorizontalExpand="True" VScrollEnabled="False">
+                        <BoxContainer Orientation="Vertical">
+                            <BoxContainer Orientation="Horizontal">
+                                <Label Text="Unspent Insights: " StyleClasses="LabelKeyText" />
+                                <RichTextLabel Name="InsightPoints" Text="0" />
+                                <Control HorizontalExpand="True" />
+                                <Label Text="Codex Unlocks Required: " StyleClasses="LabelKeyText" />
+                                <ProgressBar Name="LevelBar"
+                                    HorizontalExpand="True"
+                                    MaxValue="1"
+                                    MinValue="0"
+                                    SetHeight="25"
+                                    Margin="10 5 10 5"
+                                    VerticalAlignment="Center">
+                                    <RichTextLabel Name="ContentLabel" Margin="10 0 0 0" Text="0 / 5" />
+                                </ProgressBar>
+                            </BoxContainer>
+                            <BoxContainer Orientation="Horizontal" VerticalExpand="True" HorizontalExpand="True" Name="InsightsBox" />
+                        </BoxContainer>
+                    </ScrollContainer>
+                </TabContainer>
+            </BoxContainer>
+            <BoxContainer Orientation="Vertical" VerticalExpand="True">
+                <TabContainer Name="SectorTabContainer" VerticalExpand="True">
+                    <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False" Name="Status">
+                        <BoxContainer Orientation="Vertical" Margin="15">
+                            <Label Text="Sector Status"
+                                  StyleClasses="LabelKeyText" />
+                            <PanelContainer StyleClasses="BackgroundPanel" HorizontalExpand="True" VerticalExpand="True" Margin="10 10 10 0">
+                                <RichTextLabel Name="SectorStatusLabel" />
+                            </PanelContainer>
+                        </BoxContainer>
+                    </ScrollContainer>
                     <ScrollContainer Name="Achievements" VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
                         <BoxContainer Orientation="Vertical" Access="Public">
                             <Label Text="Ongoing:" Margin="10 10 10 0"
@@ -68,29 +107,8 @@
                         </BoxContainer>
 
                     </ScrollContainer>
-                    <ScrollContainer Name="Codex" VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
-                        <BoxContainer Orientation="Vertical">
-                            <RichTextLabel Name="UnlockedNumberLabel" Access="Public"></RichTextLabel>
-                            <Control MinHeight="20"></Control>
-                            <BoxContainer Orientation="Vertical" Access="Public" Name="CodexContainer">
-                            </BoxContainer>
-                        </BoxContainer>
-
-                    </ScrollContainer>
                 </TabContainer>
             </BoxContainer>
-
-            <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
-                <BoxContainer Orientation="Vertical" Margin="15">
-                    <Label Text="Sector Status"
-                          StyleClasses="LabelKeyText" />
-                    <PanelContainer StyleClasses="BackgroundPanel" HorizontalExpand="True" VerticalExpand="True" Margin="10 10 10 0">
-                        <RichTextLabel Name="SectorStatusLabel" />
-                    </PanelContainer>
-                </BoxContainer>
-
-            </ScrollContainer>
-         
             <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
                 <BoxContainer Orientation="Vertical" Margin="15">
                     <Control MinHeight="5"/>

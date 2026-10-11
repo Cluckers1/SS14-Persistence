@@ -1,4 +1,5 @@
 using Content.Server._NF.Bank;
+using Content.Server._Persistence14.Codex.Systems;
 using Content.Server.Access.Systems;
 using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
@@ -67,6 +68,7 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private NameIdentifierSystem _nameIdentifier = default!;
     [Dependency] private RumorsSystem _rumors = default!;
+    [Dependency] private CodexSystem _codex = default!;
     public override void ReagentObjectiveComplete(JobNetComponent component, ProtoId<PrecursorObjectivePrototype> objective)
     {
         if (_proto.TryIndex(objective, out PrecursorObjectivePrototype? proto) && proto != null)
@@ -107,12 +109,23 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         SubscribeLocalEvent<JobNetComponent, JobNetCancelRumorMessage>(OnCancelRumor);
         SubscribeLocalEvent<JobNetComponent, JobNetTransferRumorMessage>(OnTransferRumor);
         SubscribeLocalEvent<JobNetComponent, JobNetRumorRewardPurchaseMessage>(OnRumorRewardPurchase);
+        SubscribeLocalEvent<JobNetComponent, JobNetInsightPurchaseMessage>(OnInsightPurchase);
         SubscribeLocalEvent<PrecursorExtractorComponent, AfterInteractEvent>(AfterInteractOn);
         SubscribeLocalEvent<PrecursorExtractorComponent, PrecursorExtractorDoAfterEvent>(OnDoAfter);
 
 
 
         InitializeUi();
+    }
+
+    private void OnInsightPurchase(Entity<JobNetComponent> ent, ref JobNetInsightPurchaseMessage args)
+    {
+        EntityUid? player = null;
+        var comp = Transform(ent);
+        player = comp.ParentUid;
+        if (player == null) return;
+        _codex.OnInsightPurchase(player.Value, args);
+        UpdateUserInterface(args.Actor, ent);
     }
 
     private void OnRumorRewardPurchase(Entity<JobNetComponent> ent, ref JobNetRumorRewardPurchaseMessage args)

@@ -66,13 +66,18 @@ public sealed class JobNetBoundUserInterface : BoundUserInterface
         SendMessage(new JobNetCancelRumorMessage(ind));
     }
 
-    internal void TransferRumor(int rumorIndex, string text)
+    public void TransferRumor(int rumorIndex, string text)
     {
         SendMessage(new JobNetTransferRumorMessage(rumorIndex, text));
     }
 
-    internal void RumorRewardPurchase(ProtoId<RumorRewardPrototype> rewardID, ProtoId<MetaFactionLevelPrototype> levelID, ProtoId<MetaFactionPrototype> factionID)
+    public void RumorRewardPurchase(ProtoId<RumorRewardPrototype> rewardID, ProtoId<MetaFactionLevelPrototype> levelID, ProtoId<MetaFactionPrototype> factionID)
     {
         SendMessage(new JobNetRumorRewardPurchaseMessage(rewardID, levelID, factionID));
+    }
+
+    public void OnInsightPurchase(string iD)
+    {
+        SendMessage(new JobNetInsightPurchaseMessage(iD));
     }
 }

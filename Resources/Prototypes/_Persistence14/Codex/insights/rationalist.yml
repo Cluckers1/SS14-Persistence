@@ -1,0 +1,37 @@
+- type: insightTrait
+  id: AnomalySense
+  name: Sense Anomaly
+  content: "Gain the ability to sense the location of the nearest anomaly."
+  next: ArtifactReroll
+  trait: AnomalySense
+
+- type: trait
+  id: AnomalySense
+  name: Sense Anomaly
+  description: "Gain the ability to sense the location of the nearest anomaly."
+  selectable: false
+  components:
+    - type: ActionGrant
+      actions:
+        - ActionAnomalySense
+      autoDelete: true
+
+- type: entity
+  parent: BaseAction
+  id: ActionAnomalySense
+  name: Sense Anomaly
+  description: Sense the location of the nearest anomaly.
+  components:
+  - type: Action
+  - type: Sprite
+    sprite: Clothing/Neck/Misc/pins.rsi
+    layers:
+    - state: flower
+  - type: InstantAction
+    event: !type:SenseAnomalyEvent
+
+- type: insightTrait
+  id: ArtifactReroll
+  name: Beggars Choice
+  content: "Gain the ability to reroll one node in an artifact."
+
