@@ -46,7 +46,7 @@
   id: PrecursorViper
   name: Viper
   description: "A small and easily concealable pistol. Retrofitted with a fully automatic receiver. Uses extended pistol magazines (.35 auto)."
-  price: 900
+  price: 1200
   product: WeaponPistolViper
   icon:
     sprite: Objects/Weapons/Guns/Pistols/viper.rsi
@@ -56,7 +56,7 @@
   id: PrecursorCobra
   name: Cobra
   description: "A rugged, robust operator handgun with inbuilt silencer. Uses pistol magazines (.25 caseless)."
-  price: 900
+  price: 1200
   product: WeaponPistolCobra
   icon:
     sprite: Objects/Weapons/Guns/Pistols/cobra.rsi
@@ -66,7 +66,7 @@
   id: PrecursorPython
   name: Python
   description: "A loud and powerful revolver. THE gun of the syndicate. Uses magnum ammo (.45)"
-  price: 900
+  price: 1200
   product: WeaponRevolverPython
   icon:
     sprite: Objects/Weapons/Guns/Revolvers/python.rsi

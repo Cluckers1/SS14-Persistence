@@ -19,6 +19,15 @@
     - PrecursorUpgradeModule
     - TradeGood
     - PrecursorMerchCrate
+  rewardsToOffer: 1
+
+
+- type: metaFactionLevel
+  id: Precursor3
+  name: Agent
+  rumorRewards:
+    - PrecursorUpgradeModule
+    - TradeGood
     - PrecursorPJs
     - PrecursorCarpSuitBag
     - PrecursorViper
@@ -41,15 +50,6 @@
     - PrecursorWebbing
     - PrecursorMagBoots
     - PrecursorSyndieEva
-  rewardsToOffer: 1
-
-
-- type: metaFactionLevel
-  id: Precursor3
-  name: Agent
-  rumorRewards:
-    - PrecursorUpgradeModule
-    - TradeGood
     - PrecursorCobra
     - PrecursorECrossbow
     - PrecursorGlovesNorthStar
@@ -57,8 +57,6 @@
     - PrecursorHypopen
     - PrecursorHypoDart
     - PrecursorHyperzineKit
-    - PrecursorAccessBreaker
-    - PrecursorRadioJammer
     - PrecursorSoapSyndieCluster
     - PrecursorCameraBug
     - PrecursorStorageImplanter
@@ -84,11 +82,13 @@
     - PrecursorEShield
     - PrecursorC-20r
     - PrecursorL-6SawBundle
+    - PrecursorAccessBreaker
+    - PrecursorRadioJammer
     - PrecursorChameleonProjector
     - PrecursorScramImplanter
     - PrecursorVoiceMaskImplanter
     - PrecursorChameleon
     - PrecursorHardsuitSyndieElite
     - PrecursorHardsuitSyndieJug
-  rewardsToOffer: 3
+  rewardsToOffer: 2
 
