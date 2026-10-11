@@ -301,28 +301,28 @@
   id: MagazineBoxCaselessRifleRecipe
   result: MagazineBoxCaselessRifle
   materials:
-    Steel: 600
+    Steel: 800
 
 - type: latheRecipe
   parent: BaseAmmoRecipe
   id: MagazinePistolCaselessRifleRecipe
   result: MagazinePistolCaselessRifle
   materials:
-    Steel: 145
+    Steel: 245
 
 - type: latheRecipe
   parent: BaseAmmoBoxRecipe
   id: MagazineBoxCaselessRiflePracticeRecipe
   result: MagazineBoxCaselessRiflePractice
   materials:
-    Steel: 300
+    Steel: 500
 
 - type: latheRecipe
   parent: BaseAmmoRecipe
   id: MagazinePistolCaselessRiflePracticeRecipe
   result: MagazinePistolCaselessRiflePractice
   materials:
-    Steel: 85
+    Steel: 185
 
 
 # .45 Magnum

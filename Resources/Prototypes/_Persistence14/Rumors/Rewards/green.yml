@@ -36,7 +36,7 @@
   product: CentCommFlippo
   icon:
     sprite: Objects/Tools/Lighters/centcomm.rsi
-    type: Item
+    type: icon
 
 - type: rumorReward
   id: GreenPhoronCrate
@@ -46,7 +46,7 @@
   product: CrateMaterialPlasma
   icon:
     sprite: Objects/Materials/Sheets/other.rsi
-    state: plasma_3
+    state: phoron_2
 
 - type: rumorReward
   id: GreenMagBoots
