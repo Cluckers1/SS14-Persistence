@@ -19,7 +19,12 @@
   rumorRewards:
     - GreenUpgradeModule
     - TradeGood
-  rewardsToOffer: 1
+    - GreenPlasmaCrate
+    - GreenMerchCrate
+    - GreenFlippoWelder
+    - GreenPhoronCrate
+    - GreenMagBoots
+  rewardsToOffer: 3
 
 
 - type: metaFactionLevel
