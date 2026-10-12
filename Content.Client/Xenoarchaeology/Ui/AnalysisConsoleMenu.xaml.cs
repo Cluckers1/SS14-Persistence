@@ -65,11 +65,6 @@ public sealed partial class AnalysisConsoleMenu : FancyWindow
             SetSelectedNode(node);
         };
 
-        ServerButton.OnPressed += _ =>
-        {
-            OnServerSelectionButtonPressed?.Invoke();
-        };
-
         ExtractButton.OnPressed += StartExtract;
 
         CyclePrevButton.OnPressed += _ => OnCycleArtifactPressed?.Invoke(false);

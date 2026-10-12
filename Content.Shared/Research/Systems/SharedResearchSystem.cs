@@ -1,8 +1,12 @@
 using System.Linq;
+using System.Numerics;
+using Content.Shared._Persistence14.PersistentIdentifier;
 using Content.Shared._Persistence14.Research.RecipeRelay;
 using Content.Shared.Lathe;
+using Content.Shared.Pinpointer;
 using Content.Shared.Research.Components;
 using Content.Shared.Research.Prototypes;
+using Content.Shared.Station;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -14,6 +18,9 @@ public abstract partial class SharedResearchSystem : EntitySystem
 {
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedLatheSystem _lathe = default!;
+    [Dependency] private SharedStationSystem _station = default!;
+    [Dependency] private PersistentIdentifierSystem _pid = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
@@ -40,16 +47,22 @@ public abstract partial class SharedResearchSystem : EntitySystem
         Dirty(uid, component);
     }
 
-    public List<TechnologyPrototype> GetAvailableTechnologies(EntityUid uid, TechnologyDatabaseComponent? component = null)
+    public List<TechnologyPrototype> GetAvailableTechnologies(EntityUid uid, TechnologyDatabaseComponent? db = null)
     {
-        if (!Resolve(uid, ref component, false))
+        if (db is null)
+        {
+            if (!TryGetClientServer(uid, out var server))
+                return new List<TechnologyPrototype>();
+            db = server.Comp2;
+        }
+        else if (!Resolve(uid, ref db))
             return new List<TechnologyPrototype>();
 
         var availableTechnologies = new List<TechnologyPrototype>();
-        var disciplineTiers = GetDisciplineTiers(component);
+        var disciplineTiers = GetDisciplineTiers(db);
         foreach (var tech in ProtoMan.EnumeratePrototypes<TechnologyPrototype>())
         {
-            if (IsTechnologyAvailable(component, tech, disciplineTiers))
+            if (IsTechnologyAvailable(db, tech, disciplineTiers))
                 availableTechnologies.Add(tech);
         }
 
@@ -78,7 +91,14 @@ public abstract partial class SharedResearchSystem : EntitySystem
 
         foreach (var prereq in tech.TechnologyPrerequisites)
         {
-            if (!component.UnlockedTechnologies.Contains(prereq))
+            var has = false;
+            foreach (var list in component.UnlockedTechnologies.Values)
+                if (list.Contains(prereq))
+                {
+                    has = true;
+                    break;
+                }
+            if (!has)
                 return false;
         }
 
@@ -106,12 +126,15 @@ public abstract partial class SharedResearchSystem : EntitySystem
         var allTech = ProtoMan.EnumeratePrototypes<TechnologyPrototype>()
             .Where(p => p.Discipline == techDiscipline.ID && !p.Hidden).ToList();
         var allUnlocked = new List<TechnologyPrototype>();
-        foreach (var recipe in component.UnlockedTechnologies)
+        foreach (var (disc, list) in component.UnlockedTechnologies)
         {
-            var proto = ProtoMan.Index<TechnologyPrototype>(recipe);
-            if (proto.Discipline != techDiscipline.ID)
-                continue;
-            allUnlocked.Add(proto);
+            foreach (var recipe in list)
+            {
+                var proto = ProtoMan.Index<TechnologyPrototype>(recipe);
+                if (proto.Discipline != techDiscipline.ID)
+                    continue;
+                allUnlocked.Add(proto);
+            }
         }
 
         var highestTier = techDiscipline.TierPrerequisites.Keys.Max();
@@ -133,10 +156,6 @@ public abstract partial class SharedResearchSystem : EntitySystem
             if (percent < techDiscipline.TierPrerequisites[tier])
                 break;
 
-            if (tier >= techDiscipline.LockoutTier &&
-                component.MainDiscipline != null &&
-                techDiscipline.ID != component.MainDiscipline)
-                break;
             tier++;
         }
 
@@ -145,6 +164,7 @@ public abstract partial class SharedResearchSystem : EntitySystem
 
     public FormattedMessage GetTechnologyDescription(
         TechnologyPrototype technology,
+        float costMultiplier,
         bool includeCost = true,
         bool includeTier = true,
         bool includePrereqs = false,
@@ -161,7 +181,7 @@ public abstract partial class SharedResearchSystem : EntitySystem
 
         if (includeCost)
         {
-            description.AddMarkupOrThrow(Loc.GetString("research-console-cost", ("amount", technology.Cost)));
+            description.AddMarkupOrThrow(Loc.GetString("research-console-cost", ("amount", MathF.Floor(technology.Cost * costMultiplier))));
             description.PushNewline();
         }
 
@@ -211,23 +231,14 @@ public abstract partial class SharedResearchSystem : EntitySystem
     /// <returns>Whether it is unlocked or not</returns>
     public bool IsTechnologyUnlocked(EntityUid uid, string technologyId, TechnologyDatabaseComponent? component = null)
     {
-        return Resolve(uid, ref component, false) && component.UnlockedTechnologies.Contains(technologyId);
-    }
+        if (!Resolve(uid, ref component, false))
+            return false;
 
-    public void TrySetMainDiscipline(TechnologyPrototype prototype, EntityUid uid, TechnologyDatabaseComponent? component = null)
-    {
-        if (!Resolve(uid, ref component))
-            return;
+        foreach (var list in component.UnlockedTechnologies.Values)
+            if (list.Contains(technologyId))
+                return true;
 
-        var discipline = ProtoMan.Index(prototype.Discipline);
-        if (prototype.Tier < discipline.LockoutTier)
-            return;
-        return;
-        //component.MainDiscipline = prototype.Discipline;
-        //Dirty(uid, component);
-
-        //var ev = new TechnologyDatabaseModifiedEvent();
-        //RaiseLocalEvent(uid, ref ev);
+        return false;
     }
 
     /// <summary>
@@ -252,13 +263,21 @@ public abstract partial class SharedResearchSystem : EntitySystem
         var recipes = tech.RecipeUnlocks;
         foreach (var (recipe, qty) in recipes)
         {
-            foreach (var unlockedTech in entity.Comp.UnlockedTechnologies)
+            foreach (var list in entity.Comp.UnlockedTechnologies.Values)
             {
-                var unlockedTechProto = ProtoMan.Index<TechnologyPrototype>(unlockedTech);
+                bool found = false;
+                foreach (var unlockedTech in list)
+                {
+                    var unlockedTechProto = ProtoMan.Index<TechnologyPrototype>(unlockedTech);
 
-                if (!unlockedTechProto.RecipeUnlocks.ContainsKey(recipe))
-                    continue;
-                break;
+                    if (!unlockedTechProto.RecipeUnlocks.ContainsKey(recipe))
+                        continue;
+
+                    found = true;
+                    break;
+                }
+                if (found)
+                    break;
             }
         }
         Dirty(entity, entity.Comp);
@@ -297,5 +316,118 @@ public abstract partial class SharedResearchSystem : EntitySystem
 
         var ev = new TechnologyDatabaseModifiedEvent(new List<string> { recipe });
         RaiseLocalEvent(uid, ref ev);
+    }
+
+    public bool TryGetClientServer(Entity<ResearchClientComponent?> client, out Entity<ResearchServerComponent, TechnologyDatabaseComponent> server)
+    {
+        server = default!;
+        if (!Resolve(client, ref client.Comp))
+            return false;
+
+        // Attempt to resolve existing connection.
+        if (_pid.TryResolveId(client.Comp.Server, out var serverEnt))
+        {
+            if (TryComp<ResearchServerComponent>(serverEnt.Owner, out var serverComp) &&
+                TryComp<TechnologyDatabaseComponent>(serverEnt.Owner, out var dbComp) &&
+                ValidClientServer((client, client.Comp), (serverEnt.Owner, serverComp)))
+            {
+                server = (serverEnt.Owner, serverComp, dbComp);
+                return true;
+            }
+        }
+
+        // If existing connection fails, query to find new valid connection.
+        var servers = GetCompatibleServers(client)
+            .Select(candidate => (Server: candidate, Distance: Vector2.DistanceSquared(_transform.GetWorldPosition(client.Owner), _transform.GetWorldPosition(candidate.Owner))))
+            .OrderBy(candidate => candidate.Distance)
+            .ThenBy(candidate => candidate.Server.Owner).ToList();
+
+        if (servers.Count == 0)
+        {
+            client.Comp.Server = PersistentIdentifierSystem.EmptyId;
+            return false;
+        }
+
+        server = servers[0].Server;
+        client.Comp.Server = _pid.EnsureId(server);
+        return true;
+    }
+
+    protected bool ValidClientServer(Entity<ResearchClientComponent> client, Entity<ResearchServerComponent> server)
+    {
+        var clientXform = Transform(client.Owner);
+        var serverXform = Transform(server.Owner);
+        if (clientXform.GridUid == null ||
+            clientXform.GridUid != serverXform.GridUid)
+            return false;
+
+        var clientFaction = _station.GetOwningStation(client.Owner);
+        var serverFaction = _station.GetOwningStation(server.Owner);
+        if (clientFaction == null ||
+            clientFaction != serverFaction)
+            return false;
+
+        return true;
+    }
+
+    protected void SyncDB(Entity<TechnologyDatabaseComponent> source, Entity<TechnologyDatabaseComponent> target)
+    {
+        target.Comp.SupportedDisciplines = source.Comp.SupportedDisciplines;
+        target.Comp.UnlockedTechnologies = source.Comp.UnlockedTechnologies;
+
+        Dirty(target);
+        UpdateTechnologyCards(target.Owner);
+        var ev = new TechnologyDatabaseModifiedEvent();
+        RaiseLocalEvent(target.Owner, ref ev);
+    }
+
+    protected void ResetDB(Entity<ResearchServerComponent, TechnologyDatabaseComponent> server)
+    {
+        var (serverUid, serverComp, dbComp) = server;
+        dbComp.UnlockedTechnologies = [];
+
+        Dirty(serverUid, dbComp);
+        UpdateTechnologyCards(serverUid, dbComp);
+        var ev = new TechnologyDatabaseModifiedEvent();
+        RaiseLocalEvent(serverUid, ref ev);
+    }
+
+    public IEnumerable<Entity<ResearchServerComponent, TechnologyDatabaseComponent>> GetCompatibleServers(EntityUid uid)
+    {
+        var xForm = Transform(uid);
+        if (xForm.GridUid is not { } grid)
+            yield break; // Not on a grid, no compatible servers for you.
+
+        var faction = _station.GetOwningStation(uid);
+
+        var query = EntityQueryEnumerator<ResearchServerComponent, TechnologyDatabaseComponent>();
+        while (query.MoveNext(out var serverUid, out var serverComp, out var dbComp))
+        {
+            var serverXform = Transform(serverUid);
+            if (grid != serverXform.GridUid)
+                continue;
+
+            var serverFaction = _station.GetOwningStation(serverUid);
+            if (faction != serverFaction)
+                continue;
+
+            yield return (serverUid, serverComp, dbComp);
+        }
+    }
+
+    public bool ServerCompatible(EntityUid uid, Entity<ResearchServerComponent?> server)
+    {
+        var xformA = Transform(uid);
+        var xformB = Transform(server.Owner);
+
+        if (xformA.GridUid is not { } || xformA.GridUid != xformB.GridUid)
+            return false;
+
+        var factionA = _station.GetOwningStation(uid);
+        var factionB = _station.GetOwningStation(server.Owner);
+        if (factionA != factionB)
+            return false;
+
+        return true;
     }
 }

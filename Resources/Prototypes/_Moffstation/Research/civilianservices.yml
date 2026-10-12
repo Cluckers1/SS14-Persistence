@@ -7,7 +7,7 @@
     entity: HudModuleVisionCorrection
   discipline: CivilianServices
   tier: 1
-  cost: 1200
+  cost: 600 # Price changed for Persistence14
   technologyPrerequisites:
   - ModularHudFrames
   recipeUnlocks:
@@ -23,7 +23,7 @@
     entity: HudModuleShowCriminalRecordIcons
   discipline: CivilianServices
   tier: 2
-  cost: 17500 # Price changed for Persistence14
+  cost: 8750 # Price changed for Persistence14
   technologyPrerequisites:
   - ModularHudFrames
   - ModularHudModulesCivilianT1
@@ -39,7 +39,7 @@
     entity: HudModuleShowMedicalIcons
   discipline: CivilianServices
   tier: 2
-  cost: 17500 # Price changed for Persistence14
+  cost: 8750 # Price changed for Persistence14
   technologyPrerequisites:
   - ModularHudFrames
   - ModularHudModulesCivilianT1

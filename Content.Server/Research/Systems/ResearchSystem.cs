@@ -1,6 +1,8 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Radio.EntitySystems;
 using Content.Server.Station.Systems;
+using Content.Shared._Persistence14.PersistentIdentifier;
+using Content.Shared._Persistence14.Research;
 using Content.Shared.Access.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Research.Components;
@@ -24,10 +26,11 @@ namespace Content.Server.Research.Systems
         [Dependency] private readonly SharedPopupSystem _popup = default!;
         [Dependency] private readonly RadioSystem _radio = default!;
         [Dependency] private readonly StationSystem _station = default!;
+        [Dependency] private PersistentIdentifierSystem _pid = default!;
+
         public override void Initialize()
         {
             base.Initialize();
-            InitializeClient();
             InitializeConsole();
             InitializeSource();
             InitializeServer();
@@ -35,38 +38,19 @@ namespace Content.Server.Research.Systems
             SubscribeLocalEvent<TechnologyDatabaseComponent, ResearchRegistrationChangedEvent>(OnDatabaseRegistrationChanged);
         }
 
-        /// <summary>
-        /// Gets a server based on its unique numeric id.
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="id"></param>
-        /// <param name="serverUid"></param>
-        /// <param name="serverComponent"></param>
-        /// <returns></returns>
-        public bool TryGetServerById(EntityUid client, int id, [NotNullWhen(true)] out EntityUid? serverUid, [NotNullWhen(true)] out ResearchServerComponent? serverComponent)
-        {
-            serverUid = null;
-            serverComponent = null;
-
-            var query = GetServers(client);
-            foreach (var (uid, server) in query)
-            {
-                if (server.Id != id)
-                    continue;
-                serverUid = uid;
-                serverComponent = server;
-                return true;
-            }
-            return false;
-        }
-
+        /* Removed for Persistence14
         /// <summary>
         /// Gets the names of all the servers.
         /// </summary>
         /// <returns></returns>
         public string[] GetServerNames(EntityUid client)
         {
-            return GetServers(client).Select(x => x.Comp.ServerName).ToArray();
+            return GetServers(client).Select(x =>
+            {
+                if (!TryComp<ResearchServerComponent>(x, out var serverComp))
+                    return "N/A";
+                return serverComp.ServerName;
+            }).ToArray();
         }
 
         /// <summary>
@@ -75,10 +59,15 @@ namespace Content.Server.Research.Systems
         /// <returns></returns>
         public int[] GetServerIds(EntityUid client)
         {
-            return GetServers(client).Select(x => x.Comp.Id).ToArray();
+            return GetServers(client).Select(x =>
+            {
+                if (!TryComp<ResearchServerComponent>(x, out var serverComp))
+                    return -1;
+                return serverComp.Id;
+            }).ToArray();
         }
 
-        public HashSet<Entity<ResearchServerComponent>> GetServers(EntityUid client)
+        public HashSet<EntityUid> GetServers(EntityUid client)
         {
             var clientXform = Transform(client);
             if (clientXform.GridUid is not { } grid)
@@ -86,7 +75,7 @@ namespace Content.Server.Research.Systems
 
             var set = new HashSet<Entity<ResearchServerComponent>>();
             _lookup.GetGridEntities(grid, set);
-            var final = new HashSet<Entity<ResearchServerComponent>>();
+            var final = new HashSet<EntityUid>();
             var clientStation = _station.GetOwningStation(client);
             foreach (var thing in set)
             {
@@ -97,6 +86,7 @@ namespace Content.Server.Research.Systems
             }
             return final;
         }
+        */
 
         public override void Update(float frameTime)
         {

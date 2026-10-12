@@ -1,3 +1,4 @@
+using Content.Shared._Persistence14.PersistentIdentifier;
 using Content.Shared.Audio;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
@@ -28,6 +29,7 @@ public abstract partial class SharedStationTeleporterSystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedUserInterfaceSystem _uiSystem = default!;
     [Dependency] private UseDelaySystem _useDelay = default!;
+    [Dependency] private PersistentIdentifierSystem _pid = default!;
 
     [Dependency] private EntityQuery<LabelComponent> _labelQuery = default!;
 
@@ -65,10 +67,10 @@ public abstract partial class SharedStationTeleporterSystem : EntitySystem
         // so this component is optional here - only used for its LastLink/PortalColor bookkeeping.
         TryComp<StationTeleporterComponent>(teleporter.Value, out var stationTeleporterComponent);
 
-        if (_link.GetLink(teleporter.Value, out var linkedTeleporter))
-            //If the pressed teleporter is linked to another - cut this connection.
+        if (_link.GetLink(teleporter.Value, out var linkedTeleporter) && _pid.TryResolveId(linkedTeleporter.Value, out var linkedEnt))
+        //If the pressed teleporter is linked to another - cut this connection.
         {
-            _link.TryUnlink(teleporter.Value, linkedTeleporter.Value);
+            _link.TryUnlink(teleporter.Value, linkedEnt.Owner);
             stationTeleporterComponent?.LastLink = null;
         }
         else //If the pressed teleporter is not connected to anything...
@@ -161,8 +163,8 @@ public abstract partial class SharedStationTeleporterSystem : EntitySystem
     {
         if (!args.Powered)
         {
-            if (_link.GetLink(ent, out var secondLink))
-                _link.TryUnlink(ent, secondLink.Value);
+            if (_link.GetLink(ent, out var secondLink) && _pid.TryResolveId(secondLink.Value, out var linkedEnt))
+                _link.TryUnlink(ent, linkedEnt.Owner);
         }
         else
         {

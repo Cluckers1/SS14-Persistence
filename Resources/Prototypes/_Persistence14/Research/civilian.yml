@@ -7,6 +7,6 @@
     state: computer
   discipline: CivilianServices
   tier: 2
-  cost: 25000
+  cost: 12500
   recipeUnlocks:
     RequisitionsConsoleCircuitboard: 1

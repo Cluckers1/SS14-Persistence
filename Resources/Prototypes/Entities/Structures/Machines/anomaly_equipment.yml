@@ -22,9 +22,10 @@
     noRot: false
   - type: AnomalyVessel
   - type: ResearchClient
-  - type: ActivatableUI
-    key: enum.ResearchClientUiKey.Key
-  - type: ActivatableUIRequiresPower
+  # Server Targeting UI removed for Persistence14
+  #- type: ActivatableUI
+  #  key: enum.ResearchClientUiKey.Key
+  #- type: ActivatableUIRequiresPower
   - type: UserInterface
     interfaces:
       enum.ResearchClientUiKey.Key:

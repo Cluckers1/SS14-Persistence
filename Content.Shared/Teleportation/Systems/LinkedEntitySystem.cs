@@ -1,3 +1,5 @@
+using Content.Shared._Persistence14.PersistentIdentifier;
+using Content.Shared._Persistence14.PersistentIdentifier.Reference;
 using Content.Shared.Teleportation.Components;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -12,6 +14,7 @@ namespace Content.Shared.Teleportation.Systems;
 public sealed partial class LinkedEntitySystem : EntitySystem
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private PersistentIdentifierSystem _pid = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -24,8 +27,11 @@ public sealed partial class LinkedEntitySystem : EntitySystem
     private void OnLinkShutdown(EntityUid uid, LinkedEntityComponent component, ComponentShutdown args)
     {
         // Remove any links to this entity when deleted.
-        foreach (var ent in component.LinkedEntities.ToArray())
+        foreach (var entPid in component.LinkedEntities.ToArray())
         {
+            if (!_pid.TryResolveId(entPid, out var ent))
+                component.LinkedEntities.Remove(entPid);
+                
             if (!Deleted(ent) && LifeStage(ent) < EntityLifeStage.Terminating && TryComp<LinkedEntityComponent>(ent, out var link))
             {
                 TryUnlink(uid, ent, component, link);
@@ -48,6 +54,9 @@ public sealed partial class LinkedEntitySystem : EntitySystem
         var firstLink = EnsureComp<LinkedEntityComponent>(first);
         var secondLink = EnsureComp<LinkedEntityComponent>(second);
 
+        var firstPid = _pid.EnsureId(first);
+        var secondPid = _pid.EnsureId(second);
+
         firstLink.DeleteOnEmptyLinks = deleteOnEmptyLinks;
         secondLink.DeleteOnEmptyLinks = deleteOnEmptyLinks;
 
@@ -57,7 +66,7 @@ public sealed partial class LinkedEntitySystem : EntitySystem
         Dirty(first, firstLink);
         Dirty(second, secondLink);
 
-        if (firstLink.LinkedEntities.Add(second) && secondLink.LinkedEntities.Add(first))
+        if (firstLink.LinkedEntities.Add(firstPid) && secondLink.LinkedEntities.Add(secondPid))
         {
             var firstEv = new LinkedEntityChangedEvent(firstLink.LinkedEntities);
             RaiseLocalEvent(first, ref firstEv);
@@ -82,7 +91,7 @@ public sealed partial class LinkedEntitySystem : EntitySystem
 
         Dirty(source, firstLink);
 
-        if (firstLink.LinkedEntities.Add(target))
+        if (firstLink.LinkedEntities.Add(_pid.EnsureId(target)))
         {
             var ev = new LinkedEntityChangedEvent(firstLink.LinkedEntities);
             RaiseLocalEvent(source, ref ev);
@@ -111,8 +120,8 @@ public sealed partial class LinkedEntitySystem : EntitySystem
         if (!Resolve(second, ref secondLink))
             return false;
 
-        var success = firstLink.LinkedEntities.Remove(second)
-                      && secondLink.LinkedEntities.Remove(first);
+        var success = firstLink.LinkedEntities.Remove(_pid.EnsureId(second))
+                      && secondLink.LinkedEntities.Remove(_pid.EnsureId(first));
 
         _appearance.SetData(first, LinkedEntityVisuals.HasAnyLinks, firstLink.LinkedEntities.Any());
         _appearance.SetData(second, LinkedEntityVisuals.HasAnyLinks, secondLink.LinkedEntities.Any());
@@ -138,7 +147,7 @@ public sealed partial class LinkedEntitySystem : EntitySystem
     /// Get the first entity this entity is linked to.
     /// If multiple are linked only the first one is picked.
     /// </summary>
-    public bool GetLink(EntityUid uid, [NotNullWhen(true)] out EntityUid? dest, LinkedEntityComponent? comp = null)
+    public bool GetLink(EntityUid uid, [NotNullWhen(true)] out PersistentEntityReference? dest, LinkedEntityComponent? comp = null)
     {
         dest = null;
         if (!Resolve(uid, ref comp, false))
@@ -158,4 +167,4 @@ public sealed partial class LinkedEntitySystem : EntitySystem
 }
 
 [ByRefEvent]
-public readonly record struct LinkedEntityChangedEvent(HashSet<EntityUid> NewLinks);
+public readonly record struct LinkedEntityChangedEvent(HashSet<PersistentEntityReference> NewLinks);

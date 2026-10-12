@@ -8,7 +8,7 @@
     state: icon
   discipline: Arsenal
   tier: 1
-  cost: 5000
+  cost: 2500
   recipeUnlocks:
     WeaponProtoKineticAccelerator: 4
     ShuttleGunKineticCircuitboard: 4
@@ -22,7 +22,7 @@
     state: incendiarydisplay
   discipline: Arsenal
   tier: 1
-  cost: 10000
+  cost: 5000
   recipeUnlocks:
     BoxShotgunIncendiary: 6
     MagazineRifleIncendiary: 6
@@ -44,7 +44,7 @@
     state: icon
   discipline: Arsenal
   tier: 1
-  cost: 7500
+  cost: 3750
   recipeUnlocks:
     WeaponLaserCarbine: 2
     RiotLaserShield: 1
@@ -57,7 +57,7 @@
     state: beanbag
   discipline: Arsenal
   tier: 1
-  cost: 5000
+  cost: 2500
   recipeUnlocks:
     MagazineShotgunBeanbag: 6
     BoxShellTranquilizer: 6
@@ -72,7 +72,7 @@
     state: uranium
   discipline: Arsenal
   tier: 1
-  cost: 7500
+  cost: 3750
   recipeUnlocks:
     MagazineRifleUranium: 6
     MagazinePistolUranium: 6
@@ -93,7 +93,7 @@
     state: icon
   discipline: Arsenal
   tier: 1
-  cost: 8000
+  cost: 4000
   recipeUnlocks:
     Truncheon: 4
     TelescopicShield: 4
@@ -108,7 +108,7 @@
     state: payload-explosive-armed
   discipline: Arsenal
   tier: 1
-  cost: 10000
+  cost: 5000
   recipeUnlocks:
     SignallerAdvanced: 4
     SignalTrigger: 4
@@ -128,7 +128,7 @@
     state: icon
   discipline: Arsenal
   tier: 1
-  cost: 5000
+  cost: 2500
   recipeUnlocks:
     ClothingBackpackElectropack: 1
     ClothingHandsMercGlovesCombat: 4
@@ -145,7 +145,7 @@
     state: icon
   discipline: Arsenal
   tier: 2
-  cost: 50000
+  cost: 25000
   recipeUnlocks:
     WeaponLaserCannon: 2
 
@@ -157,7 +157,7 @@
     state: icon
   discipline: Arsenal
   tier: 2
-  cost: 50000
+  cost: 25000
   recipeUnlocks:
     WeaponXrayCannon: 1
 
@@ -169,7 +169,7 @@
     state: display
   discipline: Arsenal
   tier: 2
-  cost: 37500
+  cost: 18750
   recipeUnlocks:
     PKAUpgradeDamage: 2
     PKAUpgradeRange: 2
@@ -183,7 +183,7 @@
     state: full
   discipline: Arsenal
   tier: 2
-  cost: 52500
+  cost: 26250
   recipeUnlocks:
     PowerCageRechargerCircuitboard: 2
     PowerCageSmall: 2
@@ -205,7 +205,7 @@
     state: icon
   discipline: Arsenal
   tier: 2
-  cost: 50000
+  cost: 25000
   recipeUnlocks:
     ClothingBackpackHarmpack: 1
 
@@ -217,7 +217,7 @@
     state: icon
   discipline: Arsenal
   tier: 2
-  cost: 75000
+  cost: 37500
   recipeUnlocks:
     Securityhardsuit: 2
     Brigmedichardsuit: 2
@@ -237,7 +237,7 @@
     state: icon
   discipline: Arsenal
   tier: 3
-  cost: 150000
+  cost: 75000
   recipeUnlocks:
     WeaponAdvancedLaser: 1
     PortableRecharger: 1
@@ -250,7 +250,7 @@
     state: icon
   discipline: Arsenal
   tier: 3
-  cost: 150000
+  cost: 75000
   recipeUnlocks:
     WeaponTemperatureGun: 1
 
@@ -262,7 +262,7 @@
     state: icon
   discipline: Arsenal
   tier: 3
-  cost: 150000
+  cost: 75000
   recipeUnlocks:
     GrenadeEMP: 2
     PowerCageHigh: 1

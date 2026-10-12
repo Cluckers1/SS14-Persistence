@@ -8,7 +8,7 @@
     state: fab-idle
   discipline: Experimental
   tier: 1
-  cost: 5000
+  cost: 2500
   recipeUnlocks:
     ProximitySensor: 1
     RoboticsConsoleCircuitboard: 1
@@ -21,7 +21,7 @@
     state: icon
   discipline: Experimental
   tier: 1
-  cost: 5000
+  cost: 2500
   recipeUnlocks:
     AnomalyScanner: 2
     AnomalyLocator: 2
@@ -37,7 +37,7 @@
     state: display
   discipline: Experimental
   tier: 1
-  cost: 5000
+  cost: 2500
   recipeUnlocks:
     NodeScanner: 1
     AnalysisComputerCircuitboard: 1
@@ -53,7 +53,7 @@
     state: display
   discipline: Experimental
   tier: 1
-  cost: 5000
+  cost: 2500
   recipeUnlocks:
     TechDiskComputerCircuitboard: 4
 
@@ -65,7 +65,7 @@
     state: icon
   discipline: Experimental
   tier: 1
-  cost: 7500
+  cost: 3750
   recipeUnlocks:
     ClothingShoesBootsMagSci: 4
     ClothingShoesBootsMoon: 4
@@ -78,7 +78,7 @@
     state: icon
   discipline: Experimental
   tier: 1
-  cost: 10000
+  cost: 5000
   recipeUnlocks:
     WeaponGauntletGorilla: 1
 
@@ -92,7 +92,7 @@
     state: icon
   discipline: Experimental
   tier: 2
-  cost: 25000
+  cost: 12500
   recipeUnlocks:
     ArtifactCrusherMachineCircuitboard: 2
 
@@ -104,7 +104,7 @@
     state: base
   discipline: Experimental
   tier: 2
-  cost: 50000
+  cost: 25000
   recipeUnlocks:
     WeaponPistolCHIMP: 3
     AnomalySynchronizerCircuitboard: 2
@@ -120,7 +120,7 @@
     state: base
   discipline: Experimental
   tier: 2
-  cost: 32500
+  cost: 16250
   recipeUnlocks:
     WeaponParticleDecelerator: 3
     HoloprojectorField: 3
@@ -133,7 +133,7 @@
     state: base
   discipline: Experimental
   tier: 2
-  cost: 50000
+  cost: 25000
   recipeUnlocks:
     WeaponForceGun: 1
     WeaponTetherGun: 1
@@ -148,7 +148,7 @@
     state: display
   discipline: Experimental
   tier: 3
-  cost: 100000
+  cost: 50000
   recipeUnlocks:
     ArtifactAnalyzerAdvancedMachineCircuitboard: 2
   technologyPrerequisites:
@@ -162,7 +162,7 @@
     state: icon
   discipline: Experimental
   tier: 3
-  cost: 100000
+  cost: 75000
   recipeUnlocks:
     DeviceQuantumSpinInverter: 2
 
@@ -174,7 +174,7 @@
     state: icon
   discipline: Experimental
   tier: 3
-  cost: 100000
+  cost: 50000
   recipeUnlocks:
     DeviceDesynchronizer: 1
 

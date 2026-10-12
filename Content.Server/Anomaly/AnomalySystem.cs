@@ -5,7 +5,9 @@ using Content.Server.Explosion.EntitySystems;
 using Content.Server.Materials;
 using Content.Server.Radiation.Systems;
 using Content.Server.Radio.EntitySystems;
+using Content.Server.Research.Systems;
 using Content.Server.Station.Systems;
+using Content.Shared.Access.Systems;
 using Content.Shared.Anomaly;
 using Content.Shared.Anomaly.Components;
 using Content.Shared.Anomaly.Prototypes;
@@ -38,6 +40,8 @@ public sealed partial class AnomalySystem : SharedAnomalySystem
     [Dependency] private RadiationSystem _radiation = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private ResearchSystem _research = default!;
+    [Dependency] private AccessReaderSystem _access = default!;
 
     public const float MinParticleVariation = 0.8f;
     public const float MaxParticleVariation = 1.2f;

@@ -107,8 +107,8 @@ public abstract partial class SharedStationTeleporterSystem
 
         _link.GetLink(teleporter, out var linkedTeleporter);
         EntityCoordinates? linkCoord = null;
-        if (linkedTeleporter is not null)
-            linkCoord = Transform(linkedTeleporter.Value).Coordinates;
+        if (linkedTeleporter is not null && _pid.TryResolveId(linkedTeleporter.Value, out var linkedEnt))
+            linkCoord = Transform(linkedEnt.Owner).Coordinates;
 
         teleportersData.Add(
             new StationTeleporterStatus(GetNetEntity(teleporter),

@@ -2,6 +2,7 @@ using Content.Server.Cargo.Components;
 using Content.Server.CrewRecords.Systems;
 using Content.Server.Popups;
 using Content.Server.Station.Systems;
+using Content.Shared._Persistence14;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
@@ -117,38 +118,60 @@ public sealed partial class GridConfigSystem : SharedGridConfigSystem
 
     private void OnUnlink(EntityUid uid, StationTaggerComponent component, EntityEventArgs args)
     {
-        if (component.TargetAccessReaderId == EntityUid.Invalid) return;
+        if (component.TargetAccessReaderId == EntityUid.Invalid)
+            return;
 
         if (!_accessReader.GetMainAccessReader(component.TargetAccessReaderId, out var accessReaderEnt))
             return;
-        if (accessReaderEnt == null) return;
-        if (TryComp<StationTrackerComponent>(accessReaderEnt.Value.Owner, out var comp) && comp != null)
-        {
+
+        if (TryComp<StationTrackerComponent>(accessReaderEnt.Value.Owner, out var comp))
             RemComp(accessReaderEnt.Value.Owner, comp);
-        }
+
         UpdateUserInterface(uid, component, args);
+        var ev = new StationTaggedStateChangedEvent
+        {
+            Target = GetNetEntity(accessReaderEnt.Value.Owner),
+            Faction = null
+        };
+        RaiseLocalEvent(accessReaderEnt.Value.Owner, ref ev);
     }
     private void OnLink(EntityUid uid, StationTaggerComponent component, EntityEventArgs args)
     {
-        if (component.TargetAccessReaderId == EntityUid.Invalid) return;
-        if (component.ConnectedStation == null || component.ConnectedStation == 0) return;
-        if (TryComp<StationTrackerComponent>(component.TargetAccessReaderId, out var comp) && comp != null)
-        {
+        if (component.TargetAccessReaderId == EntityUid.Invalid)
             return;
-        }
+
+        if (component.ConnectedStation == null || component.ConnectedStation == 0)
+            return;
+
+        if (TryComp<StationTrackerComponent>(component.TargetAccessReaderId, out var comp) && comp != null)
+            return;
+
         if (!_accessReader.GetMainAccessReader(component.TargetAccessReaderId, out var accessReaderEnt))
             return;
-        if (accessReaderEnt == null) return;
 
-        if (component.ConnectedStation == null) return;
+        if (accessReaderEnt == null)
+            return;
+
+        if (component.ConnectedStation == null)
+            return;
+
         var station = _station.GetStationByID(component.ConnectedStation.Value);
-        if (station == null) return;
-        var comp2 = EnsureComp<StationTrackerComponent>(accessReaderEnt.Value.Owner);
-        if (comp2 == null) return;
-        comp2.locked = false;
-        _station.SetStation((accessReaderEnt.Value.Owner, comp2), station);
-        comp2.locked = true;
+        if (station == null)
+            return;
+
+        var trackerComponent = EnsureComp<StationTrackerComponent>(accessReaderEnt.Value.Owner);
+
+        trackerComponent.locked = false;
+        _station.SetStation((accessReaderEnt.Value.Owner, trackerComponent), station);
+        trackerComponent.locked = true;
+
         UpdateUserInterface(uid, component, args);
+        var ev = new StationTaggedStateChangedEvent
+        {
+            Target = GetNetEntity(accessReaderEnt.Value.Owner),
+            Faction = GetNetEntity(station)
+        };
+        RaiseLocalEvent(accessReaderEnt.Value.Owner, ref ev);
     }
     private void OnRemoved(EntityUid uid, GridConfigComponent component, EntityEventArgs args)
     {
@@ -493,7 +516,8 @@ public sealed partial class GridConfigSystem : SharedGridConfigSystem
 
     private void AfterInteractOn(EntityUid uid, StationTaggerComponent component, AfterInteractEvent args)
     {
-        if (args.Target == null || !TryComp(args.Target, out AccessReaderComponent? accessReader))
+        if (args.Target == null ||
+            !(HasComp<AccessReaderComponent>(args.Target) || HasComp<FactionTaggableComponent>(args.Target)))
             return;
 
         if (!_interactionSystem.InRangeUnobstructed(args.User, (EntityUid)args.Target))

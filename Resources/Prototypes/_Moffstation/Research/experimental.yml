@@ -7,7 +7,7 @@
     entity: HudModuleNoirOverlay
   discipline: Experimental
   tier: 1
-  cost: 1000
+  cost: 500 # Price changed for Persistence14
   technologyPrerequisites:
   - ModularHudFrames
   recipeUnlocks:
@@ -23,7 +23,7 @@
     entity: HudModuleSolutionScanner
   discipline: Experimental
   tier: 2
-  cost: 10000 # Price changed for Persistence14
+  cost: 5000 # Price changed for Persistence14
   technologyPrerequisites:
   - ModularHudFrames
   - ModularHudModulesExperimentalT1

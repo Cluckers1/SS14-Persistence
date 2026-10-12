@@ -10,9 +10,9 @@ namespace Content.Shared._Persistence14.Research.RecipeRelay;
 
 public sealed partial class SharedRecipeRelaySystem : EntitySystem
 {
-    [Dependency] private readonly PersistentIdentifierSystem _pid = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private PersistentIdentifierSystem _pid = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

@@ -8,7 +8,7 @@
     state: handdrill
   discipline: Industrial
   tier: 1
-  cost: 7500
+  cost: 3750
   recipeUnlocks:
     MiningDrill: 4
     MineralScannerEmpty: 4
@@ -26,7 +26,7 @@
     state: icon
   discipline: Industrial
   tier: 1
-  cost: 5000
+  cost: 2500
   recipeUnlocks:
     RadarConsoleCircuitboard: 4
     HandHeldMassScanner: 4
@@ -39,7 +39,7 @@
     state: empty
   discipline: Industrial
   tier: 1
-  cost: 7500
+  cost: 3750
   recipeUnlocks:
     PowerCellHigh: 4
     TurboItemRechargerCircuitboard: 4
@@ -53,7 +53,7 @@
     state: base
   discipline: Industrial
   tier: 1
-  cost: 10000
+  cost: 5000
   recipeUnlocks:
     FlatpackerMachineCircuitboard: 4
 
@@ -65,7 +65,7 @@
     state: icon
   discipline: Industrial
   tier: 1
-  cost: 7500
+  cost: 3750
   recipeUnlocks:
     RCD: 1
     HCD: 1
@@ -78,7 +78,7 @@
     state: building
   discipline: Industrial
   tier: 1
-  cost: 10000
+  cost: 5000
   recipeUnlocks:
     AutolatheHyperConvectionMachineCircuitboard: 4
     ProtolatheHyperConvectionMachineCircuitboard: 4
@@ -93,7 +93,7 @@
     state: portgen0
   discipline: Industrial
   tier: 1
-  cost: 7500
+  cost: 3750
   recipeUnlocks:
     PortableGeneratorPacmanMachineCircuitboard: 4
     PortableGeneratorSuperPacmanMachineCircuitboard: 4
@@ -113,7 +113,7 @@
     state: freezerOff
   discipline: Industrial
   tier: 1
-  cost: 7500
+  cost: 3750
   recipeUnlocks:
     ThermomachineFreezerMachineCircuitBoard: 4
     GasRecyclerMachineCircuitboard: 4
@@ -126,7 +126,7 @@
     state: ripley
   discipline: Industrial
   tier: 1
-  cost: 7500
+  cost: 3750
   recipeUnlocks:
     RipleyHarness: 1
     RipleyLArm: 1
@@ -145,7 +145,7 @@
     state: icon
   discipline: Industrial
   tier: 1
-  cost: 7500
+  cost: 3750
   recipeUnlocks:
     Spationautsuit: 2
     Donknautsuit: 2
@@ -162,7 +162,7 @@
     state: base
   discipline: Industrial
   tier: 2
-  cost: 50000
+  cost: 25000
   recipeUnlocks:
     ShuttleConsoleCircuitboard: 1
     ThrusterMachineCircuitboard: 1
@@ -180,7 +180,7 @@
     state: icon
   discipline: Industrial
   tier: 2
-  cost: 32500
+  cost: 16250
   recipeUnlocks:
     HellfireFreezerMachineCircuitBoard: 2
     PortableScrubberMachineCircuitBoard: 3
@@ -196,7 +196,7 @@
     state: icon
   discipline: Industrial
   tier: 2
-  cost: 50000
+  cost: 25000
   recipeUnlocks:
     WelderExperimental: 2
     PowerDrill: 2
@@ -213,7 +213,7 @@
     state: handdrill
   discipline: Industrial
   tier: 2
-  cost: 62500
+  cost: 31250
   recipeUnlocks:
     OreBagOfHolding: 2
     MiningDrillDiamond: 2
@@ -228,7 +228,7 @@
     state: icon
   discipline: Industrial
   tier: 2
-  cost: 62500
+  cost: 31250
   recipeUnlocks:
     Engineeringsuit: 2
     Atmossuit: 2
@@ -251,7 +251,7 @@
     state: holding
   discipline: Industrial
   tier: 3
-  cost: 150000
+  cost: 75000
   recipeUnlocks:
     ClothingBackpackHolding: 1
     ClothingBackpackSatchelHolding: 1
@@ -265,7 +265,7 @@
     state: microreactor
   discipline: Industrial
   tier: 3
-  cost: 100000
+  cost: 75000
   recipeUnlocks:
     PowerCellMicroreactor: 2
     PowerCellHyper: 3
@@ -280,7 +280,7 @@
     state: icon
   discipline: Industrial
   tier: 3
-  cost: 200000
+  cost: 100000
   recipeUnlocks:
     Luxuryminingsuit: 1
     Researchdirectorsuit: 1
