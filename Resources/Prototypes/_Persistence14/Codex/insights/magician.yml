@@ -1,11 +1,14 @@
-- type: insightTrait
-  id: MagicTest1
-  name: Dark Vision
-  content: "Gain the ability to detect the coordinates of the nearest anomaly."
-  next: MagicTest2
+#- type: insightTrait
+#  id: MagicTest1
+#  name: insight-magic-dark-vision-name
+#  content: insight-magic-dark-vision-desc
+#  next: MagicTest2
+# Trait not yet implemented
 
-- type: insightTrait
-  id: MagicTest2
-  name: Summon
-  content: "Gain the ability to reroll one node in an artifact."
+
+#- type: insightTrait
+#  id: MagicTest2
+#  name: insight-magic-summon-name
+#  content: insight-magic-summon-desc
+# Trait not yet implemented
 
