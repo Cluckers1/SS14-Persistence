@@ -1,14 +1,14 @@
 - type: insightTrait
   id: AnomalySense
-  name: Sense Anomaly
-  content: "Gain the ability to sense the location of the nearest anomaly."
+  name: insight-rationalist-anomaly-sense-name
+  content: insight-rationalist-anomaly-sense-desc
   next: ArtifactReroll
   trait: AnomalySense
 
 - type: trait
   id: AnomalySense
-  name: Sense Anomaly
-  description: "Gain the ability to sense the location of the nearest anomaly."
+  name: insight-rationalist-anomaly-sense-name
+  description: insight-rationalist-anomaly-sense-desc
   selectable: false
   components:
     - type: ActionGrant
@@ -33,13 +33,14 @@
 
 - type: insightTrait
   id: ArtifactReroll
-  name: Beggars Choice
-  content: "Gain the ability to reroll one node in an artifact."
+  name: insight-rationalist-reroll-node-name
+  content: insight-rationalist-reroll-node-desc
+  trait: ArtifactReroll
 
 - type: trait
   id: ArtifactReroll
-  name: Beggars Choice
-  description: "Gain the ability to reroll one node in an artifact."
+  name: insight-rationalist-reroll-node-name
+  description: insight-rationalist-reroll-node-desc
   selectable: false
   components:
     - type: ActionGrant
@@ -50,8 +51,8 @@
 - type: entity
   parent: BaseAction
   id: ActionArtifactReroll
-  name: Sense Anomaly
-  description: Sense the location of the nearest anomaly.
+  name: Beggar's choice
+  description: Reroll a node on an artifact (WIP).
   components:
   - type: Action
     useDelay: 30
