@@ -224,14 +224,13 @@
     speechSounds: Alto
     allowedEmotes: ['Chirp', 'Squawk', 'Flap']
   - type: Vocal
-    sounds:
-      Male: MaleHuman # TODO: Add UnisexNeoAvian
-      Female: FemaleHuman # TODO: Add UnisexNeoAvian
-      Unsexed: MaleHuman # TODO: Add UnisexNeoAvian
+    emoteSounds:
+      Male: MaleHuman # TODO: Add unique sounds
+      Female: FemaleHuman
+      Unsexed: MaleHuman
   - type: TypingIndicator
     proto: default
   - type: Butcherable
-    butcheringType: Spike
     spawned:
     - id: FoodMeatChicken
       amount: 4
