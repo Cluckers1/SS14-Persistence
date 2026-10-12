@@ -483,7 +483,9 @@ public sealed partial class BluespaceParkingSystem : SharedBluespaceParkingSyste
 
                 var box2 = Box2.CenteredAround(finalCoords.Position + bounds.Center, bounds.Size);
                 var box2Rot = new Box2Rotated(box2, worldAngle, finalCoords.Position);
-                if (_mapManager.FindGridsIntersecting(finalCoords.MapId, box2Rot).Any())
+                List<Entity<MapGridComponent>> grids = new();
+                _mapping.FindGridsIntersecting(finalCoords.MapId, box2Rot, ref grids);
+                if (grids.Any())
                 {
                     continue;
                 }
