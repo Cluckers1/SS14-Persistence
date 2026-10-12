@@ -8,3 +8,5 @@ namespace Content.Shared._Persistence14.Codex;
 public sealed partial class SenseAnomalyEvent : InstantActionEvent { };
 
 public sealed partial class ArtifactRerollEvent : InstantActionEvent { };
+
+public sealed partial class MiracleReviveEvent : EntityTargetActionEvent;

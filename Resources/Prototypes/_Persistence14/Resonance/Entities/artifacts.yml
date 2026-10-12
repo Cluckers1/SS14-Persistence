@@ -1,0 +1,29 @@
+- type: entity
+  parent: BaseItem
+  id: ResonanceArtifactSalvationShard
+  name: salvation shard
+
+  components:
+  - type: Sprite
+    sprite: Structures/Specific/Anomalies/Cores/bluespace_core.rsi
+    noRot: true
+    layers:
+    - state: core
+    - state: pulse
+      map: ["decay"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.AnomalyCoreVisuals.Decaying:
+        decay:
+          True: { visible: true }
+          False: { visible: false }
+  - type: ScaleVisuals
+    scale: 1.5, 1.5
+  - type: PointLight
+    radius: 2.5
+    energy: 6.5
+    color: "#00ccff"
+    castShadows: false
+  - type: CodexExamineUnlocker
+    entry: SalvationShard

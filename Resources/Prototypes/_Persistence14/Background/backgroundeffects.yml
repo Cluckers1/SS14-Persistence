@@ -130,5 +130,29 @@
   traits:
     - NexusPledge
 
+- type: backgroundEffect
+  id: MotiveWealth
+  description: "[color=green]You will arrive with an additional $2000"
+  bonusCash: 2000
 
+- type: backgroundEffect
+  id: MotivePower
+  description: "[color=green]You will arrive with an additional rumor"
+  extraRumors: 1
 
+- type: backgroundEffect
+  id: MotiveSecretKnowledge
+  description: "[color=green]You will unlock a Codex entry."
+  codexEntries:
+    - Shadow102
+
+- type: backgroundEffect
+  id: MotiveFriendship
+  description: "[color=green]You will arrive with an additional rumor"
+  extraRumors: 1
+
+- type: backgroundEffect
+  id: MotiveEnlightenment
+  description: "[color=green]You will unlock a Codex entry."
+  codexEntries:
+    - Luminal101

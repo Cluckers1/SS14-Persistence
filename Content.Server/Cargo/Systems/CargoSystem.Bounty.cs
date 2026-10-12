@@ -3,6 +3,7 @@ using Content.Server.Chat.Systems;
 using Content.Server.CrewAssignments.Systems;
 using Content.Server.NameIdentifier;
 using Content.Shared._Persistence14.Cargo;
+using Content.Shared._Persistence14.Resonance.Prototypes;
 using Content.Shared._Persistence14.Rumors.Systems;
 using Content.Shared.Access.Components;
 using Content.Shared.Atmos.Components;
@@ -698,7 +699,6 @@ public sealed partial class CargoSystem
         }
 
     }
-
     private void BountyRefresh(EntityUid uid, StationCargoBountyDatabaseComponent comp)
     {
         var station = _station.GetOwningStation(uid);

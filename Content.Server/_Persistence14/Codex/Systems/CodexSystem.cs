@@ -1,19 +1,33 @@
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.CrewRecords.Systems;
+using Content.Server.Database;
 using Content.Server.Traits;
 using Content.Shared._Persistence14.Codex;
 using Content.Shared._Persistence14.Codex.Components;
 using Content.Shared._Persistence14.Codex.Prototypes;
 using Content.Shared._Persistence14.Rumors.Components;
 using Content.Shared.Anomaly.Components;
+using Content.Shared.Atmos.Rotting;
+using Content.Shared.Body.Components;
+using Content.Shared.Chat;
 using Content.Shared.CrewAssignments;
 using Content.Shared.CrewAssignments.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Electrocution;
 using Content.Shared.EntityEffects.Effects.Body;
 using Content.Shared.Examine;
+using Content.Shared.FixedPoint;
 using Content.Shared.GridControl.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Medical;
+using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Traits.Assorted;
 using Robust.Server.Player;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -30,6 +44,11 @@ namespace Content.Server._Persistence14.Codex.Systems;
 
 public sealed partial class CodexSystem : EntitySystem
 {
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private CrewMetaRecordsSystem _crewMetaRecords = default!;
     [Dependency] private IChatManager _chatManager = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -38,13 +57,64 @@ public sealed partial class CodexSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedElectrocutionSystem _electrocution = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private SharedRottingSystem _rotting = default!;
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<ActorComponent, SenseAnomalyEvent>(OnSenseAnomaly);
         SubscribeLocalEvent<CodexFragmentComponent, UseInHandEvent>(CodexFragmentAfterInteract);
         SubscribeLocalEvent<CodexExamineUnlockerComponent, ExaminedEvent>(OnUnlockerExamined);
+        SubscribeLocalEvent<MiracleReviveComponent, MiracleReviveEvent>(OnMiracleRevive);
+    }
 
+    private void OnMiracleRevive(Entity<MiracleReviveComponent> ent, ref MiracleReviveEvent args)
+    {
+        EntityUid target = args.Target;
+        EntityUid user = ent.Owner;
+        if(TryRevive(ent, user, target)) args.Handled = true;
+    }
+
+    private bool TryRevive(Entity<MiracleReviveComponent> ent, EntityUid user, EntityUid target)
+    {
+   
+        bool failedRevive = true;
+        if (_rotting.IsRotten(target))
+        {
+            _chat.TrySendInGameICMessage(ent.Owner, Loc.GetString("defibrillator-rotten"), InGameICChatType.Speak, true);
+        }
+        else if (TryComp<UnrevivableComponent>(target, out var unrevivable))
+        {
+            _chat.TrySendInGameICMessage(ent.Owner, Loc.GetString(unrevivable.ReasonMessage), InGameICChatType.Speak, true);
+        }
+        else
+        {
+            TryComp<MobStateComponent>(target, out var targetMobState);
+            if (targetMobState == null || targetMobState.CurrentState != MobState.Dead) return false;
+            _damageable.TryChangeDamage(target, ent.Comp.ZapHeal, true, origin: user);
+            var canRevive = true;
+            
+            if (canRevive && // funky
+                TryComp<MobThresholdsComponent>(target, out var targetThresholds) && // funky
+                _mobThreshold.TryGetThresholdForState(target, MobState.Dead, out var threshold, targetThresholds) &&
+                _damageable.GetTotalDamage(target) < threshold) //is their current health above their death threshold
+            {
+                _mobState.ChangeMobState(target, MobState.Critical, targetMobState, user); //if so revive them
+                failedRevive = false;
+                _electrocution.TryDoElectrocution(
+                    target,
+                    ent.Owner,
+                    ent.Comp.ZapDamage,
+                    ent.Comp.WritheDuration,
+                    true
+                );
+                _audio.PlayPredicted(ent.Comp.ZapSound, ent, null);
+            }
+        }
+
+
+        return !failedRevive;
     }
 
     public float? GetRange(EntityUid start, EntityUid destination)
@@ -166,6 +236,7 @@ public sealed partial class CodexSystem : EntitySystem
         {
             NotifyPlayer(ent, "There are no anomalies within a 1000m range.");
         }
+        args.Handled = true;
     }
 
     public void UnlockEntry(EntityUid mob, ProtoId<CodexEntryPrototype> codex)

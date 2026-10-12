@@ -39,6 +39,7 @@ public sealed partial class BackgroundEffectPrototype : IPrototype, IEquipmentLo
 
     [DataField]
     public List<ProtoId<CodexEntryPrototype>> CodexEntries = new();
-
+    [DataField]
+    public int BonusCash = 0;
 
 }

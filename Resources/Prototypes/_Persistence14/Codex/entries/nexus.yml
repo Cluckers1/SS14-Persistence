@@ -30,4 +30,11 @@
   category: Nexus
   unlockHint: "Spend a lot of time aboard Eclipse Station."
 
+- type: codexEntry
+  id: SalvationShard
+  name: The Salvation Shard
+  content: "UNFILLED"
+  order: 4
+  category: Nexus
+  unlockHint: "Examine the Salvation Shard"
 

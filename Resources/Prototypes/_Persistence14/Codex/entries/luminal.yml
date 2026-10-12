@@ -5,6 +5,7 @@
   order: 0
   category: Luminal
   unlockHint: "Use a Codex Fragment"
+
 - type: codexEntry
   id: Luminal102
   name: 102

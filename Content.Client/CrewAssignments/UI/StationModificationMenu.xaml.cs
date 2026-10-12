@@ -58,7 +58,7 @@ namespace Content.Client.CrewAssignments.UI
             TabContainer.SetTabTitle(1, "Assignments");
             TabContainer.SetTabTitle(2, "Radio");
             TabContainer.SetTabTitle(3, "Upgrade");
-            TabContainer.SetTabTitle(3, "Precursor Market");
+            TabContainer.SetTabTitle(4, "Resonance Market");
             PossibleAccesses.OnItemSelected += OnDelAccessSelected;
             PossibleAssignments.OnItemSelected += OnAssignmentSelected;
             PossibleChannels.OnItemSelected += OnChannelSelected;

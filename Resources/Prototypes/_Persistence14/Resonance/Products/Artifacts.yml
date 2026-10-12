@@ -1,0 +1,11 @@
+- type: resonanceProduct
+  id: SalvationShard
+  name: The Salvation Shard
+  description: "This universal shard can help protect the Nexus Planet if stored on Eclipse Station."
+  price: 1000
+  shared: false
+  productType: Product
+  product: ResonanceArtifactSalvationShard
+  icon:
+    sprite: Structures/Specific/Anomalies/Cores/bluespace_core.rsi
+    state: core

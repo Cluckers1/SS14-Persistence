@@ -11,3 +11,10 @@
   description: "As your reputation with the local authorities soured you were to flee into the [bold]Nexus Space[/bold].\nBecause of the [bold]NCC[/bold] and the [italic]Independents Truce[/italic] you know your pursuers cannot follow you into the [bold]Nexus Space[/bold]."
   effects:
     - TraitPledge
+
+- type: turningPoint
+  id: Magician
+  name: Encountered by a Magician
+  description: "You encountered a strange traveler from beyond your Universe.\nThey claimed to be a [color=purple]Magician[/color] and convinced you to travel to the [bold]Nexus Space[/bold].\nYou left everything behind to pursue this Destiny."
+  effects:
+    - TraitPledge

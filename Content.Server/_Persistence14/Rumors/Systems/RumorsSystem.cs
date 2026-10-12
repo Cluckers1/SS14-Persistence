@@ -1093,10 +1093,12 @@ public sealed partial class RumorsSystem : EntitySystem
                         NotifyPlayer(actor, $"You do not have enough money to purchase the {rewardProto.Name} reward from the {faction.Name} network.");
                         return;
                     }
-                    account.Balance -= rewardProto.Price;
-                    reward.Purchased = true;
-                    _cargo.TryFulfillOrderRumor(reward, "Paper", Name(actor));
-                    NotifyPlayer(actor, $"The {rewardProto.Name} has been delivered to {reward.TradeStationName}.");
+                    if(_cargo.TryFulfillOrderRumor(reward, "Paper", Name(actor)) != null)
+                    {
+                        account.Balance -= rewardProto.Price;
+                        reward.Purchased = true;
+                        NotifyPlayer(actor, $"The {rewardProto.Name} has been delivered to {reward.TradeStationName}.");
+                    }
                 }
             }
         }

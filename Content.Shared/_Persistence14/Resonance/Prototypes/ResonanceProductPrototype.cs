@@ -49,5 +49,7 @@ public sealed partial class ResonanceProductPrototype : IPrototype
 
 public enum ResonanceProductType : byte
 {
-    MainWorldBoundary
+    MainWorldBoundary,
+    MainWorldAwakening,
+    Product
 }
