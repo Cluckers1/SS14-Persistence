@@ -5,12 +5,12 @@
   firstTrait: AnomalySense
   color: DarkGreen
 
-#- type: insightCategory
-#  id: Magician
-#  name: Magician
-#  order: 2
-#  firstTrait: MagicTest1
-#  color: Purple
+- type: insightCategory
+  id: Magician
+  name: Magician
+  order: 2
+  firstTrait: Magic1
+  color: Purple
 
 - type: insightCategory
   id: Priest

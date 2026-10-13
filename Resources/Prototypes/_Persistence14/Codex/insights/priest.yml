@@ -42,7 +42,7 @@
   components:
   - type: Action
     priority: 1
-    useDelay: 20
+    useDelay: 3600
     raiseOnUser: true
     itemIconStyle: BigAction
   - type: Sprite

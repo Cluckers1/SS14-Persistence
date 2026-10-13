@@ -17,5 +17,5 @@ public sealed partial class InsightTraitPrototype : IPrototype
     [DataField]
     public ProtoId<InsightTraitPrototype>? Next = null;
     [DataField(required: true)]
-    public ProtoId<TraitPrototype> Trait;
+    public ProtoId<TraitPrototype> Trait = "";
 }

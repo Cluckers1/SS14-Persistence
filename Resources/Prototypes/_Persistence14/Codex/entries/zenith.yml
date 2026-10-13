@@ -37,3 +37,12 @@
   order: 4
   category: Zenith
   unlockHint: "Use a Codex Fragment"
+
+
+- type: codexEntry
+  id: ThresholdCandle
+  name: The Threshold Candle
+  content: "UNFILLED"
+  order: 4
+  category: Zenith
+  unlockHint: "Examine the Threshold Candle"

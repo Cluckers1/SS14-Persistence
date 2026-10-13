@@ -2,7 +2,6 @@
   parent: BaseItem
   id: ResonanceArtifactSalvationShard
   name: salvation shard
-
   components:
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/bluespace_core.rsi
@@ -27,3 +26,12 @@
     castShadows: false
   - type: CodexExamineUnlocker
     entry: SalvationShard
+
+- type: entity
+  name: The Threshold Candle
+  description: "An artifact of the Threshold's Embrace. This candle was lit by the light of the Zenith Threshold itself. It's ever-burning wick was a sign of the vitality of the Zenith Threshold; What does it mean now?"
+  parent: CandleThresholdInfinite
+  id: CandleThresholdInfiniteArtifact
+  components:
+  - type: CodexExamineUnlocker
+    entry: ThresholdCandle

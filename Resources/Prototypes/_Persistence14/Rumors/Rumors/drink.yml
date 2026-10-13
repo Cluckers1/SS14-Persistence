@@ -33,6 +33,7 @@
     - DiscoverSmallSalvage
     - BountyBasicGeneral
     - BountyBasicScience
+    - PowerLuminal
   consumptionTarget: 30
 
 - type: rumor
@@ -60,4 +61,7 @@
     - DiscoverSmallShadow
     - ExterminateCult
     - BountyBasicWeapon
+    - RescuePrecursor
+    - PowerPrecursor
+    - RescueShadow
   consumptionTarget: 30

@@ -1,7 +1,7 @@
 - type: codexEntry
   id: Precursor101
   name: The Syndicate Precursors
-  content: "The Syndicate is a coalition of corporations that are being financially crushed by hegemonic big-tech companies such as Nanotrasen.\n\nWhen the Syndicate discovered the Threshold they believed it could provide the technology and materials that would allow them to finally recapture the market. Syndicate agents discovered and explored the Threshold before any other, and so they called themselves the [bold]Precursors[/bold].
+  content: "The Syndicate is a coalition of corporations that are being financially crushed by hegemonic big-tech companies such as Nanotrasen.\n\nWhen the Syndicate discovered the Threshold they believed it could provide the technology and materials that would allow them to finally recapture the market. Syndicate agents discovered and explored the Threshold before any other, and so they called themselves the [bold]Precursors[/bold]."
   category: Precursor
   unlockHint: "Use a Codex Fragment"
 
@@ -16,7 +16,7 @@
 - type: codexEntry
   id: Precursor103
   name: The Network of Agents
-  content: "Using the [bold]Precursor Networks[/bold] the Syndicate has established agents within the local population of the alternate Thresholds.\n\nThese contacts allowed the Syndicate to provide [bold]crucial assistance[/bold] during the [bold]AJAX Crisis[/bold] by steering the alternate Thresholds into the guidance of the [bold]Luminals[/bold]. This has bought the Syndicate enough political capital to become members of the [bold]Nexus CLosed Council[/bold]; a key element of the [bold]Syndicate Strategy[/bold]."
+  content: "Using the [bold]Precursor Networks[/bold] the Syndicate has established agents within the local population of the alternate Thresholds.\n\nThese contacts allowed the Syndicate to provide [bold]crucial assistance[/bold] during the [bold]AJAX Crisis[/bold] by steering the alternate Thresholds into the guidance of the [bold]Luminals[/bold]. This has bought the Syndicate enough political capital to become members of the [bold]Nexus Closed Council[/bold]; a key element of the [bold]Syndicate Strategy[/bold]."
   order: 2
   category: Precursor
   unlockHint: "Use a Codex Fragment"
@@ -32,7 +32,8 @@
 - type: codexEntry
   id: Precursor105
   name: The Syndicate Strategy
-  content: "UNFILLED"
+  content: "The Syndicate Strategy is a strategy developed by the [bold]Syndicate Leadership[/bold] that operates inside the Threshold. The strategy is to use the Nexus Space as a highway to reach and do business with sectors from all possible Universes.\n\nThe Syndicate believes that sectors of the Thresholds can be made independent and will become reliant on Syndicate businesses to sustain intra-sector competition."
   order: 4
   category: Precursor
   unlockHint: "Use a Codex Fragment"
+
