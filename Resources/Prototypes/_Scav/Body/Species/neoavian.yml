@@ -224,10 +224,7 @@
     speechSounds: Alto
     allowedEmotes: ['Chirp', 'Squawk', 'Flap']
   - type: Vocal
-    emoteSounds:
-      Male: MaleHuman # TODO: Add unique sounds
-      Female: FemaleHuman
-      Unsexed: MaleHuman
+    emoteSounds: MaleHuman # TODO: Add unique sounds
   - type: TypingIndicator
     proto: default
   - type: Butcherable
