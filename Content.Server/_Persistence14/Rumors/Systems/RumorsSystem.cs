@@ -87,7 +87,7 @@ public sealed partial class RumorsSystem : EntitySystem
     private void GenerateRumorRewards(Entity<RumorGetterComponent> ent)
     {
         ent.Comp.RumorRewards = new();
-        var factions = _protoMan.EnumeratePrototypes<MetaFactionPrototype>().ToList();
+        var factions = _protoMan.EnumeratePrototypes<MetaFactionPrototype>().OrderBy(p => p.Order).ThenBy(p => p.Name).ToList();
         foreach (var faction in factions)
         {
             ent.Comp.RumorRewards[faction.ID] = new();

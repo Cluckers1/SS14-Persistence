@@ -15,8 +15,8 @@
 
 - type: infrastructureLevel
   id: ILevelGeneral2
-  demotionXP: 150
-  requiredXP: 200
+  demotionXP: 9
+  requiredXP: 10
   name: Decent Trading Station (2)
   markets:
     - market
@@ -31,8 +31,8 @@
   level: 2
 - type: infrastructureLevel
   id: ILevelGeneral3
-  demotionXP: 650
-  requiredXP: 700
+  demotionXP: 39
+  requiredXP: 40
   name: Busy Trade Hub (3)
   markets:
     - market
@@ -50,8 +50,8 @@
 
 - type: infrastructureLevel
   id: ILevelGeneral4
-  demotionXP: 1400
-  requiredXP: 1500
+  demotionXP: 99
+  requiredXP: 100
   name: Masterful Trade Citadel (4)
   markets:
     - market
@@ -83,8 +83,8 @@
 
 - type: infrastructureLevel
   id: ILevelScience2
-  demotionXP: 150
-  requiredXP: 200
+  demotionXP: 9
+  requiredXP: 10
   name: Established Analysis Centre (2)
   markets:
     - sciencemarket
@@ -100,8 +100,8 @@
 
 - type: infrastructureLevel
   id: ILevelScience3
-  demotionXP: 650
-  requiredXP: 700
+  demotionXP: 39
+  requiredXP: 40
   name: Robust Research Station (3)
   markets:
     - sciencemarket
@@ -118,8 +118,8 @@
 
 - type: infrastructureLevel
   id: ILevelScience4
-  demotionXP: 1400
-  requiredXP: 1500
+  demotionXP: 99
+  requiredXP: 100
   name: Prestigious Scientific Intstitution (4)
   markets:
     - sciencemarket
@@ -151,8 +151,8 @@
 
 - type: infrastructureLevel
   id: ILevelExploration2
-  demotionXP: 150
-  requiredXP: 200
+  demotionXP: 9
+  requiredXP: 10
   name: Decent Explorer's Outpost (2)
   markets:
     - explorermarket
@@ -170,8 +170,8 @@
 
 - type: infrastructureLevel
   id: ILevelExploration3
-  demotionXP: 650
-  requiredXP: 700
+  demotionXP: 39
+  requiredXP: 40
   name: Established Exploration Station (3)
   markets:
     - explorermarket
@@ -191,8 +191,8 @@
 
 - type: infrastructureLevel
   id: ILevelExploration4
-  demotionXP: 1400
-  requiredXP: 1500
+  demotionXP: 99
+  requiredXP: 100
   name: Beacon of Exploration (4)
   markets:
     - explorermarket
@@ -229,8 +229,8 @@
 
 - type: infrastructureLevel
   id: ILevelHunter2
-  demotionXP: 150
-  requiredXP: 200
+  demotionXP: 9
+  requiredXP: 10
   name: Burgeoning Hunter's Haven (2)
   markets:
     - huntermarket
@@ -244,8 +244,8 @@
 
 - type: infrastructureLevel
   id: ILevelHunter3
-  demotionXP: 650
-  requiredXP: 700
+  demotionXP: 39
+  requiredXP: 40
   name: Robust Hunter's Station (3)
   markets:
     - huntermarket
@@ -260,8 +260,8 @@
 
 - type: infrastructureLevel
   id: ILevelHunter4
-  demotionXP: 1400
-  requiredXP: 1500
+  demotionXP: 99
+  requiredXP: 100
   name: Legendary Hunter's Refuge (4)
   markets:
     - huntermarket
@@ -292,8 +292,8 @@
 
 - type: infrastructureLevel
   id: ILevelService2
-  demotionXP: 150
-  requiredXP: 200
+  demotionXP: 9
+  requiredXP: 10
   name: Burgeoning Bodega (2)
   markets:
     - servicemarket
@@ -306,8 +306,8 @@
 
 - type: infrastructureLevel
   id: ILevelService3
-  demotionXP: 650
-  requiredXP: 700
+  demotionXP: 39
+  requiredXP: 40
   name: Robust General Store (3)
   markets:
     - servicemarket
@@ -321,8 +321,8 @@
 
 - type: infrastructureLevel
   id: ILevelService4
-  demotionXP: 1400
-  requiredXP: 1500
+  demotionXP: 99
+  requiredXP: 100
   name: Space Mall (4)
   markets:
     - servicemarket
@@ -353,8 +353,8 @@
 
 - type: infrastructureLevel
   id: ILevelEngineer2
-  demotionXP: 150
-  requiredXP: 200
+  demotionXP: 9
+  requiredXP: 10
   name: Industrial Engineering Outpost (2)
   markets:
     - engineermarket
@@ -370,8 +370,8 @@
 
 - type: infrastructureLevel
   id: ILevelEngineer3
-  demotionXP: 650
-  requiredXP: 700
+  demotionXP: 39
+  requiredXP: 40
   name: Robust Industrial Station (3)
   markets:
     - engineermarket
@@ -388,8 +388,8 @@
 
 - type: infrastructureLevel
   id: ILevelEngineer4
-  demotionXP: 1400
-  requiredXP: 1500
+  demotionXP: 99
+  requiredXP: 100
   name: Exemplary Industrial Fortress (4)
   markets:
     - engineermarket

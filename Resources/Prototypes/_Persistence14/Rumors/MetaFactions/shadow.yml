@@ -20,6 +20,7 @@
     - ShadowUpgradeModule
     - TradeGood
     - ShadowCodexFragment
+    - GrandLottery
   rewardsToOffer: 1
 
 - type: metaFactionLevel
@@ -29,6 +30,18 @@
     - ShadowUpgradeModule
     - TradeGood
     - ShadowCodexFragment
+    - ShadowKnifeKit
+    - ChemKit
+    - VestArmor
+    - VestArmorElite
+    - HyperzineKit
+    - Cobra
+    - FreedomImplanter
+    - Jaws
+    - KnuckleDusters
+    - IchorCigarettes
+    - RaidSuit
+    - CombatToolbox
   rewardsToOffer: 2
 
 - type: metaFactionLevel
@@ -38,6 +51,14 @@
     - ShadowUpgradeModule
     - TradeGood
     - ShadowCodexFragment
-  rewardsToOffer: 3
+    - EDagger
+    - VoiceMaskImplanter
+    - StorageImplanter
+    - ESword
+    - EShield
+    - ECrossbow
+    - RadioJammer
+    - Chameleon
+  rewardsToOffer: 2
 
 

@@ -20,6 +20,8 @@
     - MarineUpgradeModule
     - TradeGood
     - MarineCodexFragment
+    - GrandLottery
+    - MarineWebbing
   rewardsToOffer: 1
 
 - type: metaFactionLevel
@@ -29,6 +31,17 @@
     - MarineUpgradeModule
     - TradeGood
     - MarineCodexFragment
+    - MarineViper
+    - VestArmor
+    - VestArmorElite
+    - HyperzineKit
+    - Cobra
+    - Python
+    - KnuckleDusters
+    - IchorCigarettes
+    - RaidSuit
+    - Hushpup
+    - CombatToolbox
   rewardsToOffer: 2
 
 - type: metaFactionLevel
@@ -38,5 +51,12 @@
     - MarineUpgradeModule
     - TradeGood
     - MarineCodexFragment
-  rewardsToOffer: 3
+    - MarineL-6SawBundle
+    - ESword
+    - EShield
+    - RadioJammer
+    - C-20r
+    - GlovesNorthStar
+    - Chameleon
+  rewardsToOffer: 2
 

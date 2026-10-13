@@ -1,6 +1,7 @@
 using Content.Server.Salvage.Magnet;
 using Content.Shared._Persistence14.Rumors.Components;
 using Content.Shared._Persistence14.TradeGoods.Components;
+using Content.Shared.Cargo;
 using Content.Shared.Cargo.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs;
@@ -24,6 +25,25 @@ public sealed partial class TradeGoodsSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<TradeGoodComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<TradeGoodComponent, GridUidChangedEvent>(OnTradeGoodGridChange);
+        SubscribeLocalEvent<TradeGoodComponent, PriceCalculationEvent>(OnGetPrice);
+        SubscribeLocalEvent<TradeGoodComponent, ComponentShutdown>(OnShutdown);
+    }
+
+    private void OnShutdown(Entity<TradeGoodComponent> ent, ref ComponentShutdown args)
+    {
+        var grid = Transform(ent).GridUid;
+        if (grid != null)
+        {
+            if (_tradeStationQuery.TryComp(grid.Value, out var tradeStation))
+            {
+                RecountTradeGoods(grid.Value, tradeStation);
+            }
+        }
+    }
+    private void OnGetPrice(Entity<TradeGoodComponent> ent, ref PriceCalculationEvent args)
+    {
+        args.Price = ent.Comp.PriceOverride;
+        args.Handled = true;
     }
 
     private void OnTradeGoodGridChange(Entity<TradeGoodComponent> ent, ref GridUidChangedEvent args)
@@ -60,5 +80,14 @@ public sealed partial class TradeGoodsSystem : EntitySystem
     private void OnComponentInit(Entity<TradeGoodComponent> ent, ref ComponentInit args)
     {
         _meta.AddFlag(ent, MetaDataFlags.ExtraTransformEvents);
+        var grid = Transform(ent).GridUid;
+        if (grid != null)
+        {
+            if (_tradeStationQuery.TryComp(grid.Value, out var tradeStation))
+            {
+                RecountTradeGoods(grid.Value, tradeStation);
+            }
+        }
+
     }
 }

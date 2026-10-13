@@ -58,8 +58,6 @@
   id: LotteryCashEntityTable
   table: !type:GroupSelector
     children:
-    - id: SpaceCash1000000
-      weight: 0.01
     - id: SpaceCash10000
       weight: 0.1
     - id: SpaceCash5000

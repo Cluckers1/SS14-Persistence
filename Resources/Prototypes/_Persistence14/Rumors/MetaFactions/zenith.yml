@@ -20,6 +20,7 @@
     - ZenithUpgradeModule
     - TradeGood
     - ZenithCodexFragment
+    - GrandLottery
   rewardsToOffer: 1
 
 - type: metaFactionLevel
@@ -29,6 +30,15 @@
     - ZenithUpgradeModule
     - TradeGood
     - ZenithCodexFragment
+    - VestArmor
+    - VestArmorElite
+    - Defib
+    - PrecursorMicrowave
+    - Microwave
+    - FlashCamera
+    - HyperzineKit
+    - RaidSuit
+    - Hushpup
   rewardsToOffer: 2
 
 - type: metaFactionLevel
@@ -38,5 +48,10 @@
     - ZenithUpgradeModule
     - TradeGood
     - ZenithCodexFragment
-  rewardsToOffer: 3
+    - ESword
+    - ScramImplanter
+    - C-20r
+    - GlovesNorthStar
+    - StealthBox
+  rewardsToOffer: 2
 

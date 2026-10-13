@@ -18,3 +18,33 @@
   icon:
     sprite: _Persistence14/Objects/Specific/Upgrades/modules.rsi
     state: nanotrasen-full
+
+- type: rumorReward
+  id: MarineViper
+  name: Viper
+  description: "A small and easily concealable pistol. Retrofitted with a fully automatic receiver. Uses extended pistol magazines (.35 auto)."
+  price: 1200
+  product: WeaponPistolViper
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/viper.rsi
+    state: icon
+
+- type: rumorReward
+  id: MarineL-6SawBundle
+  name: L6 Saw Bundle
+  description: "More dakka: The iconic L6 light machine gun, bundled with 2 box magazines."
+  price: 16000
+  product: ClothingBackpackDuffelSyndicateFilledLMG
+  icon:
+    sprite: Objects/Weapons/Guns/LMGs/l6.rsi
+    state: icon
+
+- type: rumorReward
+  id: MarineWebbing
+  name: Military Webbing
+  description: "Explosion-resistant tactical webbing used for holding operational goods."
+  price: 1500
+  product: ClothingBeltMilitaryWebbing
+  icon:
+    sprite: Clothing/Belt/militarywebbing.rsi
+    state: icon

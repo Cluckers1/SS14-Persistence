@@ -7,8 +7,8 @@
   productType: MainWorldBoundary
   radiusExpansion: 500
   icon:
-    sprite: _Persistence14/Objects/Specific/Upgrades/modules.rsi
-    state: nanotrasen-full
+    sprite: Structures/Specific/anomaly.rsi
+    state: anom4
 
 - type: resonanceProduct
   id: WorldBoundary2
@@ -20,5 +20,5 @@
   radiusExpansion: 1000
   requires: WorldBoundary1
   icon:
-    sprite: _Persistence14/Objects/Specific/Upgrades/modules.rsi
-    state: nanotrasen-full
+    sprite: Structures/Specific/anomaly.rsi
+    state: anom4

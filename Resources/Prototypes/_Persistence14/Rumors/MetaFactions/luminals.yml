@@ -19,6 +19,7 @@
     - LuminalUpgradeModule
     - TradeGood
     - LuminalCodexFragment
+    - GrandLottery
   rewardsToOffer: 1
 
 - type: metaFactionLevel
@@ -28,6 +29,14 @@
     - LuminalUpgradeModule
     - TradeGood
     - LuminalCodexFragment
+    - Defib
+    - FlashCamera
+    - FreedomImplanter
+    - Python
+    - Jaws
+    - Microwave
+    - Hypopen
+    - HyperzinePen
   rewardsToOffer: 2
 
 - type: metaFactionLevel
@@ -37,4 +46,10 @@
     - LuminalUpgradeModule
     - TradeGood
     - LuminalCodexFragment
-  rewardsToOffer: 3
+    - VoiceMaskImplanter
+    - StorageImplanter
+    - ScramImplanter
+    - StealthBox
+    - GlovesNorthStar
+    - EDagger
+  rewardsToOffer: 2

@@ -19,6 +19,8 @@
   rumorRewards:
     - PrecursorUpgradeModule
     - TradeGood
+    - PrecursorCodexFragment
+    - PrecursorPJs
     - PrecursorMerchCrate
   rewardsToOffer: 1
 
@@ -29,45 +31,22 @@
   rumorRewards:
     - PrecursorUpgradeModule
     - TradeGood
-    - PrecursorPJs
-    - PrecursorCarpSuitBag
-    - PrecursorViper
-    - PrecursorPython
-    - PrecursorKnifeKit
-    - PrecursorKnuckleDusters
-    - PrecursorRiggedBoxingGloves
-    - PrecursorMicrowave
-    - PrecursorChemKit
-    - PrecursorHyperzinePen
-    - PrecursorCigarettes
-    - PrecursorDefib
-    - PrecursorJaws
-    - PrecursorStealthBox
-    - PrecursorFlashCamera
+    - PrecursorCodexFragment
+    - Microwave
+    - ChemKit
+    - HyperzinePen
+    - IchorCigarettes
     - PrecursorDecoy
     - PrecursorSoapSyndie
-    - PrecursorToolbox
-    - PrecursorFakeMindshield
-    - PrecursorWebbing
     - PrecursorMagBoots
     - PrecursorSyndieEva
-    - PrecursorCobra
-    - PrecursorECrossbow
-    - PrecursorGlovesNorthStar
-    - PrecursorHushpup
-    - PrecursorHypopen
-    - PrecursorHypoDart
-    - PrecursorHyperzineKit
+    - Cobra
+    - Hushpup
+    - Hypopen
     - PrecursorSoapSyndieCluster
-    - PrecursorCameraBug
-    - PrecursorStorageImplanter
-    - PrecursorFreedomImplanter
+    - FreedomImplanter
     - PrecursorNoSlips
-    - PrecursorVestArmor
-    - PrecursorVestArmorElite
     - PrecursorHardsuitSyndie
-    - PrecursorCarpHardsuit
-    - PrecursorRaidSuit
   rewardsToOffer: 2
 
 - type: metaFactionLevel
@@ -76,20 +55,14 @@
   rumorRewards:
     - PrecursorUpgradeModule
     - TradeGood
-    - PrecursorESword
-    - PrecursorEDagger
-    - PrecursorECrossbow
-    - PrecursorGlovesNorthStar
-    - PrecursorEShield
-    - PrecursorC-20r
-    - PrecursorL-6SawBundle
-    - PrecursorAccessBreaker
-    - PrecursorRadioJammer
+    - PrecursorCodexFragment
+    - ECrossbow
+    - RadioJammer
     - PrecursorChameleonProjector
-    - PrecursorScramImplanter
-    - PrecursorVoiceMaskImplanter
+    - VoiceMaskImplanter
     - PrecursorChameleon
     - PrecursorHardsuitSyndieElite
     - PrecursorHardsuitSyndieJug
+    - StealthBox
   rewardsToOffer: 2
 

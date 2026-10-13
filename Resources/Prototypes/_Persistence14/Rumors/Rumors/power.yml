@@ -15,7 +15,7 @@
   description: "Eliminate the Rebel Luminals and restore power to the substation and two SMES."
   eventGrids:
     - /Maps/Rumors/Charge/lumi-charge.yml
-  cashReward: 2500
+  cashReward: 5000
   reputationReward: 50
   completionType: Power
   descriptionAddon: "Power all SMES on board the grid."
@@ -26,7 +26,7 @@
   description: "Restore power to the two SMES and the substation so we can retrieve our science data!"
   eventGrids:
     - /Maps/Rumors/Charge/lumi-charge.yml
-  cashReward: 2500
+  cashReward: 5000
   reputationReward: 50
   completionType: Power
   descriptionAddon: "Power all SMES on board the grid."

@@ -36,6 +36,12 @@
     - GreenFlippoWelder
     - GreenPhoronCrate
     - GreenMagBoots
+    - ChemKit
+    - Defib
+    - Hypopen
+    - Jaws
+    - HyperzinePen
+    - CombatToolbox
   rewardsToOffer: 2
 
 - type: metaFactionLevel
@@ -45,4 +51,10 @@
     - GreenUpgradeModule
     - GreenCodexFragment
     - TradeGood
-  rewardsToOffer: 3
+    - StorageImplanter
+    - EShield
+    - ECrossbow
+    - ScramImplanter
+    - EDagger
+    - ChameleonProjector
+  rewardsToOffer: 2

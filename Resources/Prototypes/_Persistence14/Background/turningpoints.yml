@@ -18,3 +18,17 @@
   description: "You encountered a strange traveler from beyond your Universe.\nThey claimed to be a [color=purple]Magician[/color] and convinced you to travel to the [bold]Nexus Space[/bold].\nYou left everything behind to pursue this Destiny."
   effects:
     - TraitPledge
+
+- type: turningPoint
+  id: Priestess
+  name: Encouraged by a Priestess
+  description: "You encountered a wise [color=yellow]Priestess[/color] who knew many secrets of the Threshold.\nShe encouraged you to travel to the [bold]Nexus Space[/bold] to seek the Gods.\nYou left everything behind to pursue this Destiny."
+  effects:
+    - TraitPledge
+
+- type: turningPoint
+  id: Rational
+  name: Lectured by a Rationalist
+  description: "A rationalist genius gave a lecture in your sector.\nThey said that everything about the Threshold can be explained by the science being conducted in the [bold]Nexus Space[/bold].\nYou left everything behind to pursue this Destiny."
+  effects:
+    - TraitPledge
