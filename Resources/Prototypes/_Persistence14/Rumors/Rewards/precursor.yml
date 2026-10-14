@@ -78,15 +78,6 @@
     sprite: Objects/Tools/access_breaker.rsi
     state: syndi-icon
 
-- type: rumorReward
-  id: PrecursorChameleonProjector
-  name: Chameleon Projector
-  description: "Disappear in plain sight by creating a hologram of an item around you, disguising you as that object! Do not use this to play the game 'Object Search'."
-  price: 3400
-  product: ChameleonProjector
-  icon:
-    sprite: Objects/Devices/chameleon_projector.rsi
-    state: icon
 
 - type: rumorReward
   id: PrecursorDecoy
@@ -119,16 +110,6 @@
     state: syndie-4
 
 - type: rumorReward
-  id: PrecursorToolbox
-  name: Combat Toolbox
-  description: "A full compliment of tools for the mechanically inclined agent. Includes a pair of insulated combat gloves and a agent gas mask as well."
-  price: 2000
-  product: ToolboxSyndicateFilled
-  icon:
-    sprite: Objects/Tools/Toolboxes/toolbox_syn.rsi
-    state: icon
-
-- type: rumorReward
   id: PrecursorCameraBug
   name: Camera Bug
   description: "A portable device that allows you to view the station through the lens of the station's camera systems."
@@ -158,15 +139,7 @@
 
 
 
-- type: rumorReward
-  id: PrecursorChameleon
-  name: Chameleon Kit
-  description: "A backpack full of items that contain chameleon technology allowing you to disguise as pretty much anyone on the station, and more!"
-  price: 25000
-  product: ClothingBackpackChameleonFillAgent
-  icon:
-    sprite: Clothing/Uniforms/Jumpsuits/Color/rainbow.rsi
-    state: icon
+
 
 - type: rumorReward
   id: PrecursorNoSlips

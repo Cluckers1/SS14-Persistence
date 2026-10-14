@@ -18,4 +18,6 @@ public sealed partial class InsightTraitPrototype : IPrototype
     public ProtoId<InsightTraitPrototype>? Next = null;
     [DataField(required: true)]
     public ProtoId<TraitPrototype> Trait = "";
+    [DataField]
+    public bool RequiresAwake = false;
 }

@@ -1,15 +1,39 @@
 - type: insightTrait
   id: Magic1
-  name: insight-magic-dark-vision-name
-  content: insight-magic-dark-vision-desc
+  name: Void Visions
+  content: Once per day you can peek into the Void and get a random rumor.
   next: Magic2
   trait: Magic1
 
 - type: trait
   id: Magic1
-  name: insight-magic-dark-vision-name
-  description: insight-magic-dark-vision-desc
+  name: Void Visions
+  description: Once per day you can peek into the Void and get a random rumor.
   selectable: false
+  components:
+    - type: ActionGrant
+      actions:
+        - ActionVoidVisions
+      autoDelete: true
+
+- type: entity
+  parent: BaseAction
+  id: ActionVoidVisions
+  name: Void Vision
+  description: Peek into the void to get a random rumor.
+  components:
+  - type: Action
+    useDelay: 14400
+  - type: Sprite
+    sprite: Structures/Specific/Anomalies/shadow_anom.rsi
+    layers:
+    - state: anom
+      map: ["enum.AnomalyVisualLayers.Base"]
+    - state: pulse
+      map: ["enum.AnomalyVisualLayers.Animated"]
+      visible: false
+  - type: InstantAction
+    event: !type:VoidVisionsEvent
 
 - type: insightTrait
   id: Magic2
@@ -58,4 +82,5 @@
   name: insight-magic-summon-name
   content: insight-magic-summon-desc
   trait: Priest1
+  requiresAwake: true
 

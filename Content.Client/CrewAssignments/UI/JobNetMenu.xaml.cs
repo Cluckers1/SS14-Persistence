@@ -163,7 +163,7 @@ public sealed partial class JobNetMenu : DefaultWindow
                                                          .ThenBy(p => p.Name)
                                                          .ToList())
         {
-            InsightBoxFragment box = new(insightCategory, state.UnlockedInsights, state.UnspentInsights > 0, this);
+            InsightBoxFragment box = new(insightCategory, state.UnlockedInsights, state.UnspentInsights > 0, this, state.SectorAwake);
             InsightsBox.AddChild(box);
         }
         _prototypeManager.Resolve(state.Level, out var levelProto);
@@ -315,12 +315,12 @@ public sealed partial class JobNetMenu : DefaultWindow
         UntilNextRumor -= TimeSpan.FromSeconds(deltaSeconds);
         if (UntilNextRumor > TimeSpan.Zero)
         {
-            RumorCooldownLbl.Text = UntilNextRumor.ToString("mm\\:ss");
+            RumorCooldownLbl.Text = UntilNextRumor.ToString("hh\\:mm\\:ss");
         }
         UntilNextReward -= TimeSpan.FromSeconds(deltaSeconds);
         if (UntilNextReward > TimeSpan.Zero)
         {
-            RewardCooldownLbl.Text = UntilNextReward.ToString("mm\\:ss");
+            RewardCooldownLbl.Text = UntilNextReward.ToString("hh\\:mm\\:ss");
         }
     }
 

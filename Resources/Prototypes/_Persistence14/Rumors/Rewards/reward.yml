@@ -304,7 +304,6 @@
     sprite: Objects/Tools/Toolboxes/toolbox_syn.rsi
     state: icon
 
-
 - type: rumorReward
   id: EDagger
   name: Energy Dagger
@@ -313,4 +312,24 @@
   product: EnergyDaggerBox
   icon:
     sprite: Objects/Weapons/Melee/e_dagger.rsi
+    state: icon
+
+- type: rumorReward
+  id: ChameleonProjector
+  name: Chameleon Projector
+  description: "Disappear in plain sight by creating a hologram of an item around you, disguising you as that object!"
+  price: 12000
+  product: ChameleonProjector
+  icon:
+    sprite: Objects/Devices/chameleon_projector.rsi
+    state: icon
+
+- type: rumorReward
+  id: Chameleon
+  name: Chameleon Kit
+  description: "A backpack full of items that contain chameleon technology allowing you to disguise as pretty much anyone on the station, and more!"
+  price: 25000
+  product: ClothingBackpackChameleonFillAgent
+  icon:
+    sprite: Clothing/Uniforms/Jumpsuits/Color/rainbow.rsi
     state: icon

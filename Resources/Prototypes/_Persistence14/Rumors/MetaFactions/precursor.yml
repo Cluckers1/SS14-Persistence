@@ -24,7 +24,6 @@
     - PrecursorMerchCrate
   rewardsToOffer: 1
 
-
 - type: metaFactionLevel
   id: Precursor3
   name: Agent
@@ -58,9 +57,9 @@
     - PrecursorCodexFragment
     - ECrossbow
     - RadioJammer
-    - PrecursorChameleonProjector
+    - ChameleonProjector
     - VoiceMaskImplanter
-    - PrecursorChameleon
+    - Chameleon
     - PrecursorHardsuitSyndieElite
     - PrecursorHardsuitSyndieJug
     - StealthBox

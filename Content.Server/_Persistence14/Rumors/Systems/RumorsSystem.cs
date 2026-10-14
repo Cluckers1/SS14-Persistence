@@ -1030,7 +1030,7 @@ public sealed partial class RumorsSystem : EntitySystem
         if (getter.Rumors.Count - 1 < iD) return;
         var rumor = getter.Rumors[iD];
         var targetGetter = GetRumorGetterByName(target);
-        if(targetGetter == null || targetGetter.Rumors.Count > 4)
+        if(targetGetter == null || targetGetter.Rumors.Count >= 4)
         {
             NotifyPlayer(player, $"You cannot transfer the rumor to {target} at this time.");
             return;

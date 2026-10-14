@@ -7,6 +7,7 @@ using Content.Shared._Persistence14.Rumors.Components;
 using Content.Shared.Cargo.Events;
 using Content.Shared.CrewAssignments.Components;
 using Content.Shared.Movement.Components;
+using Content.Shared.Parallax;
 using Content.Shared.Station;
 using Content.Shared.Station.Components;
 using Robust.Shared.Prototypes;
@@ -74,6 +75,8 @@ public sealed partial class ResonanceSystem : EntitySystem
         {
             _crewMeta.MetaRecords.SectorAwoke = true;
             _chat.DispatchGlobalAnnouncement($"Surges of electricity crackle through space! The Sector has AWOKE; Tier 3 Insights are now available!", "Sector News");
+            var parallax = EnsureComp<ParallaxComponent>(_crewMeta.MetaRecords.Owner);
+            parallax.Parallax = "Wizard";
         }
         if(proto.ProductType == ResonanceProductType.Product)
         {

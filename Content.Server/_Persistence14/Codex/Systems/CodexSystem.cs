@@ -7,6 +7,7 @@ using Content.Shared._Persistence14.Codex;
 using Content.Shared._Persistence14.Codex.Components;
 using Content.Shared._Persistence14.Codex.Prototypes;
 using Content.Shared._Persistence14.Rumors.Components;
+using Content.Shared._Persistence14.Rumors.Systems;
 using Content.Shared.Anomaly.Components;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Body.Components;
@@ -15,6 +16,7 @@ using Content.Shared.CrewAssignments;
 using Content.Shared.CrewAssignments.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Electrocution;
+using Content.Shared.Emoting;
 using Content.Shared.EntityEffects.Effects.Body;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
@@ -60,13 +62,22 @@ public sealed partial class CodexSystem : EntitySystem
     [Dependency] private SharedElectrocutionSystem _electrocution = default!;
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private SharedRottingSystem _rotting = default!;
+    [Dependency] private RumorsSystem _rumors = default!;
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<ActorComponent, VoidVisionsEvent>(OnVoidVision);
         SubscribeLocalEvent<ActorComponent, SenseAnomalyEvent>(OnSenseAnomaly);
         SubscribeLocalEvent<CodexFragmentComponent, UseInHandEvent>(CodexFragmentAfterInteract);
         SubscribeLocalEvent<CodexExamineUnlockerComponent, ExaminedEvent>(OnUnlockerExamined);
         SubscribeLocalEvent<MiracleReviveComponent, MiracleReviveEvent>(OnMiracleRevive);
+    }
+
+    private void OnVoidVision(Entity<ActorComponent> ent, ref VoidVisionsEvent args)
+    {
+        var getter = _rumors.GetRumorComponent(ent);
+        if (getter == null || getter.Value.Comp.Rumors.Count >= 4) return;
+        _rumors.AssignRumor(getter.Value, ent);
     }
 
     private void OnMiracleRevive(Entity<MiracleReviveComponent> ent, ref MiracleReviveEvent args)

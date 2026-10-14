@@ -14,6 +14,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Labels.Components;
 using Content.Shared.Paper;
 using Content.Shared.Station.Components;
+using Content.Shared.Storage.Components;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -999,26 +1000,28 @@ namespace Content.Server.Cargo.Systems
 
             // Ensure the item doesn't start anchored
             _transformSystem.Unanchor(item, itemXForm);
-
-            // Spawn container and insert the item into it if a container is defined.
-            var containerEntity = Spawn(rumorProto.Container, itemXForm.Coordinates);
-            _metaSystem.SetEntityName(containerEntity, $"{Name(item)} ({personalAccount})");
-            if(TryComp<AccessReaderComponent>(containerEntity, out var accessReader) && accessReader != null)
+            EntityUid containerEntity = item;
+            if(!TryComp<EntityStorageComponent>(item, out _))
             {
-                _accessReaderSystem.TryAddPersonalAccess((containerEntity, accessReader), personalAccount);
-            }
-            _transformSystem.SetLocalRotation(containerEntity, itemXForm.LocalRotation);
-
-            if (!_container.TryGetContainer(containerEntity, rumorProto.ContainerId, out var container1) ||
+                containerEntity = Spawn(rumorProto.Container, itemXForm.Coordinates);
+                if (!_container.TryGetContainer(containerEntity, rumorProto.ContainerId, out var container1) ||
                 !_container.Insert(item, container1, force: true))
-            {
-                QueueDel(containerEntity);
+                {
+                    QueueDel(containerEntity);
+                }
+                else _transformSystem.SetLocalRotation(containerEntity, itemXForm.LocalRotation);
             }
             else
             {
                 item = containerEntity;
             }
-
+            _metaSystem.SetEntityName(containerEntity, $"{Name(item)} ({personalAccount})");
+            if(TryComp<AccessReaderComponent>(containerEntity, out var accessReader) && accessReader != null)
+            {
+                _accessReaderSystem.TryAddPersonalAccess((containerEntity, accessReader), personalAccount);
+                accessReader.PersonalAccessMode = true;
+            }
+            
             // Create a sheet of paper to write the order details on
             var printed = Spawn(paperProto, spawn);
             if (TryComp<PaperComponent>(printed, out var paper))

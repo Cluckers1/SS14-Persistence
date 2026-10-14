@@ -187,6 +187,7 @@ public sealed partial class JobNetSystem
         List<ProtoId<InsightTraitPrototype>> unlockedInsights = new();
         int codexUnlocksSince = 0;
         int unspentInsights = 0;
+        bool sectorAwake = false;
         if (TryComp<RumorGetterComponent>(jobnet, out var rumorGetter))
         {
             rumors = rumorGetter.Rumors;
@@ -197,6 +198,7 @@ public sealed partial class JobNetSystem
 
         if (_meta.MetaRecords != null)
         {
+            sectorAwake = _meta.MetaRecords.SectorAwoke;
             completedObjectives = _meta.MetaRecords.CompletedObjectives;
             currentObjectives = _meta.MetaRecords.CurrentObjectives;
             if (_meta.MetaRecords.TryGetRecord(Name(user.Value), out var record) && record != null)
@@ -226,7 +228,7 @@ public sealed partial class JobNetSystem
         var balance = 0;
         _bank.TryGetBalance(user.Value, out balance);
 
-        var state = new JobNetUpdateState(possibleStations, assignmentName, wage, selectedstation, remainingTime, currentObjectives, completedObjectives, codexEntries, currentLevel, balance, spendAuth, spent, spendable, sectorStatus, metaFactionReputations, rumors, rumorCooldown, rumorTax, directMessages, rumorRewards, rewardCooldown, unlockedInsights, codexUnlocksSince, unspentInsights);
+        var state = new JobNetUpdateState(possibleStations, assignmentName, wage, selectedstation, remainingTime, currentObjectives, completedObjectives, codexEntries, currentLevel, balance, spendAuth, spent, spendable, sectorStatus, metaFactionReputations, rumors, rumorCooldown, rumorTax, directMessages, rumorRewards, rewardCooldown, unlockedInsights, codexUnlocksSince, unspentInsights, sectorAwake);
         _ui.SetUiState(jobnet, JobNetUiKey.Key, state);
     }
 

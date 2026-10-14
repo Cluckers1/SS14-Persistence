@@ -17,7 +17,7 @@ public sealed partial class InsightBoxFragment : PanelContainer
     private JobNetMenu _owner;
     [Dependency] private IPrototypeManager _protoManager = default!;
 
-    public InsightBoxFragment(InsightCategoryPrototype insightCategory, List<ProtoId<InsightTraitPrototype>> unlockedInsights, bool hasPoints, JobNetMenu jobNetMenu)
+    public InsightBoxFragment(InsightCategoryPrototype insightCategory, List<ProtoId<InsightTraitPrototype>> unlockedInsights, bool hasPoints, JobNetMenu jobNetMenu, bool sectorAwake)
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
@@ -48,6 +48,11 @@ public sealed partial class InsightBoxFragment : PanelContainer
             button.Text = Loc.GetString(current.Name);
             button.HorizontalExpand = true;
             button.ToolTip = current.Content is not null ? Loc.GetString(current.Content) : "";
+            if(current.RequiresAwake && !sectorAwake)
+            {
+                possible = false;
+                button.ToolTip = "Sector Awakening Required";
+            }
             if (!possible)
             {
                 button.Disabled = true;
