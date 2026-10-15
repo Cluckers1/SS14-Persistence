@@ -224,12 +224,12 @@ public sealed partial class JobNetMenu : DefaultWindow
         }
         if (state.RumorCooldown != null)
         {
-            RumorCooldownLbl.Text = $"{state.RumorCooldown.Value.ToString("mm\\:ss")}";
+            RumorCooldownLbl.Text = $"{state.RumorCooldown.Value.ToString("hh\\:mm\\:ss")}";
             UntilNextRumor = state.RumorCooldown.Value;
         }
         if (state.RewardCooldown != null)
         {
-            RewardCooldownLbl.Text = $"{state.RewardCooldown.Value.ToString("mm\\:ss")}";
+            RewardCooldownLbl.Text = $"{state.RewardCooldown.Value.ToString("hh\\:mm\\:ss")}";
             UntilNextReward = state.RewardCooldown.Value;
         }
         RumorLimitLbl.Text = $"{state.Rumors.Count.ToString()}/4 Available";

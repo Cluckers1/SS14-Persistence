@@ -5,10 +5,9 @@
   order: 0
   category: Nexus
 
-
 - type: codexEntry
   id: EclipseStation101
-  name: Eclipse Station101
+  name: The Construction of Eclipse Station
   content: "UNFILLED"
   order: 1
   category: Nexus
@@ -16,7 +15,7 @@
 
 - type: codexEntry
   id: EclipseStation102
-  name: Eclipse Station102
+  name: The NCC
   content: "UNFILLED"
   order: 2
   category: Nexus
@@ -24,7 +23,7 @@
 
 - type: codexEntry
   id: EclipseStation103
-  name: Eclipse Station103
+  name: Strange Politics of the NCC
   content: "UNFILLED"
   order: 3
   category: Nexus

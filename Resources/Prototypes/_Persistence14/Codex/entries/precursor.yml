@@ -11,7 +11,7 @@
   content: "The Universe where the Syndicate controls the Threshold is known as the 'Precursor Universe' because the Syndicate discovered the Threshold and the Nexus Space before anyone else.\n\nThe Syndicate peered through the Nexus Space and saw the other Thresholds just starting to be colonized by the Solar Legion, Nanotrasen and the UNMC.\n\nThe Syndicate used early access to the Nexus Space to create the [bold]'Precursor Network'[/bold] which broadcast into the other Thresholds. This network offered rewards in exchange for colonists in the other Threshold doing odd tasks that put them at odds with the rest of society."
   order: 1
   category: Precursor
-  unlockHint: ""
+  unlockHint: "Use a Codex Fragment"
 
 - type: codexEntry
   id: Precursor103
