@@ -154,7 +154,7 @@ public sealed partial class ActionComponent : Component
     public SoundSpecifier? Sound;
 }
 
-[DataDefinition, Serializable, NetSerializable]
+[DataDefinition, Serializable, NetSerializable, Virtual]
 public partial class ActionCooldown
 {
     [DataField(required: true, customTypeSerializer: typeof(TimeOffsetSerializer))]
