@@ -1,4 +1,5 @@
 using Content.Shared.Access.Components;
+using Content.Shared.Construction.Components;
 using Content.Shared.CrewAccesses.Components;
 using Content.Shared.CrewAssignments.Components;
 using Content.Shared.CrewRecords.Components;
@@ -60,8 +61,19 @@ public sealed partial class AccessReaderSystem : EntitySystem
         SubscribeLocalEvent<AccessReaderComponent, SetupAccessList>(OnSetupAccessList);
         SubscribeLocalEvent<AccessReaderComponent, ComponentGetState>(OnGetState);
         SubscribeLocalEvent<AccessReaderComponent, ComponentHandleState>(OnHandleState);
+        SubscribeLocalEvent<AccessReaderComponent, UnanchorAttemptEvent>(OnUnanchorAttempt);
 
         Subs.SubscribeWithRelay<ShowAccessReaderSettingsComponent, ShowAccessReaderSettingsEvent>(OnAccessRead); // Moffstation
+    }
+
+    private void OnUnanchorAttempt(Entity<AccessReaderComponent> ent, ref UnanchorAttemptEvent args)
+    {
+        if (!ent.Comp.BlockUnanchor) return;
+        if(!IsAllowed(args.User, ent, ent.Comp))
+        {
+            args.FailMessage = "The access reader prevent you from unanchoring this; Access Denied.";
+            args.Cancel();
+        }
     }
 
     // Moffstation - Begin - Access reader by event

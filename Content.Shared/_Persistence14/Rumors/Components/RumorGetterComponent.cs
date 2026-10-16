@@ -1,4 +1,5 @@
 using Content.Shared._Persistence14.Rumors.Prototypes;
+using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using System;
@@ -23,5 +24,7 @@ public sealed partial class RumorGetterComponent : Component
     public TimeSpan RumorCooldownLength = TimeSpan.FromMinutes(60);
     [DataField]
     public Dictionary<ProtoId<MetaFactionPrototype>, Dictionary<ProtoId<MetaFactionLevelPrototype>, List<ActiveRumorReward>>> RumorRewards = new();
-
+    public SoundSpecifier NewRumorSound = new SoundPathSpecifier("/Audio/Effects/RingtoneNotes/b.ogg");
+    public SoundSpecifier NewRewardSound = new SoundPathSpecifier("/Audio/Effects/RingtoneNotes/f.ogg");
+    public SoundSpecifier KachingSound = new SoundPathSpecifier("/Audio/Effects/kaching.ogg");
 }

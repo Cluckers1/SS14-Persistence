@@ -238,6 +238,10 @@ public sealed partial class GridConfigSystem : SharedGridConfigSystem
                     return false;
             }
         }
+        if(tradeStationGrid && targetStation != null && tradeStation != null)
+        {
+            _station.AnnounceTradeStationCapture(targetStation.Value, tradeStation);
+        }
         return true;
     }
     private bool ValidatePersonalClaim(EntityUid uid, GridConfigComponent component, bool requireTarget = true)

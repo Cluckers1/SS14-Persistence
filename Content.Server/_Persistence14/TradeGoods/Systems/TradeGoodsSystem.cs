@@ -1,4 +1,7 @@
+using Content.Server.Chat.Managers;
+using Content.Server.Chat.Systems;
 using Content.Server.Salvage.Magnet;
+using Content.Server.Station.Systems;
 using Content.Shared._Persistence14.Rumors.Components;
 using Content.Shared._Persistence14.TradeGoods.Components;
 using Content.Shared.Cargo;
@@ -20,6 +23,8 @@ public sealed partial class TradeGoodsSystem : EntitySystem
 {
     [Dependency] private EntityQuery<TradeStationComponent> _tradeStationQuery = default!;
     [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private ChatSystem _chat = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -73,6 +78,15 @@ public sealed partial class TradeGoodsSystem : EntitySystem
             if(Transform(uid).GridUid == ent)
             {
                 comp.ExperiencePoints++;
+            }
+        }
+        if (comp.ExperiencePoints < 5)
+        {
+            var station = _station.GetOwningStation(comp.Owner);
+            if(station != null)
+            {
+                _station.RemoveGridFromStation(station.Value, comp.Owner);
+                _station.AnnounceTradeStationRelease(comp);
             }
         }
     }

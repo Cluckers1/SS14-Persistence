@@ -177,7 +177,7 @@ namespace Content.Client.CrewAssignments.UI
 
         }
 
-        public void UpdateUpgrades(ProtoId<FactionLevelPrototype> level, int balance)
+        public void UpdateUpgrades(ProtoId<FactionLevelPrototype> level, Dictionary<ProtoId<Shared._Persistence14.Upgrades.Prototypes.UpgradeModuleTypePrototype>, int> upgradeProgress, StationModificationConsoleBoundUserInterface stationModificationConsoleBoundUserInterface)
         {
             _protoManager.Resolve(level, out var levelProto);
             if (levelProto == null) return;
@@ -192,11 +192,11 @@ namespace Content.Client.CrewAssignments.UI
                 levelDesc += $"\n[color=green]Can claim trade stations[/color]";
             CurrentBenefitsLabel.SetMarkup(levelDesc);
             string nextLevelDesc;
+            UpgradeRequirementsBox.RemoveAllChildren();
             if (nextLevelProto == null)
             {
                 NextFactionLevelLabel.Text = "Max Level Attained";
                 nextLevelDesc = "[color=green]Maximum Level Attained[/color]";
-                LevelPurchaseButton.Visible = false;
             }
             else
             {
@@ -206,11 +206,16 @@ namespace Content.Client.CrewAssignments.UI
                 {
                     nextLevelDesc += $"\n[color=green]Can claim trade stations[/color]";
                 }
-                LevelPurchaseButton.Visible = true;
-                LevelPurchaseButton.Text = $"${nextLevelProto.Cost}";
+                foreach (var kv in nextLevelProto.RequiredModules)
+                {
+                    int progress = 0;
+                    if (upgradeProgress.ContainsKey(kv.Key)) progress = upgradeProgress[kv.Key];
+                    FactionUpgradeModuleFragment fragment = new(kv, progress);
+                    fragment.ApplyButton.OnPressed += _ => stationModificationConsoleBoundUserInterface.OnModuleApply(kv.Key);
+                    UpgradeRequirementsBox.AddChild(fragment);
+                }
             }
             NextBenefitsLabel.SetMarkup(nextLevelDesc);
-            AccountBalanceLabel.Text = $"${balance}";
 
         }
 

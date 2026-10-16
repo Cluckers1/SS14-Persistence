@@ -1,6 +1,9 @@
+using Content.Server._Persistence14.Codex.Systems;
 using Content.Server._Persistence14.Resonance.Systems;
 using Content.Server.CrewRecords.Systems;
+using Content.Server.Hands.Systems;
 using Content.Shared._Persistence14.Resonance.Prototypes;
+using Content.Shared._Persistence14.Upgrades.Components;
 using Content.Shared.Access;
 using Content.Shared.Cargo.BUI;
 using Content.Shared.Cargo.Components;
@@ -19,9 +22,10 @@ public sealed partial class CrewAssignmentSystem
 
     [Dependency] private CrewMetaRecordsSystem _crewMeta = default!;
     [Dependency] private ResonanceSystem _resonance = default!;
+    [Dependency] private CodexSystem _codex = default!;
+    [Dependency] private HandsSystem _hands = default!;
     private void InitializeConsole()
     {
-        SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationPurchaseUpgrade>(OnPurchaseUpgrade);
         SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationChangeSalesTax>(OnChangeSalesTax);
         SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationChangeExportTax>(OnChangeExportTax);
         SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationChangeImportTax>(OnChangeImportTax);
@@ -48,8 +52,54 @@ public sealed partial class CrewAssignmentSystem
         SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationJobNetOn>(OnJobNetOn);
         SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationJobNetOff>(OnJobNetOff);
         SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationResonancePurchase>(OnResonancePurchase);
+        SubscribeLocalEvent<StationModificationConsoleComponent, StationModificationApplyModule>(OnApplyModule);
         SubscribeLocalEvent<StationModificationConsoleComponent, BoundUIOpenedEvent>(OnOrderUIOpened);
         SubscribeLocalEvent<StationModificationConsoleComponent, ComponentInit>(OnInit);
+    }
+
+    private void OnApplyModule(Entity<StationModificationConsoleComponent> ent, ref StationModificationApplyModule args)
+    {
+        if (args.Actor is not { Valid: true } player)
+            return;
+
+        var station = _station.GetOwningStation(ent);
+        if (station == null) return;
+
+        if (!Validate(ent, ent.Comp, player, out var stationData)) return;
+        if (!TryComp<StationDataComponent>(station, out var data) || data == null)
+            return;
+        _protoMan.Resolve(data.Level, out var currentLevel);
+        if (currentLevel == null || currentLevel.Next == null) return;
+        _protoMan.Resolve(currentLevel.Next, out var nextLevel);
+        if (nextLevel == null) return;
+        if (!nextLevel.RequiredModules.ContainsKey(args.Prototype)) return;
+        var module = _hands.GetActiveItem(player);
+        if (module == null || !TryComp<UpgradeModuleComponent>(module, out var upgradeComp) || upgradeComp == null || upgradeComp.TargetModule != args.Prototype)
+        {
+            _codex.NotifyPlayer(player, $"You must be holding an upgrade module of the correct type in your active hand.");
+            return;
+        }
+        if (data.UpgradeProgress.ContainsKey(args.Prototype))
+        {
+            if (data.UpgradeProgress[args.Prototype] >= nextLevel.RequiredModules[args.Prototype])
+            {
+                return;
+            }
+            data.UpgradeProgress[args.Prototype]++;
+        }
+        else data.UpgradeProgress.Add(args.Prototype, 1);
+        _codex.NotifyPlayer(player, "Upgade Module Applied.", upgradeComp.ApplySound);
+        QueueDel(module);
+        UpdateOrders(station.Value);
+        if (data.UpgradeProgress[args.Prototype] < nextLevel.RequiredModules[args.Prototype]) return;
+        foreach (var kv in nextLevel.RequiredModules)
+        {
+            if (!data.UpgradeProgress.ContainsKey(kv.Key)) return;
+            if (data.UpgradeProgress[kv.Key] < kv.Value) return;
+        }
+        data.UpgradeProgress = new();
+        data.Level = currentLevel.Next.Value;
+        UpdateOrders(station.Value);
     }
 
     private void OnResonancePurchase(Entity<StationModificationConsoleComponent> ent, ref StationModificationResonancePurchase args)
@@ -212,32 +262,6 @@ public sealed partial class CrewAssignmentSystem
         }
         crewAssignments.CreateAssignment(args.Owner);
         Dirty((EntityUid)station, crewAssignments);
-        UpdateOrders(station.Value);
-    }
-
-    private void OnPurchaseUpgrade(EntityUid uid, StationModificationConsoleComponent component, StationModificationPurchaseUpgrade args)
-    {
-        if (args.Actor is not { Valid: true } player)
-            return;
-
-        var station = _station.GetOwningStation(uid);
-        if (station == null) return;
-
-        if (!Validate(uid, component, player, out var stationData)) return;
-
-        if (!TryComp<StationBankAccountComponent>(station, out var bank) || bank == null)
-            return;
-        if (!TryComp<StationDataComponent>(station, out var data))
-            return;
-        _protoMan.Resolve(data.Level, out var currentLevel);
-        if (currentLevel == null || currentLevel.Next == null) return;
-        _protoMan.Resolve(currentLevel.Next, out var nextLevel);
-        if (nextLevel == null) return;
-        var balance = _cargo.GetBalanceFromAccount((station.Value, bank), "Cargo");
-        var cost = nextLevel.Cost;
-        if (balance < cost) return;
-        _cargo.UpdateBankAccount((station.Value, bank), -cost, "Cargo");
-        data.Level = currentLevel.Next.Value;
         UpdateOrders(station.Value);
     }
 
@@ -842,7 +866,8 @@ public sealed partial class CrewAssignmentSystem
                 hasTrade,
                 resonanceMarket,
                 data.StoredResonance,
-                partialPurchases
+                partialPurchases,
+                data.UpgradeProgress
             ));
         }
     }

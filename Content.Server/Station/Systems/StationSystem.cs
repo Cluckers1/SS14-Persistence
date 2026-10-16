@@ -20,6 +20,7 @@ using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using System.Linq;
 
@@ -42,9 +43,8 @@ public sealed partial class StationSystem : SharedStationSystem
     [Dependency] private CrewMetaRecordsSystem _metaRecords = default!;
     [Dependency] private MapSystem _mapSystem = default!;
     [Dependency] private CrewManifestSystem _crewManifest = default!;
-
     [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
-
+    [Dependency] private IGameTiming _timing = default!;
     private ISawmill _sawmill = default!;
 
     /// <inheritdoc/>
@@ -68,6 +68,25 @@ public sealed partial class StationSystem : SharedStationSystem
 
         _player.PlayerStatusChanged += OnPlayerStatusChanged;
     }
+
+    public void AnnounceTradeStationCapture(EntityUid faction, TradeStationComponent comp)
+    {
+        if(_timing.CurTime < comp.CurrentCooldown)
+        {
+            comp.CurrentCooldown = _timing.CurTime + comp.AnnounceCooldown;
+            _chatSystem.DispatchGlobalAnnouncement($"A trade station has been claimed by {Name(faction)}; {Name(comp.Owner)}.", "Sector News");
+        }
+    }
+
+    public void AnnounceTradeStationRelease(TradeStationComponent comp)
+    {
+        if(_timing.CurTime < comp.CurrentCooldown)
+        {
+            comp.CurrentCooldown = _timing.CurTime + comp.AnnounceCooldown;
+            _chatSystem.DispatchGlobalAnnouncement($"A trade station has been unclaimed by; {Name(comp.Owner)}.", "Sector News");
+        }
+    }
+
 
     public int GetStationID(EntityUid station)
     {

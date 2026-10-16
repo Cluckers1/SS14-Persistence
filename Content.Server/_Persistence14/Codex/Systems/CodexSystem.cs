@@ -1,3 +1,4 @@
+using Content.Server.Audio;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.CrewRecords.Systems;
@@ -63,6 +64,10 @@ public sealed partial class CodexSystem : EntitySystem
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private SharedRottingSystem _rotting = default!;
     [Dependency] private RumorsSystem _rumors = default!;
+    [Dependency] private ServerGlobalSoundSystem _globalsound = default!;
+    private SoundSpecifier _codexUnlockSound = new SoundPathSpecifier("/Audio/Effects/RingtoneNotes/gsharp.ogg");
+    private SoundSpecifier _insightUnlockSound = new SoundPathSpecifier("/Audio/Effects/RingtoneNotes/dsharp.ogg");
+
     public override void Initialize()
     {
         base.Initialize();
@@ -120,7 +125,7 @@ public sealed partial class CodexSystem : EntitySystem
                     ent.Comp.WritheDuration,
                     true
                 );
-                _audio.PlayPredicted(ent.Comp.ZapSound, ent, null);
+                _audio.PlayPvs(ent.Comp.ZapSound, ent, null);
             }
         }
 
@@ -257,17 +262,17 @@ public sealed partial class CodexSystem : EntitySystem
         crewrecord.UnlockedEntries.Add(codex);
         var codexProto = _protoMan.Index(codex);
         var categoryProto = _protoMan.Index(codexProto.Category);
-        NotifyPlayer(mob, $"You have unlocked the codex entry '[bold]{codexProto.Name}[/bold]' in the {categoryProto.Name} series.");
+        NotifyPlayer(mob, $"You have unlocked the codex entry '[bold]{codexProto.Name}[/bold]' in the {categoryProto.Name} series.", _codexUnlockSound);
         crewrecord.CodexUnlocksSince++;
         if(crewrecord.CodexUnlocksSince >= 5)
         {
             crewrecord.UnspentInsights++;
             crewrecord.CodexUnlocksSince = 0;
-            NotifyPlayer(mob, $"You have enough codex entries to earn an Insight. Spend Insights in the Job Network.");
+            NotifyPlayer(mob, $"You have enough codex entries to earn an Insight. Spend Insights in the Job Network.", _insightUnlockSound);
         }
     }
 
-    public void NotifyPlayer(EntityUid player, string msg, SoundSpecifier? sound = null, EntityUid? source = null)
+    public void NotifyPlayer(EntityUid player, string msg, SoundSpecifier? sound = null)
     {
         if (TryComp<ActorComponent>(player, out var actor) && actor != null && actor.PlayerSession != null)
         {
@@ -278,10 +283,10 @@ public sealed partial class CodexSystem : EntitySystem
                 false,
                 actor.PlayerSession.Channel
                 );
-        }
-        if (sound != null && source != null)
-        {
-            _audio.PlayEntity(sound, player, source.Value);
+            if (sound != null)
+            {
+                _globalsound.PlayLocalSound(sound, actor);
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 using Content.Client.Cargo.UI;
 using Content.Client.CrewAssignments.UI;
 using Content.Shared._Persistence14.Resonance.Prototypes;
+using Content.Shared._Persistence14.Upgrades.Prototypes;
 using Content.Shared.Cargo;
 using Content.Shared.Cargo.BUI;
 using Content.Shared.Cargo.Components;
@@ -80,7 +81,6 @@ public sealed class StationModificationConsoleBoundUserInterface : BoundUserInte
         _menu.ITaxConfirm.OnPressed += ChangeITax;
         _menu.ETaxConfirm.OnPressed += ChangeETax;
         _menu.STaxConfirm.OnPressed += ChangeSTax;
-        _menu.LevelPurchaseButton.OnPressed += PurchaseUpgrade;
         _menu.ChannelEnable.OnPressed += OnChannelEnable;
         _menu.ChannelDisable.OnPressed += OnChannelDisable;
         _menu.JobNetOn.OnPressed += OnJobNetOn;
@@ -106,7 +106,7 @@ public sealed class StationModificationConsoleBoundUserInterface : BoundUserInte
         _menu?.UpdateStation(station, cState.Name, cState.FactionTag);
         _menu?.UpdateAccesses(Accesses);
         _menu?.UpdateAssignments(Assignments);
-        _menu?.UpdateUpgrades(cState.Level, cState.AccountBalance);
+        _menu?.UpdateUpgrades(cState.Level, cState.UpgradeProgress, this);
         _menu?.UpdateChannels(cState.RadioData);
         _menu?.UpdateResonance(cState);
         if (_menu != null)
@@ -347,5 +347,10 @@ public sealed class StationModificationConsoleBoundUserInterface : BoundUserInte
     public void OnResonancePurchase(ProtoId<ResonanceProductPrototype> product)
     {
         SendMessage(new StationModificationResonancePurchase(product));
+    }
+
+    public void OnModuleApply(ProtoId<UpgradeModuleTypePrototype> key)
+    {
+        SendMessage(new StationModificationApplyModule(key));
     }
 }

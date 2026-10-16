@@ -1,9 +1,10 @@
-using System.Text;
+using Content.Shared._Persistence14.Upgrades.Prototypes;
 using Content.Shared.CrewAssignments.Prototypes;
 using Content.Shared.Radio;
 using Content.Shared.Roles;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using System.Text;
 
 namespace Content.Shared.Station.Components;
 
@@ -80,6 +81,10 @@ public sealed partial class StationDataComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public string? FactionTag;
+
+
+    [DataField]
+    public Dictionary<ProtoId<UpgradeModuleTypePrototype>, int> UpgradeProgress = new();
 
     /// <summary>
     /// Returns the tag that should actually be displayed to players.

@@ -312,7 +312,6 @@
                         </PanelContainer.PanelOverride>
                         <RichTextLabel Name="CurrentBenefitsLabel" VerticalExpand="True" HorizontalExpand="True" MinHeight="100"/>
                     </PanelContainer>
-                    
                 </BoxContainer>
                 <Control MinHeight="20" />
                 <BoxContainer Orientation="Horizontal">
@@ -332,16 +331,8 @@
                         <RichTextLabel Name="NextBenefitsLabel"  VerticalExpand="True" HorizontalExpand="True"  MinHeight="100"/>
                     </PanelContainer>
                 </BoxContainer>
-                
-                <BoxContainer Orientation="Horizontal">
-                    <Label Text="Faction Account:"
-                      StyleClasses="LabelKeyText" />
-                    <Label Name="AccountBalanceLabel" Text="" />
-                    <Control HorizontalExpand="True" />
-                    <Label Text="Purchase Upgrade:"
-                      StyleClasses="LabelKeyText" />
-                    <Button Name="LevelPurchaseButton" Access="Public" />
-                </BoxContainer>
+                <Label Text="Upgrade Faction:" StyleClasses="LabelKeyText" />
+                <BoxContainer Orientation="Vertical" Name="UpgradeRequirementsBox" />
             </BoxContainer>
             <!-- Resonance Market -->
             <BoxContainer Orientation="Vertical" Margin="15">

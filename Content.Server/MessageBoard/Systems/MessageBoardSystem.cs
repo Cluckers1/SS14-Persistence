@@ -1,4 +1,5 @@
 using Content.Server.Administration.Managers;
+using Content.Server.Audio;
 using Content.Server.Chat.Managers;
 using Content.Server.CrewAssignments.Systems;
 using Content.Server.CrewRecords.Systems;
@@ -26,6 +27,7 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
     [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private JobNetSystem _jobNet = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private ServerGlobalSoundSystem _globalsound = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -38,7 +40,7 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
         SubscribeLocalEvent<MessageBoardComponent, MessageBoardSendDirectMessagePublicMessage>(OnSendDirectMessagePublic);
     }
 
-    public void NotifyPlayer(EntityUid player, string msg, SoundSpecifier? sound = null, EntityUid? source = null)
+    public void NotifyPlayer(EntityUid player, string msg, SoundSpecifier? sound = null)
     {
         if (TryComp<ActorComponent>(player, out var actor) && actor != null && actor.PlayerSession != null)
         {
@@ -49,10 +51,10 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
                 false,
                 actor.PlayerSession.Channel
                 );
-        }
-        if (sound != null && source != null)
-        {
-            _audio.PlayEntity(sound, player, source.Value);
+            if (sound != null)
+            {
+                _globalsound.PlayLocalSound(sound, actor);
+            }
         }
     }
     private void OnSendDirectMessagePublic(Entity<MessageBoardComponent> ent, ref MessageBoardSendDirectMessagePublicMessage args)
@@ -91,7 +93,7 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
         var implantXform = Transform(recipientJobnet.Owner);
         var recipientPlayer = implantXform.ParentUid;
         if (!recipientPlayer.IsValid()) return;
-        NotifyPlayer(recipientPlayer, $"(DM) {Name(args.Actor)} sends: '{args.Body}'");
+        NotifyPlayer(recipientPlayer, $"(DM) {Name(args.Actor)} sends: '{args.Body}'", recipientJobnet.DMSound);
         _jobNet.UpdateUserInterface(recipientPlayer, recipientJobnet.Owner, recipientJobnet);
         UpdateDirectMessageByName(args.Recipient);
 

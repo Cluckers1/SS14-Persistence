@@ -66,7 +66,7 @@ public sealed partial class LinkedEntitySystem : EntitySystem
         Dirty(first, firstLink);
         Dirty(second, secondLink);
 
-        if (firstLink.LinkedEntities.Add(firstPid) && secondLink.LinkedEntities.Add(secondPid))
+        if (firstLink.LinkedEntities.Add(secondPid) && secondLink.LinkedEntities.Add(firstPid))
         {
             var firstEv = new LinkedEntityChangedEvent(firstLink.LinkedEntities);
             RaiseLocalEvent(first, ref firstEv);

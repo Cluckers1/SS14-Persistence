@@ -1,6 +1,7 @@
 using Content.Shared.Audio;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
+using Robust.Client.Player;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
@@ -12,6 +13,7 @@ public sealed partial class ClientGlobalSoundSystem : SharedGlobalSoundSystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     // Admin music
     private bool _adminAudioEnabled = true;
@@ -33,6 +35,14 @@ public sealed partial class ClientGlobalSoundSystem : SharedGlobalSoundSystem
         Subs.CVar(_cfg, CCVars.EventMusicEnabled, ToggleStationEventMusic, true);
 
         SubscribeNetworkEvent<GameGlobalSoundEvent>(PlayGameSound);
+        SubscribeNetworkEvent<LocalSoundEvent>(PlayLocalSound);
+    }
+
+    private void PlayLocalSound(LocalSoundEvent ev)
+    {
+        var local = _playerManager.LocalEntity;
+        if (local == null) return;
+        _audio.PlayLocal(ev.Specifier, local.Value, null);
     }
 
     private void OnRoundRestart(RoundRestartCleanupEvent ev)

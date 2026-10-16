@@ -1,9 +1,11 @@
 using Content.Server._NF.Bank;
 using Content.Server.Afk;
+using Content.Server.Audio;
 using Content.Server.Cargo.Systems;
 using Content.Server.Chat.Managers;
 using Content.Server.CrewAssignments.Systems;
 using Content.Server.CrewRecords.Systems;
+using Content.Server.Database;
 using Content.Server.Movement.Systems;
 using Content.Server.NameIdentifier;
 using Content.Server.Salvage.Magnet;
@@ -70,6 +72,7 @@ public sealed partial class RumorsSystem : EntitySystem
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private IAfkManager _afkManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private ServerGlobalSoundSystem _globalsound = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -105,6 +108,10 @@ public sealed partial class RumorsSystem : EntitySystem
                 }
             }
         }
+        EntityUid? player = null;
+        var implant = Transform(ent);
+        player = implant.ParentUid;
+        NotifyPlayer(player.Value, $"Your Rumor Imports have been refreshed", ent.Comp.NewRewardSound);
     }
 
     private ActiveRumorReward? RealizeReward(ProtoId<RumorRewardPrototype> reward)
@@ -510,8 +517,12 @@ public sealed partial class RumorsSystem : EntitySystem
         if (finalCashReward > 0)
         {
             msg += $"\nYou have earned ${finalCashReward}";
+            NotifyPlayer(player, msg, ent.Comp.KachingSound);
         }
-        NotifyPlayer(player, msg, new SoundPathSpecifier("/Audio/Effects/kaching.ogg"), ent);
+        else
+        {
+            NotifyPlayer(player, msg);
+        }
         var originalProto = _protoMan.Index<RumorPrototype>(rumor.OriginalPrototype);
         if (originalProto.RewardRumors > 0)
         {
@@ -625,7 +636,7 @@ public sealed partial class RumorsSystem : EntitySystem
         _jobnet.UpdateUserInterface(player, comp.Owner);
     }
 
-    public void NotifyPlayer(EntityUid player, string msg, SoundSpecifier? sound = null, EntityUid? source = null)
+    public void NotifyPlayer(EntityUid player, string msg, SoundSpecifier? sound = null)
     {
         if (TryComp<ActorComponent>(player, out var actor) && actor != null && actor.PlayerSession != null)
         {
@@ -636,10 +647,10 @@ public sealed partial class RumorsSystem : EntitySystem
                 false,
                 actor.PlayerSession.Channel
                 );
-        }
-        if (sound != null && source != null)
-        {
-            _audio.PlayEntity(sound, player, source.Value);
+            if (sound != null)
+            {
+                _globalsound.PlayLocalSound(sound, actor);
+            }
         }
     }
     private void TrySpawnRumor(EntityUid player, ActiveRumor rumor)
@@ -1097,7 +1108,7 @@ public sealed partial class RumorsSystem : EntitySystem
                     {
                         account.Balance -= rewardProto.Price;
                         reward.Purchased = true;
-                        NotifyPlayer(actor, $"The {rewardProto.Name} has been delivered to {reward.TradeStationName}.");
+                        NotifyPlayer(actor, $"The {rewardProto.Name} has been delivered to {reward.TradeStationName}.", getter.KachingSound);
                     }
                 }
             }

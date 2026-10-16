@@ -1,6 +1,7 @@
 using Content.Server._NF.Bank;
 using Content.Server._Persistence14.Codex.Systems;
 using Content.Server.Access.Systems;
+using Content.Server.Audio;
 using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
 using Content.Server.Chat.Managers;
@@ -36,6 +37,7 @@ using Content.Shared.Station.Components;
 using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
+using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Physics.Dynamics.Joints;
 using Robust.Shared.Player;
@@ -69,6 +71,7 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
     [Dependency] private NameIdentifierSystem _nameIdentifier = default!;
     [Dependency] private RumorsSystem _rumors = default!;
     [Dependency] private CodexSystem _codex = default!;
+    [Dependency] private ServerGlobalSoundSystem _globalsound = default!;
     public override void ReagentObjectiveComplete(JobNetComponent component, ProtoId<PrecursorObjectivePrototype> objective)
     {
         if (_proto.TryIndex(objective, out PrecursorObjectivePrototype? proto) && proto != null)
@@ -147,31 +150,6 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         if (!TryComp<RumorGetterComponent>(ent, out var getter) || getter == null) return;
         _rumors.CancelRumorByIndex(getter, args.ID);
         UpdateUserInterface(args.Actor, ent);
-    }
-
-    public void CompleteDealerBounty(EntityUid uid, JobNetComponent component)
-    {
-        if (component.DealerBounty == null) return;
-        var ts = _cargo.GetTradeStationByID(component.DealerBounty.TradeStationUID);
-        if (ts == null) return;
-        AwardPrecursor(uid, component, 500);
-        EntityUid? player = null;
-        var comp = Transform(uid);
-        player = comp.ParentUid;
-        if (player == null) return;
-        if (TryComp<ActorComponent>(player, out var actor) && actor != null && actor.PlayerSession != null)
-        {
-            var msg = $"You have completed the dealer bounty for {Name(ts.Value)}. 500 precursor gained.";
-            _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                msg,
-                msg,
-                player.Value,
-                false,
-                actor.PlayerSession.Channel
-                );
-        }
-        component.DealerBounty = null;
-        UpdateUserInterface(player, uid, component);
     }
     public JobNetComponent? GetJobNetByName(string name)
     {
@@ -539,6 +517,23 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         }
         base.Update(frameTime);
     }
+    public void NotifyPlayer(EntityUid player, string msg, SoundSpecifier? sound = null)
+    {
+        if (TryComp<ActorComponent>(player, out var actor) && actor != null && actor.PlayerSession != null)
+        {
+            _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
+                msg,
+                msg,
+                player,
+                false,
+                actor.PlayerSession.Channel
+                );
+            if (sound != null)
+            {
+                _globalsound.PlayLocalSound(sound, actor);
+            }
+        }
+    }
     public void TryPay(EntityUid user, JobNetComponent component)
     {
 
@@ -578,47 +573,24 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
                                     {
                                         if (money < assignment.Wage)
                                         {
-                                            _audio.PlayEntity(component.ErrorSound, player.Value, component.Owner);
                                             var msg = $"{stationData.StationName} has failed to pay you your ${assignment.Wage} due to insufficient funds.";
-                                            if (msg != null)
-                                                _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                                                    msg,
-                                                    msg,
-                                                    station.Value,
-                                                    false,
-                                                    actor.PlayerSession.Channel
-                                                    );
+                                            NotifyPlayer(player.Value, msg, component.ErrorSound);
                                             return;
                                         }
                                         if (bank.TryGetAccount(name, out var account) && account != null)
                                         {
-                                            _audio.PlayEntity(component.PaySuccessSound, player.Value, component.Owner);
                                             account.Balance += assignment.Wage;
                                             _cargo.TryAdjustBankAccount(station.Value, "Cargo", -assignment.Wage);
                                             var msg = $"You have received ${assignment.Wage} for working as a {assignment.Name} for {stationData.StationName}.";
-                                            if (msg != null)
-                                                _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                                                    msg,
-                                                    msg,
-                                                    station.Value,
-                                                    false,
-                                                    actor.PlayerSession.Channel
-                                                    );
+                                            NotifyPlayer(player.Value, msg, component.PaySuccessSound);
                                             _bank.DirtyMoneyAccountsComponent();
+                                            return;
                                         }
                                     }
                                     else
                                     {
-                                        _audio.PlayEntity(component.ErrorSound, player.Value, component.Owner);
                                         var msg = $"{stationData.StationName} has failed to pay you your ${assignment.Wage} due to an invalid account.";
-                                        if (msg != null)
-                                            _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                                                msg,
-                                                msg,
-                                                station.Value,
-                                                false,
-                                                actor.PlayerSession.Channel
-                                                );
+                                        NotifyPlayer(player.Value, msg, component.ErrorSound);
                                         return;
                                     }
 
