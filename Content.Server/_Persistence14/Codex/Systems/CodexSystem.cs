@@ -83,6 +83,8 @@ public sealed partial class CodexSystem : EntitySystem
         var getter = _rumors.GetRumorComponent(ent);
         if (getter == null || getter.Value.Comp.Rumors.Count >= 4) return;
         _rumors.AssignRumor(getter.Value, ent);
+        _chat.TrySendInGameICMessage(ent.Owner, $"briefly falls into a trance.", InGameICChatType.Emote, true);
+        args.Handled = true;
     }
 
     private void OnMiracleRevive(Entity<MiracleReviveComponent> ent, ref MiracleReviveEvent args)
@@ -98,11 +100,11 @@ public sealed partial class CodexSystem : EntitySystem
         bool failedRevive = true;
         if (_rotting.IsRotten(target))
         {
-            _chat.TrySendInGameICMessage(ent.Owner, Loc.GetString("defibrillator-rotten"), InGameICChatType.Speak, true);
+            _chat.TrySendInGameICMessage(ent.Owner, "cannot revive a rotten corpse.", InGameICChatType.Emote, true);
         }
         else if (TryComp<UnrevivableComponent>(target, out var unrevivable))
         {
-            _chat.TrySendInGameICMessage(ent.Owner, Loc.GetString(unrevivable.ReasonMessage), InGameICChatType.Speak, true);
+            _chat.TrySendInGameICMessage(ent.Owner, "cannot revive them.", InGameICChatType.Emote, true);
         }
         else
         {
@@ -126,6 +128,7 @@ public sealed partial class CodexSystem : EntitySystem
                     true
                 );
                 _audio.PlayPvs(ent.Comp.ZapSound, ent, null);
+                _chat.TrySendInGameICMessage(ent.Owner, $"lays hands on {Name(target)} and zaps them back to life.", InGameICChatType.Emote, true);
             }
         }
 
@@ -243,10 +246,12 @@ public sealed partial class CodexSystem : EntitySystem
                 }
             }
         }
-        if(closest != null)
+        if (closest != null)
         {
             var active = Transform(closest.Value);
             NotifyPlayer(ent, $"You sense an anomaly; {Name(closest.Value)} is at {Math.Round(active.MapPosition.Position.X)}, {Math.Round(active.MapPosition.Position.Y)}");
+            _chat.TrySendInGameICMessage(ent.Owner, $"looks overwhelmed by a sudden surge of knowledge.", InGameICChatType.Emote, true);
+
         }
         else
         {

@@ -3,6 +3,7 @@ using Content.Server.Afk;
 using Content.Server.Audio;
 using Content.Server.Cargo.Systems;
 using Content.Server.Chat.Managers;
+using Content.Server.Chat.Systems;
 using Content.Server.CrewAssignments.Systems;
 using Content.Server.CrewRecords.Systems;
 using Content.Server.Database;
@@ -60,6 +61,7 @@ public sealed partial class RumorsSystem : EntitySystem
     [Dependency] private EntityQuery<RumorHealingTargetComponent> _healingTargetQuery = default!;
     [Dependency] private EntityQuery<RumorPowerTargetComponent> _powerTargetQuery = default!;
     [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private MetaDataSystem _meta = default!;
     [Dependency] private PersistentIdentifierSystem _pid = default!;
@@ -162,6 +164,8 @@ public sealed partial class RumorsSystem : EntitySystem
 
                         if (gID == rumor.TargetStation)
                         {
+                            _chatSystem.TrySendInGameICMessage(ent.Owner, $"Thank you", Chat.InGameICChatType.Speak, false);
+                            _chatSystem.TrySendInGameICMessage(ent.Owner, $"leaves to reunite with their crew.", Chat.InGameICChatType.Emote, false);
                             rumor.Targets.Remove(pID);
                             QueueDel(ent.Owner);
                             if (rumor.Targets.Count == 0)
@@ -207,6 +211,8 @@ public sealed partial class RumorsSystem : EntitySystem
                         if(gID == rumor.TargetStation)
                         {
                             rumor.Targets.Remove(pID);
+                            _chatSystem.TrySendInGameICMessage(ent.Owner, $"Thank you", Chat.InGameICChatType.Speak, false);
+                            _chatSystem.TrySendInGameICMessage(ent.Owner, $"Leaves to reunite with their crew.", Chat.InGameICChatType.Emote, false);
                             QueueDel(ent.Owner);
                             if (rumor.Targets.Count == 0)
                             {
@@ -527,7 +533,7 @@ public sealed partial class RumorsSystem : EntitySystem
                     if(otherGetter != null)
                     {
                         var otherPlayer = Transform(otherGetter.Owner).ParentUid;
-                        NotifyPlayer(otherPlayer, $"You have gained {otherhalf} reputation with the {rumor.Faction} from a transfered rumor being completed.", otherGetter.KachingSound);
+                        NotifyPlayer(otherPlayer, $"You have gained {otherhalf} reputation with the {rumor.Faction} from a transfer rumor being completed.", otherGetter.KachingSound);
                     }
                 }
 
@@ -1022,9 +1028,13 @@ public sealed partial class RumorsSystem : EntitySystem
     }
 
     private bool TryGetGridSpawnPosition(EntityUid player, ActiveRumor rumor, MapId mapId, Box2Rotated attachedBounds, Box2 bounds, Angle worldAngle, out MapCoordinates coords, out Angle angle)
-    {
+    { 
         var magnetPos = _transform.GetWorldPosition(player) + worldAngle.ToVec() * bounds.MaxDimension;
         var origin = magnetPos;
+        if (rumor.TargetPosition != null)
+        {
+            origin = rumor.TargetPosition.Value.Position;
+        }
         var fraction = 0.50f;
         var grids = new List<Entity<MapGridComponent>>();
 

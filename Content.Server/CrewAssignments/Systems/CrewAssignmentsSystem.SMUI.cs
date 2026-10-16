@@ -1,5 +1,6 @@
 using Content.Server._Persistence14.Codex.Systems;
 using Content.Server._Persistence14.Resonance.Systems;
+using Content.Server.Chat.Systems;
 using Content.Server.CrewRecords.Systems;
 using Content.Server.Hands.Systems;
 using Content.Shared._Persistence14.Resonance.Prototypes;
@@ -12,6 +13,7 @@ using Content.Shared.CrewAccesses.Components;
 using Content.Shared.CrewAssignments.Components;
 using Content.Shared.CrewAssignments.Events;
 using Content.Shared.CrewAssignments.Systems;
+using Content.Shared.MessageBoard.Components;
 using Content.Shared.Station.Components;
 using Robust.Shared.Prototypes;
 
@@ -105,8 +107,7 @@ public sealed partial class CrewAssignmentSystem
     private void OnResonancePurchase(Entity<StationModificationConsoleComponent> ent, ref StationModificationResonancePurchase args)
     {
         _resonance.OnResonancePurchase(ent, args);
-        var station = _station.GetOwningStation(ent);
-        UpdateOrderState(ent.Owner, station);
+        UpdateAllUserInterfaces();
     }
 
     private void OnInit(EntityUid uid, StationModificationConsoleComponent orderConsole, ComponentInit args)
@@ -816,6 +817,17 @@ public sealed partial class CrewAssignmentSystem
     {
         var station = _station.GetOwningStation(uid);
         UpdateOrderState(uid, station);
+    }
+    public void UpdateAllUserInterfaces()
+    {
+        var query = EntityQueryEnumerator<StationModificationConsoleComponent>();
+
+        while (query.MoveNext(out var uid, out var component))
+        {
+            var station = _station.GetOwningStation(uid);
+            if (station == null) continue;
+            UpdateOrderState(uid, station);
+        }
     }
 
     #endregion

@@ -1,6 +1,7 @@
 using Content.Server.Administration.Managers;
 using Content.Server.Audio;
 using Content.Server.Chat.Managers;
+using Content.Server.Chat.Systems;
 using Content.Server.CrewAssignments.Systems;
 using Content.Server.CrewRecords.Systems;
 using Content.Shared._Persistence14.PersistentIdentifier;
@@ -28,6 +29,7 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
     [Dependency] private JobNetSystem _jobNet = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private ServerGlobalSoundSystem _globalsound = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -210,18 +212,23 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
             }
         }
         if (entry == null) return;
-        MessageBoardComment newComment = new(entry.NextCommentID++, Name(args.Actor), args.Body);
+        var senderName = Name(args.Actor);
+        MessageBoardComment newComment = new(entry.NextCommentID++, senderName, args.Body);
         entry.Comments.Add(newComment);
         authorRecord.NextMessageBoardComment = _timing.CurTime + TimeSpan.FromSeconds(5);
-        UpdateAllUserInterfaces();
+        UpdateAllUserInterfaces($"A new comment has been posted on {entry.Title} by {senderName}.");
     }
 
-    public void UpdateAllUserInterfaces()
+    public void UpdateAllUserInterfaces(string? report = null)
     {
         var query = EntityQueryEnumerator<MessageBoardComponent>();
 
         while (query.MoveNext(out var uid, out var component))
         {
+            if(report != null)
+            {
+                _chatSystem.TrySendInGameICMessage(uid, report, Shared.Chat.InGameICChatType.Speak, true);
+            }
             UpdateUserInterface(uid, component);
         }
     }
@@ -265,10 +272,11 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
             }
             return;
         }
-        MessageBoardEntry newEntry = new(metaRecord.NextMessageBoardEntryID++, args.Title, Name(args.Actor), args.Body);
+        var posterName = Name(args.Actor);
+        MessageBoardEntry newEntry = new(metaRecord.NextMessageBoardEntryID++, args.Title, posterName, args.Body);
         metaRecord.MessageBoardEntries.Add(newEntry);
         authorRecord.NextMessageBoardEntry = _timing.CurTime + TimeSpan.FromHours(4);
-        UpdateAllUserInterfaces();
+        UpdateAllUserInterfaces($"A new thread '{args.Title}' has been created by {posterName}.");
     }
 
     private void UpdateUserInterface(EntityUid uid, MessageBoardComponent component)

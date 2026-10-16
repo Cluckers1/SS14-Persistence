@@ -13,6 +13,8 @@ namespace Content.Shared.MessageBoard.Components;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class MessageBoardComponent : Component
 {
+    [DataField]
+    public bool Silenced = false;
 }
 
 

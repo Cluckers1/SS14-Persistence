@@ -103,7 +103,7 @@ public partial class ActiveRumor
     [DataField]
     public int GridsToSpawn { get; set; } = 1;
     [DataField]
-    public float SpawnDistance { get; set; } = 500f;
+    public float SpawnDistance { get; set; } = 50f;
     [DataField]
     public List<string> Targets { get; set; } = new List<string>();
     [DataField]
