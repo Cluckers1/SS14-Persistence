@@ -1,3 +1,4 @@
+using Content.Server.Actions;
 using Content.Server.Audio;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
@@ -11,6 +12,7 @@ using Content.Shared._Persistence14.Rumors.Components;
 using Content.Shared._Persistence14.Rumors.Systems;
 using Content.Shared.Anomaly.Components;
 using Content.Shared.Atmos.Rotting;
+using Content.Shared.Audio;
 using Content.Shared.Body.Components;
 using Content.Shared.Chat;
 using Content.Shared.CrewAssignments;
@@ -30,6 +32,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Speech.Components;
 using Content.Shared.Traits.Assorted;
 using Robust.Server.Player;
 using Robust.Shared.Audio;
@@ -65,17 +68,28 @@ public sealed partial class CodexSystem : EntitySystem
     [Dependency] private SharedRottingSystem _rotting = default!;
     [Dependency] private RumorsSystem _rumors = default!;
     [Dependency] private ServerGlobalSoundSystem _globalsound = default!;
+    [Dependency] private ActionsSystem _actions = default!;
     private SoundSpecifier _codexUnlockSound = new SoundPathSpecifier("/Audio/Effects/RingtoneNotes/gsharp.ogg");
     private SoundSpecifier _insightUnlockSound = new SoundPathSpecifier("/Audio/Effects/RingtoneNotes/dsharp.ogg");
 
     public override void Initialize()
     {
         base.Initialize();
+        
         SubscribeLocalEvent<ActorComponent, VoidVisionsEvent>(OnVoidVision);
         SubscribeLocalEvent<ActorComponent, SenseAnomalyEvent>(OnSenseAnomaly);
         SubscribeLocalEvent<CodexFragmentComponent, UseInHandEvent>(CodexFragmentAfterInteract);
         SubscribeLocalEvent<CodexExamineUnlockerComponent, ExaminedEvent>(OnUnlockerExamined);
         SubscribeLocalEvent<MiracleReviveComponent, MiracleReviveEvent>(OnMiracleRevive);
+    }
+
+
+    [SubscribeLocalEvent]
+    private void OnGuideGranterMapInit(Entity<GuideActionGranterComponent> ent, ref MapInitEvent args)
+    {
+        // try to add scream action when vocal comp added
+        _actions.AddAction(ent.Owner, ref ent.Comp.ActionEntity, ent.Comp.Action);
+        ent.Comp.RemoveIn = ent.Comp.RemoveTime + _timing.CurTime;
     }
 
     private void OnVoidVision(Entity<ActorComponent> ent, ref VoidVisionsEvent args)
@@ -146,6 +160,16 @@ public sealed partial class CodexSystem : EntitySystem
     }
     public override void Update(float frameTime)
     {
+        var guidebookGranterQuery = EntityQueryEnumerator<GuideActionGranterComponent>();
+        while (guidebookGranterQuery.MoveNext(out var uid, out var comp))
+        {
+            if (comp.Removed) continue;
+            if (comp.RemoveIn < _timing.CurTime)
+            {
+                comp.Removed = true;
+                _actions.RemoveAction(uid, comp.ActionEntity);
+            }
+        }
         var passiveUnlockerQuery = EntityQueryEnumerator<CodexPassiveUnlockerComponent>();
         while (passiveUnlockerQuery.MoveNext(out var uid, out var comp))
         {

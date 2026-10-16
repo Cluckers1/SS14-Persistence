@@ -36,57 +36,6 @@ namespace Content.Server.Research.Systems
 
             SubscribeLocalEvent<TechnologyDatabaseComponent, ResearchRegistrationChangedEvent>(OnDatabaseRegistrationChanged);
         }
-
-        /* Removed for Persistence14
-        /// <summary>
-        /// Gets the names of all the servers.
-        /// </summary>
-        /// <returns></returns>
-        public string[] GetServerNames(EntityUid client)
-        {
-            return GetServers(client).Select(x =>
-            {
-                if (!TryComp<ResearchServerComponent>(x, out var serverComp))
-                    return "N/A";
-                return serverComp.ServerName;
-            }).ToArray();
-        }
-
-        /// <summary>
-        /// Gets the ids of all the servers
-        /// </summary>
-        /// <returns></returns>
-        public int[] GetServerIds(EntityUid client)
-        {
-            return GetServers(client).Select(x =>
-            {
-                if (!TryComp<ResearchServerComponent>(x, out var serverComp))
-                    return -1;
-                return serverComp.Id;
-            }).ToArray();
-        }
-
-        public HashSet<EntityUid> GetServers(EntityUid client)
-        {
-            var clientXform = Transform(client);
-            if (clientXform.GridUid is not { } grid)
-                return [];
-
-            var set = new HashSet<Entity<ResearchServerComponent>>();
-            _lookup.GetGridEntities(grid, set);
-            var final = new HashSet<EntityUid>();
-            var clientStation = _station.GetOwningStation(client);
-            foreach (var thing in set)
-            {
-                if (_station.GetOwningStation(thing.Owner) == clientStation)
-                {
-                    final.Add(thing);
-                }
-            }
-            return final;
-        }
-        */
-
         public override void Update(float frameTime)
         {
             var query = EntityQueryEnumerator<ResearchServerComponent>();

@@ -434,7 +434,7 @@ public sealed partial class ChatUIController : UIController
     private void AddSpeechBubble(ChatMessage msg, SpeechBubble.SpeechType speechType)
     {
         var ent = EntityManager.GetEntity(msg.SenderEntity);
-
+        if (ent == EntityUid.Invalid) return;
         if (!EntityManager.EntityExists(ent))
         {
             _sawmill.Debug("Got local chat message with invalid sender entity: {0}", msg.SenderEntity);

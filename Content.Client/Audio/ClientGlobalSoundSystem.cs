@@ -1,7 +1,10 @@
+using Content.Client.UserInterface.Systems.Guidebook;
+using Content.Shared._Persistence14.Codex;
 using Content.Shared.Audio;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Robust.Client.Player;
+using Robust.Client.UserInterface;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
@@ -14,7 +17,8 @@ public sealed partial class ClientGlobalSoundSystem : SharedGlobalSoundSystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
-
+    private GuidebookUIController _guidebook = default!;
+    [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
     // Admin music
     private bool _adminAudioEnabled = true;
     private List<EntityUid?> _adminAudio = new(1);
@@ -36,6 +40,17 @@ public sealed partial class ClientGlobalSoundSystem : SharedGlobalSoundSystem
 
         SubscribeNetworkEvent<GameGlobalSoundEvent>(PlayGameSound);
         SubscribeNetworkEvent<LocalSoundEvent>(PlayLocalSound);
+
+        SubscribeLocalEvent<ActorComponent, PersistenceGuideEvent>(OnGuideAction);
+        _guidebook = _userInterfaceManager.GetUIController<GuidebookUIController>();
+
+    }
+
+    private void OnGuideAction(Entity<ActorComponent> ent, ref PersistenceGuideEvent args)
+    {
+        if (args.Handled) return;
+        args.Handled = true;
+        _guidebook.OpenGuidebook(selected:"Persistence");
     }
 
     private void PlayLocalSound(LocalSoundEvent ev)
