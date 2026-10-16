@@ -28,7 +28,6 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private JobNetSystem _jobNet = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private ServerGlobalSoundSystem _globalsound = default!;
     [Dependency] private ChatSystem _chatSystem = default!;
     public override void Initialize()

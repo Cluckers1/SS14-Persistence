@@ -243,10 +243,10 @@ public sealed partial class AnomalyGeneratorSystem : SharedAnomalyGeneratorSyste
 
         if (ev.Context.ForceEnvironmental && ev.Context.ForceInfectious)
             return false;
-
-        if (!(ev.Context.ForceEnvironmental || ev.Context.ForceInfectious) && !anomalyPrototype.TryGetSpawnableProtoId(_random, out var spawnable))
+        EntProtoId spawnable = "";
+        if (!(ev.Context.ForceEnvironmental || ev.Context.ForceInfectious) && !anomalyPrototype.TryGetSpawnableProtoId(_random, out spawnable))
             return false;
-
+        
         if (ev.Context.ForceEnvironmental && !anomalyPrototype.TrySpawnEnvironmental(_random, out spawnable))
             return false;
 

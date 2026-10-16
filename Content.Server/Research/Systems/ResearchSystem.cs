@@ -21,7 +21,6 @@ namespace Content.Server.Research.Systems
         [Dependency] private readonly IAdminLogManager _adminLog = default!;
         [Dependency] private readonly IGameTiming _timing = default!;
         [Dependency] private readonly AccessReaderSystem _accessReader = default!;
-        [Dependency] private readonly EntityLookupSystem _lookup = default!;
         [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
         [Dependency] private readonly SharedPopupSystem _popup = default!;
         [Dependency] private readonly RadioSystem _radio = default!;

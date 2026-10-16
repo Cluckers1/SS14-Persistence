@@ -62,7 +62,6 @@ public sealed partial class RumorsSystem : EntitySystem
     [Dependency] private EntityQuery<RumorPowerTargetComponent> _powerTargetQuery = default!;
     [Dependency] private IChatManager _chatManager = default!;
     [Dependency] private ChatSystem _chatSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private MetaDataSystem _meta = default!;
     [Dependency] private PersistentIdentifierSystem _pid = default!;
     [Dependency] private BankSystem _bank = default!;
