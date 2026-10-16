@@ -36,6 +36,7 @@
   name: insight-rationalist-reroll-node-name
   content: insight-rationalist-reroll-node-desc
   trait: ArtifactReroll
+  next: Rationalist3
 
 - type: trait
   id: ArtifactReroll
@@ -62,3 +63,16 @@
     - state: flower
   - type: InstantAction
     event: !type:ArtifactRerollEvent
+
+- type: insightTrait
+  id: Rationalist3
+  name: Anomaly Generator
+  content: Once per day you can generate an anomaly of your choosing.
+  next: Rationalist4
+  trait: AnomalySense
+
+- type: insightTrait
+  id: Rationalist4
+  name: Upgrade Overclocker
+  content: Once per day you can apply one upgrade past the limit on an item or machine.
+  trait: AnomalySense

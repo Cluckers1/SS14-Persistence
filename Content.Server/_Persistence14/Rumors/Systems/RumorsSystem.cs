@@ -460,10 +460,6 @@ public sealed partial class RumorsSystem : EntitySystem
         var name = Name(player);
         _crewMeta.MetaRecords.TryGetRecord(name, out var metaRecord);
         if (metaRecord == null) return;
-        var reputation = 0;
-        metaRecord.MetaFactionReputations.TryGetValue(rumor.Faction, out var rep);
-        reputation += rep;
-        metaRecord.MetaFactionReputations[rumor.Faction] = reputation + rumor.ReputationReward;
         int finalCashReward = rumor.CashReward;
         if (rumor.CashReward > 0)
         {
@@ -512,7 +508,38 @@ public sealed partial class RumorsSystem : EntitySystem
         string msg = $"You have completed the {rumor.Name} rumor!";
         if(rumor.ReputationReward > 0)
         {
-            msg += $"\nYou have gained {rumor.ReputationReward} reputation with the {rumor.Faction}";
+            if(rumor.Transfer)
+            {
+                var half = rumor.ReputationReward / 2;
+                var otherhalf = rumor.ReputationReward - half;
+                var reputation = 0;
+                metaRecord.MetaFactionReputations.TryGetValue(rumor.Faction, out var rep);
+                reputation += rep;
+                metaRecord.MetaFactionReputations[rumor.Faction] = reputation + half;
+                msg += $"\nYou have gained {half} reputation with the {rumor.Faction}";
+                if (_crewMeta.MetaRecords.TryGetRecord(rumor.OriginalOwner, out var otherRecord) && otherRecord != null)
+                {
+                    reputation = 0;
+                    otherRecord.MetaFactionReputations.TryGetValue(rumor.Faction, out var otherRep);
+                    reputation += otherRep;
+                    otherRecord.MetaFactionReputations[rumor.Faction] = reputation + otherhalf;
+                    var otherGetter = GetRumorGetterByName(rumor.OriginalOwner);
+                    if(otherGetter != null)
+                    {
+                        var otherPlayer = Transform(otherGetter.Owner).ParentUid;
+                        NotifyPlayer(otherPlayer, $"You have gained {otherhalf} reputation with the {rumor.Faction} from a transfered rumor being completed.", otherGetter.KachingSound);
+                    }
+                }
+
+            }
+            else
+            {
+                var reputation = 0;
+                metaRecord.MetaFactionReputations.TryGetValue(rumor.Faction, out var rep);
+                reputation += rep;
+                metaRecord.MetaFactionReputations[rumor.Faction] = reputation + rumor.ReputationReward;
+                msg += $"\nYou have gained {rumor.ReputationReward} reputation with the {rumor.Faction}";
+            }
         }
         if (finalCashReward > 0)
         {
@@ -627,8 +654,12 @@ public sealed partial class RumorsSystem : EntitySystem
     }
     public void AssignRumor(RumorGetterComponent comp, EntityUid player, ProtoId<MetaFactionPrototype>? factionId = null, ActiveRumor? newRumor = null)
     {
-        if(newRumor == null) newRumor = GenerateRumor(player, comp, factionId);
-        if (newRumor != null)
+        if (newRumor == null)
+        {
+            newRumor = GenerateRumor(player, comp, factionId);
+            if(newRumor != null) newRumor.OriginalOwner = Name(player);
+        }
+            if (newRumor != null)
         {
             comp.Rumors.Add(newRumor);
             NotifyPlayer(player, $"Your job network reports you have recieved a new rumor: {newRumor.Name}");
@@ -1054,6 +1085,14 @@ public sealed partial class RumorsSystem : EntitySystem
             {
                 NotifyPlayer(player, $"You cannot transfer the rumor to {target} at this time.");
                 return;
+            }
+            if(rumor.OriginalOwner == Name(targetPlayer))
+            {
+                rumor.Transfer = false;
+            }
+            else
+            {
+                rumor.Transfer = true;
             }
             NotifyPlayer(targetPlayer, $"{Name(player)} has transfered a rumor to you.");
             AssignRumor(targetGetter, targetPlayer, null, rumor);

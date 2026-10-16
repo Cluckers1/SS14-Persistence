@@ -18,6 +18,7 @@
   name: Miracle Worker
   content: "You can zap someone back from the grasp of death with a healing touch."
   trait: Priest2
+  next: Priest3
 
 - type: trait
   id: Priest2
@@ -60,3 +61,16 @@
       components:
       - MobState
     event: !type:MiracleReviveEvent
+
+- type: insightTrait
+  id: Priest3
+  name: Godly Chanter
+  content: "Your prayers grant a blessing to everyone nearby. The blessing will have a random collection of positive effects."
+  trait: Priest2
+  next: Priest4
+
+- type: insightTrait
+  id: Priest4
+  name: Personal Sanctuary
+  content: "At any altar can open a portal to a pocket dimension that belongs to you. The portal will remain open as long as anyone remains inside."
+  trait: Priest2

@@ -126,6 +126,10 @@ public partial class ActiveRumor
     public bool DebugComplete = false;
     [DataField]
     public string TargetStation = "";
+    [DataField]
+    public string OriginalOwner = "";
+    [DataField]
+    public bool Transfer = false;
     public ActiveRumor(ProtoId<RumorPrototype> originalPrototype)
     {
         OriginalPrototype = originalPrototype;

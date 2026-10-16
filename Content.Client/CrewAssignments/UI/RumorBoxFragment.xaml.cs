@@ -39,6 +39,10 @@ public sealed partial class RumorBoxFragment : PanelContainer
             if (newline) RewardLabel.Text += "\n";
             RewardLabel.Text += $"[color=orange]{activeRumor.ReputationReward} REP ({factionProto.Name})[/color]";
             newline = true;
+            if(activeRumor.Transfer)
+            {
+                RewardLabel.Text += $"\n[color=gray](Reputation split 50% with {activeRumor.OriginalOwner})[/color]";
+            }
         }
         var originalProto = _protoManager.Index<RumorPrototype>(activeRumor.OriginalPrototype);
         if(originalProto.RewardRumors != 0)

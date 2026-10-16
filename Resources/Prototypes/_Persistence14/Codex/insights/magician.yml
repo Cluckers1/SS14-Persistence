@@ -1,13 +1,13 @@
 - type: insightTrait
   id: Magic1
-  name: Void Visions
+  name: Void Visionary
   content: Once per day you can peek into the Void and get a random rumor.
   next: Magic2
   trait: Magic1
 
 - type: trait
   id: Magic1
-  name: Void Visions
+  name: Void Visionary
   description: Once per day you can peek into the Void and get a random rumor.
   selectable: false
   components:
@@ -39,7 +39,7 @@
   id: Magic2
   name: Basic Summoner
   content: Summon some other-world tentacles to grab and stun people!
-  next: MagicTest3
+  next: Magic3
   trait: Magic2
 
 - type: trait
@@ -78,9 +78,17 @@
     event: !type:GoliathSummonTentacleAction
 
 - type: insightTrait
-  id: MagicTest3
-  name: insight-magic-summon-name
-  content: insight-magic-summon-desc
+  id: Magic3
+  name: "Strange Alchemist"
+  content: "Once per day you can transmute a stack of steel into a more valuable material."
+  trait: Priest1
+  requiresAwake: true
+  next: Magic4
+
+- type: insightTrait
+  id: Magic4
+  name: "Advanced Summoner"
+  content: "Once per day you can create a pair of linked portals which last for four hours."
   trait: Priest1
   requiresAwake: true
 
