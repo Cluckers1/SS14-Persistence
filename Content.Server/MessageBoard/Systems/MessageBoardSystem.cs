@@ -16,6 +16,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
+using System.ComponentModel;
 
 namespace Content.Server.MessageBoard.Systems;
 
@@ -40,6 +41,13 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
         SubscribeLocalEvent<MessageBoardComponent, MessageBoardDeleteCommentPublicMessage>(OnDeleteCommentPublic);
         SubscribeLocalEvent<MessageBoardComponent, MessageBoardDeleteEntryPublicMessage>(OnDeleteEntryPublic);
         SubscribeLocalEvent<MessageBoardComponent, MessageBoardSendDirectMessagePublicMessage>(OnSendDirectMessagePublic);
+        SubscribeLocalEvent<MessageBoardComponent, MessageBoardSilenceMessage>(OnSilence);
+    }
+
+    private void OnSilence(Entity<MessageBoardComponent> ent, ref MessageBoardSilenceMessage args)
+    {
+        ent.Comp.Silenced = args.State;
+        UpdateUserInterface(ent, ent.Comp);
     }
 
     public void NotifyPlayer(EntityUid player, string msg, SoundSpecifier? sound = null)
@@ -225,7 +233,7 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
 
         while (query.MoveNext(out var uid, out var component))
         {
-            if(report != null)
+            if(report != null && !component.Silenced)
             {
                 _chatSystem.TrySendInGameICMessage(uid, report, Shared.Chat.InGameICChatType.Speak, true);
             }
@@ -273,7 +281,7 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
             return;
         }
         var posterName = Name(args.Actor);
-        MessageBoardEntry newEntry = new(metaRecord.NextMessageBoardEntryID++, args.Title, posterName, args.Body);
+        MessageBoardEntry newEntry = new(metaRecord.NextMessageBoardEntryID++, args.Title, posterName, args.Body, args.CategoryProtoID);
         metaRecord.MessageBoardEntries.Add(newEntry);
         authorRecord.NextMessageBoardEntry = _timing.CurTime + TimeSpan.FromHours(4);
         UpdateAllUserInterfaces($"A new thread '{args.Title}' has been created by {posterName}.");
@@ -283,7 +291,7 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
     {
         var metaRecord = _crewMetaRecordsSystem.MetaRecords;
         if (metaRecord == null) return;
-        var entries = metaRecord.MessageBoardEntries;    
-        _uiSystem.SetUiState(uid, MessageBoardUiKey.Main, new MessageBoardInterfaceState(entries));
-    }   
+        var entries = metaRecord.MessageBoardEntries;
+        _uiSystem.SetUiState(uid, MessageBoardUiKey.Main, new MessageBoardInterfaceState(entries, component.Silenced));
+    }
 }
