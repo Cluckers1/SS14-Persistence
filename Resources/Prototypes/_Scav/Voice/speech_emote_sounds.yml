@@ -1,6 +1,6 @@
 - type: emoteSounds
   id: UnisexNeoAvian
-  voiceSelectorName: humanoid-profile-editor-voice-unisex
+  voiceSelectorName: humanoid-profile-editor-voice-neutral
   params:
     variation: 0.125
   sounds: # TODO: Add unique sounds
