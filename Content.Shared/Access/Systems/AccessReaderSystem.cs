@@ -69,7 +69,7 @@ public sealed partial class AccessReaderSystem : EntitySystem
     private void OnUnanchorAttempt(Entity<AccessReaderComponent> ent, ref UnanchorAttemptEvent args)
     {
         if (!ent.Comp.BlockUnanchor) return;
-        if(!IsAllowed(args.User, ent, ent.Comp))
+        if (!IsAllowed(args.User, ent, ent.Comp))
         {
             args.FailMessage = "The access reader prevent you from unanchoring this; Access Denied.";
             args.Cancel();
@@ -636,7 +636,6 @@ public sealed partial class AccessReaderSystem : EntitySystem
     {
         HashSet<EntityUid>? items = null;
         HashSet<int>? tags = null;
-        var owned = false;
 
         //owning person redundant for now but couldnt find an altentive function and maybe it could possible be used with personalacces
         _station.GetOwning(owningStationUID, out var station, out var owningPerson);
@@ -651,10 +650,10 @@ public sealed partial class AccessReaderSystem : EntitySystem
             {
                 if (!crewRecords.TryGetRecord(idComp.FullName ?? "", out var record) || record == null) continue;
                 if (crewAssignments.TryGetAssignment(record.AssignmentID, out var assignment) && assignment != null)
-                    {
-                        if(tags == null) tags = new HashSet<int>();
-                        tags.Add(record.AssignmentID);
-                    }
+                {
+                    if (tags == null) tags = new HashSet<int>();
+                    tags.Add(record.AssignmentID);
+                }
             }
             else if (TryComp<PdaComponent>(ent, out var pdaComp))
             {
@@ -663,11 +662,11 @@ public sealed partial class AccessReaderSystem : EntitySystem
                     if (TryComp<IdCardComponent>(pdaComp.ContainedId, out var idComp2))
                     {
                         if (!crewRecords.TryGetRecord(idComp2.FullName ?? "", out var record) || record == null) continue;
-                if (crewAssignments.TryGetAssignment(record.AssignmentID, out var assignment) && assignment != null)
-                    {
-                        if(tags == null) tags = new HashSet<int>();
-                        tags.Add(record.AssignmentID);
-                    }
+                        if (crewAssignments.TryGetAssignment(record.AssignmentID, out var assignment) && assignment != null)
+                        {
+                            if (tags == null) tags = new HashSet<int>();
+                            tags.Add(record.AssignmentID);
+                        }
                     }
                 }
             }
@@ -685,7 +684,7 @@ public sealed partial class AccessReaderSystem : EntitySystem
 
 
         crewAssignments.TryGetAssignment(assignmentId, out var assignment);
-         if (assignment == null) return assignmentName;
+        if (assignment == null) return assignmentName;
         assignmentName = assignment.Name;
 
         return assignmentName;

@@ -27,10 +27,10 @@ public sealed partial class GroupedAccessEntryChecklist : BoxContainer
 
     // Access data
     private HashSet<int> _accessGroups = new(); //this variable and its set function arent really needed since 2 are practically hardcoded but il just leave it in case it could be expanded later to something more than just faction and personal
-    public HashSet<int> _accessAssignments = new();
-    public HashSet<string> _activeAccessAssignments = new();
+    public HashSet<int> AccessAssignments = new();
+    public HashSet<string> ActiveAccessAssignments = new();
 
-    public Dictionary<int, string> _assignmentIdtoString = new();
+    public Dictionary<int, string> AssignmentIdtoString = new();
 
     // Button groups
     private readonly ButtonGroup _accessGroupsButtons = new();
@@ -62,7 +62,7 @@ public sealed partial class GroupedAccessEntryChecklist : BoxContainer
         _groupedAccess.Clear();
 
         _groupedAccess.Add(FactionAccesGroup, new());
-        foreach (var accessAssignment in _accessAssignments)
+        foreach (var accessAssignment in AccessAssignments)
         {
             //Console.WriteLine($"ui got {accessAssignment}");
             _groupedAccess[FactionAccesGroup].Add(accessAssignment.ToString());
@@ -111,9 +111,9 @@ public sealed partial class GroupedAccessEntryChecklist : BoxContainer
                 accessGroupButton.Label.SetOnlyStyleClass(_labelStyleClass);
 
             var accessLevelPrototypes = _groupedAccess[accessGroup];
-            var prefix = accessLevelPrototypes.All(x => _activeAccessAssignments.Contains(x))
+            var prefix = accessLevelPrototypes.All(x => ActiveAccessAssignments.Contains(x))
                 ? "»"
-                : accessLevelPrototypes.Any(x => _activeAccessAssignments.Contains(x))
+                : accessLevelPrototypes.Any(x => ActiveAccessAssignments.Contains(x))
                     ? "›"
                     : " ";
 
@@ -174,9 +174,9 @@ public sealed partial class GroupedAccessEntryChecklist : BoxContainer
 
             var accessAssignments = new HashSet<int>();
 
-            foreach (var accessAssignment in _accessAssignments)
+            foreach (var accessAssignment in AccessAssignments)
             {
-               accessAssignments.Add(accessAssignment);
+                accessAssignments.Add(accessAssignment);
             }
             OnAccessAssignmentsChangedEvent?.Invoke(accessAssignments, allCheckBox.Pressed);
         };
@@ -189,14 +189,14 @@ public sealed partial class GroupedAccessEntryChecklist : BoxContainer
         allCheckBox.Disabled = !_canInteract;
 
         // Add any remaining missing access buttons to the UI
-        foreach (var accessAssignment in _accessAssignments)
+        foreach (var accessAssignment in AccessAssignments)
         {
             // Create the entry
             var accessEntry = new AccessEntry(_isMonotone);
 
             accessEntry.AccessAssignment = accessAssignment;
-            accessEntry.CheckBox.Text = _assignmentIdtoString[accessAssignment];
-            accessEntry.CheckBox.Pressed = _activeAccessAssignments.Contains(accessAssignment.ToString());
+            accessEntry.CheckBox.Text = AssignmentIdtoString[accessAssignment];
+            accessEntry.CheckBox.Pressed = ActiveAccessAssignments.Contains(accessAssignment.ToString());
             accessEntry.CheckBox.Disabled = !_canInteract;
 
             if (_labelStyleClass != null)
@@ -269,12 +269,12 @@ public sealed partial class GroupedAccessEntryChecklist : BoxContainer
     /// </summary>
     public void SetAccessAssignments(HashSet<int> accessAssignments)
     {
-        _accessAssignments = accessAssignments;
+        AccessAssignments = accessAssignments;
     }
 
     public void SetAccessAssignmentstoId(Dictionary<int, string> assignmentIdtoString)
     {
-        _assignmentIdtoString = assignmentIdtoString;
+        AssignmentIdtoString = assignmentIdtoString;
 
         ArrangeAccessControls();
 
@@ -287,7 +287,7 @@ public sealed partial class GroupedAccessEntryChecklist : BoxContainer
     /// </summary>
     public void SetActiveAccessAssignments(HashSet<string> activeAccessAssignments)
     {
-        _activeAccessAssignments = activeAccessAssignments;
+        ActiveAccessAssignments = activeAccessAssignments;
 
         if (TryRebuildAccessGroupControls())
             RebuildAccessEntriesControls();
@@ -361,7 +361,6 @@ public sealed partial class GroupedAccessEntryChecklist : BoxContainer
 
     private sealed class AccessEntry : BoxContainer
     {
-        public int AccessLevel;
         public int AccessAssignment;
         public readonly CheckBox CheckBox;
         public readonly LineRenderer CheckBoxLink;

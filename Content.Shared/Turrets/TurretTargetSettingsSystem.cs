@@ -119,7 +119,7 @@ public sealed partial class TurretTargetSettingsSystem : EntitySystem
     public bool EntityIsTargetForTurret(Entity<TurretTargetSettingsComponent> ent, EntityUid target)
     {
         var owningStationUID = _station.GetOwningStation(ent);
-        ICollection<int> accessAssignments =  new HashSet<int>();
+        ICollection<int> accessAssignments = new HashSet<int>();
 
         if (owningStationUID != null)
         {
