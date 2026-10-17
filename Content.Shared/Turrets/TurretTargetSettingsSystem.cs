@@ -1,14 +1,13 @@
-using Content.Shared.Access;
 using Content.Shared.Access.Systems;
 using JetBrains.Annotations;
-using Robust.Shared.Prototypes;
+using Content.Shared.Station;
 
 namespace Content.Shared.Turrets;
 
 /// <summary>
 /// This system is used for validating potential targets for NPCs with a <see cref="TurretTargetSettingsComponent"/> (i.e., turrets).
-/// A turret will consider an entity a valid target if the entity does not possess any access tags which appear on the
-/// turret's <see cref="TurretTargetSettingsComponent.ExemptAccessLevels"/> list.
+/// A turret will consider an entity a valid target if the entity does not possess any access assignments or names which appear on the
+/// turret's <see cref="TurretTargetSettingsComponent.ExemptAccessAssignments"/> list.
 /// </summary>
 public sealed partial class TurretTargetSettingsSystem : EntitySystem
 {
@@ -18,19 +17,19 @@ public sealed partial class TurretTargetSettingsSystem : EntitySystem
     private ProtoId<AccessLevelPrototype> _accessLevelBasicSilicon = "BasicSilicon";
 
     /// <summary>
-    /// Adds or removes access levels from a <see cref="TurretTargetSettingsComponent.ExemptAccessLevels"/> list.
+    /// Adds or removes access assignments from a <see cref="TurretTargetSettingsComponent.ExemptAccessAssignments"/> list.
     /// </summary>
     /// <param name="ent">The entity and its <see cref="TurretTargetSettingsComponent"/></param>
-    /// <param name="exemption">The proto ID for the access level</param>
+    /// <param name="exemption">The assignment ID or personal name for acces</param>
     /// <param name="enabled">Set 'true' to add the exemption, or 'false' to remove it</param>
     /// <param name="dirty">Set 'true' to dirty the component</param>
     [PublicAPI]
-    public void SetAccessLevelExemption(Entity<TurretTargetSettingsComponent> ent, ProtoId<AccessLevelPrototype> exemption, bool enabled, bool dirty = true)
+    public void SetAccessLevelExemption(Entity<TurretTargetSettingsComponent> ent, int exemption, bool enabled, bool dirty = true)
     {
         if (enabled)
-            ent.Comp.ExemptAccessLevels.Add(exemption);
+            ent.Comp.ExemptAccessAssignments.Add(exemption);
         else
-            ent.Comp.ExemptAccessLevels.Remove(exemption);
+            ent.Comp.ExemptAccessAssignments.Remove(exemption);
 
         if (dirty)
             Dirty(ent);
@@ -43,7 +42,7 @@ public sealed partial class TurretTargetSettingsSystem : EntitySystem
     /// <param name="exemption">The collection of access level proto IDs to add or remove</param>
     /// <param name="enabled">Set 'true' to add the collection as exemptions, or 'false' to remove them</param>
     [PublicAPI]
-    public void SetAccessLevelExemptions(Entity<TurretTargetSettingsComponent> ent, ICollection<ProtoId<AccessLevelPrototype>> exemptions, bool enabled)
+    public void SetAccessLevelExemptions(Entity<TurretTargetSettingsComponent> ent, ICollection<int> exemptions, bool enabled)
     {
         foreach (var exemption in exemptions)
             SetAccessLevelExemption(ent, exemption, enabled, false);
@@ -57,9 +56,9 @@ public sealed partial class TurretTargetSettingsSystem : EntitySystem
     /// <param name="ent">The entity and its <see cref="TurretTargetSettingsComponent"/></param>
     /// <param name="exemptions">The supplied collection of access level proto IDs</param>
     [PublicAPI]
-    public void SyncAccessLevelExemptions(Entity<TurretTargetSettingsComponent> ent, ICollection<ProtoId<AccessLevelPrototype>> exemptions)
+    public void SyncAccessLevelExemptions(Entity<TurretTargetSettingsComponent> ent, ICollection<int> exemptions)
     {
-        ent.Comp.ExemptAccessLevels.Clear();
+        ent.Comp.ExemptAccessAssignments.Clear();
         SetAccessLevelExemptions(ent, exemptions, true);
     }
 
@@ -71,7 +70,7 @@ public sealed partial class TurretTargetSettingsSystem : EntitySystem
     [PublicAPI]
     public void SyncAccessLevelExemptions(Entity<TurretTargetSettingsComponent> target, Entity<TurretTargetSettingsComponent> source)
     {
-        SyncAccessLevelExemptions(target, source.Comp.ExemptAccessLevels);
+        SyncAccessLevelExemptions(target, source.Comp.ExemptAccessAssignments);
     }
 
     /// <summary>
@@ -80,12 +79,12 @@ public sealed partial class TurretTargetSettingsSystem : EntitySystem
     /// <param name="ent">The entity and its <see cref="TurretTargetSettingsComponent"/></param>
     /// <param name="exemption">The access level proto ID being checked</param>
     [PublicAPI]
-    public bool HasAccessLevelExemption(Entity<TurretTargetSettingsComponent> ent, ProtoId<AccessLevelPrototype> exemption)
+    public bool HasAccessLevelExemption(Entity<TurretTargetSettingsComponent> ent, int exemption)
     {
-        if (ent.Comp.ExemptAccessLevels.Count == 0)
+        if (ent.Comp.ExemptAccessAssignments.Count == 0)
             return false;
 
-        return ent.Comp.ExemptAccessLevels.Contains(exemption);
+        return ent.Comp.ExemptAccessAssignments.Contains(exemption);
     }
 
     /// <summary>
@@ -94,9 +93,9 @@ public sealed partial class TurretTargetSettingsSystem : EntitySystem
     /// <param name="ent">The entity and its <see cref="TurretTargetSettingsComponent"/></param>
     /// <param name="exemptions"></param>
     [PublicAPI]
-    public bool HasAnyAccessLevelExemption(Entity<TurretTargetSettingsComponent> ent, ICollection<ProtoId<AccessLevelPrototype>> exemptions)
+    public bool HasAnyAccessLevelExemption(Entity<TurretTargetSettingsComponent> ent, ICollection<int> exemptions)
     {
-        if (ent.Comp.ExemptAccessLevels.Count == 0)
+        if (ent.Comp.ExemptAccessAssignments.Count == 0)
             return false;
 
         foreach (var exemption in exemptions)
@@ -119,14 +118,14 @@ public sealed partial class TurretTargetSettingsSystem : EntitySystem
     [PublicAPI]
     public bool EntityIsTargetForTurret(Entity<TurretTargetSettingsComponent> ent, EntityUid target)
     {
-        var accessLevels = _accessReader.FindAccessTags(target);
+        var owningStationUID = _station.GetOwningStation(ent);
+        ICollection<int> accessAssignments =  new HashSet<int>();
 
-        if (accessLevels.Contains(_accessLevelBorg))
-            return !HasAccessLevelExemption(ent, _accessLevelBorg);
+        if (owningStationUID != null)
+        {
+            accessAssignments = _accessReader.FindAccessTagsPersistent(target, owningStationUID.Value);
+        }
 
-        if (accessLevels.Contains(_accessLevelBasicSilicon))
-            return !HasAccessLevelExemption(ent, _accessLevelBasicSilicon);
-
-        return !HasAnyAccessLevelExemption(ent, accessLevels);
+        return !HasAnyAccessLevelExemption(ent, accessAssignments);
     }
 }
