@@ -196,8 +196,10 @@
   components:
   - type: Sprite
     sprite: _Persistence14/Clothing/Head/Helmets/Hardsuits/wafflecoengi.rsi
+  - type: HandheldLight
+    addPrefix: false
+  - type: ToggleableVisuals
   - type: Clothing
-    sprite: _Persistence14/Clothing/Head/Helmets/Hardsuits/wafflecoengi.rsi
   - type: PointLight
     color: "#e8e8ba"
   - type: PressureProtection
@@ -222,8 +224,10 @@
   components:
   - type: Sprite
     sprite: _Persistence14/Clothing/Head/Helmets/Hardsuits/wafflecoatmos.rsi
+  - type: HandheldLight
+    addPrefix: false
+  - type: ToggleableVisuals
   - type: Clothing
-    sprite: _Persistence14/Clothing/Head/Helmets/Hardsuits/wafflecoatmos.rsi
   - type: PointLight
     color: "#e8e8ba"
   - type: PressureProtection
@@ -248,15 +252,17 @@
 #Waffle co Elite hardsuit
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: ClothingHeadHelmetHardsuitDonk
   id: ClothingHeadHelmetHardsuitWaffleCoElite
   name: elite Waffle co hardsuit helmet
   description: Lightweight hardsuit helmet that doesn't restrict your head movements. Designed for the best of the best of waffle co.
   components:
   - type: Sprite
     sprite: _Persistence14/Clothing/Head/Helmets/Hardsuits/wafflecoelite.rsi
+  - type: HandheldLight
+    addPrefix: false
+  - type: ToggleableVisuals
   - type: Clothing
-    sprite: _Persistence14/Clothing/Head/Helmets/Hardsuits/wafflecoelite.rsi
   - type: PointLight
     radius: 6
     color: "#e8e8ba"
@@ -288,7 +294,6 @@
   - type: Sprite
     sprite: _Persistence14/Clothing/Head/Helmets/Hardsuits/donkmicrowave.rsi
   - type: Clothing
-    sprite: _Persistence14/Clothing/Head/Helmets/Hardsuits/donkmicrowave.rsi
     unequipSound: /Audio/Machines/microwave_done_beep.ogg
   - type: PointLight
     radius: 7
