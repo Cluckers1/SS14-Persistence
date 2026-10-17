@@ -389,6 +389,7 @@ public sealed partial class StationSystem : SharedStationSystem
         if (name == null) name ??= MetaData(station).EntityName;
         else
         {
+            data.StationName = name;
             _metaData.SetEntityName(station, name);
         }
         if (owner != null)

@@ -128,6 +128,17 @@ entities:
     - type: OccluderTree
     - type: ChunkContainer
       chunkEntities: []
+    - type: WorldController
+    - type: BiomeSelection
+      biomes:
+      - FrozenCrystalBiome
+      - IronrockBiome
+      - RockyWastesBiome
+      - VolcanicBiome
+      - WeirdmetalBiome
+      - VoidBiome
+      - BaseBiome
+    - type: NoiseIndex
   - uid: 2
     components:
     - type: MetaData
