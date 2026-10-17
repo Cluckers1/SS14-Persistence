@@ -137966,7 +137966,7 @@ entities:
 
         [color=#a57022][bold]GREEN TEAM[/bold][/color]
 
-        [color=#AAAAAA][italic]Engineering Division[/italic][/color] 
+        [color=#AAAAAA][italic]Engineering Division[/italic][/color]
 
         [color=#f39f27]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[/color]
 
@@ -196330,7 +196330,7 @@ entities:
     - type: DeviceNetwork
       receiveFrequency: 1280
       address: 5569-BE89
-- proto: WindoorPhoronSecure
+- proto: WindoorPhoron
   entities:
   - uid: 2574
     components:

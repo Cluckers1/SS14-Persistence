@@ -238,7 +238,7 @@ public sealed partial class GridConfigSystem : SharedGridConfigSystem
                     return false;
             }
         }
-        if(tradeStationGrid && targetStation != null && tradeStation != null)
+        if (tradeStationGrid && targetStation != null && tradeStation != null)
         {
             _station.AnnounceTradeStationCapture(targetStation.Value, tradeStation);
         }
@@ -484,7 +484,7 @@ public sealed partial class GridConfigSystem : SharedGridConfigSystem
         if (args.StationName == null || args.StationName == "") return;
         StationConfig config = new();
         config.StationPrototype = "StandardNanotrasenStation";
-        _station.InitializeNewStation(config, null, args.StationName);
+        _station.InitializeNewStation(config, null, args.StationName, null, realName);
         if (idCard != null)
         {
             _popupSystem.PopupEntity($"The station {args.StationName} was created.", idCard.Value);
@@ -762,7 +762,7 @@ public sealed partial class GridConfigSystem : SharedGridConfigSystem
             {
                 errMsg = "Trade stations cannot be claimed by individuals";
             }
-            if(tradeStation.ExperiencePoints < 5)
+            if (tradeStation.ExperiencePoints < 5)
             {
                 errMsg = "A minimum of five trade nodes must be on board to claim the trade station.";
             }

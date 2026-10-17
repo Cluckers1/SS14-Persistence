@@ -71,7 +71,7 @@ public sealed partial class StationSystem : SharedStationSystem
 
     public void AnnounceTradeStationCapture(EntityUid faction, TradeStationComponent comp)
     {
-        if(_timing.CurTime < comp.CurrentCooldown)
+        if (_timing.CurTime < comp.CurrentCooldown)
         {
             comp.CurrentCooldown = _timing.CurTime + comp.AnnounceCooldown;
             _chatSystem.DispatchGlobalAnnouncement($"A trade station has been claimed by {Name(faction)}; {Name(comp.Owner)}.", "Sector News");
@@ -80,7 +80,7 @@ public sealed partial class StationSystem : SharedStationSystem
 
     public void AnnounceTradeStationRelease(TradeStationComponent comp)
     {
-        if(_timing.CurTime < comp.CurrentCooldown)
+        if (_timing.CurTime < comp.CurrentCooldown)
         {
             comp.CurrentCooldown = _timing.CurTime + comp.AnnounceCooldown;
             _chatSystem.DispatchGlobalAnnouncement($"A trade station has been unclaimed by; {Name(comp.Owner)}.", "Sector News");
@@ -374,22 +374,31 @@ public sealed partial class StationSystem : SharedStationSystem
         StationConfig stationConfig,
         IEnumerable<EntityUid>? gridIds,
         string? name = null,
-        Content.Shared.Maps.GameMapPrototype? gameMap = null)
+        Content.Shared.Maps.GameMapPrototype? gameMap = null,
+        string? owner = null)
     {
         // Use overrides for setup.
         var station = EntityManager.SpawnEntity(stationConfig.StationPrototype, MapCoordinates.Nullspace, stationConfig.StationComponentOverrides);
         DebugTools.Assert(HasComp<StationDataComponent>(station), "Stations should have StationData in their prototype.");
 
         var data = Comp<StationDataComponent>(station);
+        if (owner != null)
+            data.AddOwner(owner);
         data.JobWeights = gameMap?.JobWeights;
         Dirty(station, data);
-        name ??= MetaData(station).EntityName;
-
+        if (name == null) name ??= MetaData(station).EntityName;
+        else
+        {
+            _metaData.SetEntityName(station, name);
+        }
+        if (owner != null)
+        {
+            data.AddOwner(owner);
+        }
         foreach (var grid in gridIds ?? Array.Empty<EntityUid>())
         {
             AddGridToStation(station, grid, null, data, name);
         }
-
         var ev = new StationPostInitEvent((station, data));
         RaiseLocalEvent(station, ref ev, true);
 

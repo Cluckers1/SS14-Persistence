@@ -58,14 +58,14 @@
   conditions:
     - !type:TileNotBlocked
 
-#- type: construction
-#  id: WindoorPhoronSecure
-#  graph: Windoor
-#  startNode: start
-#  targetNode: phwindoorSecure
-#  category: construction-category-structures
-#  objectType: Structure
-#  placementMode: SnapgridCenter
-#  canBuildInImpassable: false
-#  conditions:
-#    - !type:TileNotBlocked
+- type: construction
+  id: WindoorPhoronSecure
+  graph: Windoor
+  startNode: start
+  targetNode: phwindoorSecure
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
