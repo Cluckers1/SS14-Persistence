@@ -23,6 +23,7 @@ using Robust.Shared.Map; // Persistence
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Prototypes;
+using Content.Shared.Mobs.Events;
 
 namespace Content.Server.Mobs;
 
