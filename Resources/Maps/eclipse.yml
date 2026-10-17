@@ -128,6 +128,15 @@ entities:
     - type: OccluderTree
     - type: ChunkContainer
       chunkEntities: []
+    - type: TradeStation
+      levels:
+      - ILevelGeneral1
+      - ILevelGeneral2
+      - ILevelGeneral3
+      - ILevelGeneral4
+      markets:
+      - market
+      uID: 1
     - type: WorldController
     - type: BiomeSelection
       biomes:
