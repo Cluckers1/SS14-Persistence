@@ -206,7 +206,7 @@
         amount: 250 # thermal energy, not temp
       - !type:HealthChange
         conditions:
-          - !type:MetabolizerTypeCondition
+          - !type:MetabolizerTypeCondition # Scav
             type: [ NeoAvian ]
             inverted: true
           - !type:ReagentCondition
