@@ -50,7 +50,7 @@ public sealed partial class ClientGlobalSoundSystem : SharedGlobalSoundSystem
     {
         if (args.Handled) return;
         args.Handled = true;
-        _guidebook.OpenGuidebook(selected:"Persistence");
+        _guidebook.OpenGuidebook(selected: "Persistence");
     }
 
     private void PlayLocalSound(LocalSoundEvent ev)

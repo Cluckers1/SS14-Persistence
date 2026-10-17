@@ -93,7 +93,7 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
         recipientConversation.IsRead = false;
         UpdateDirectMessaging(ent, args.Actor);
         var authorJobnet = _jobNet.GetJobNetByName(Name(args.Actor));
-        if(authorJobnet != null)
+        if (authorJobnet != null)
         {
             _jobNet.UpdateUserInterface(args.Actor, authorJobnet.Owner, authorJobnet);
         }
@@ -114,18 +114,17 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
         var playerQuery = EntityQueryEnumerator<ActorComponent>();
         while (playerQuery.MoveNext(out var uid, out var comp))
         {
-            if(Name(uid) == name)
+            if (Name(uid) == name)
             {
                 target = uid;
                 break;
             }
-
         }
         if (target == null) return;
         var query = EntityQueryEnumerator<MessageBoardComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            if(_uiSystem.IsUiOpen(uid, MessageBoardUiKey.Main, target.Value))
+            if (_uiSystem.IsUiOpen(uid, MessageBoardUiKey.Main, target.Value))
             {
                 UpdateDirectMessaging((uid, comp), target.Value);
             }
@@ -232,7 +231,7 @@ public sealed partial class MessageBoardSystem : SharedMessageBoardSystem
 
         while (query.MoveNext(out var uid, out var component))
         {
-            if(report != null && !component.Silenced)
+            if (report != null && !component.Silenced)
             {
                 _chatSystem.TrySendInGameICMessage(uid, report, Shared.Chat.InGameICChatType.Speak, true);
             }

@@ -75,7 +75,6 @@ public sealed partial class CodexSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        
         SubscribeLocalEvent<ActorComponent, VoidVisionsEvent>(OnVoidVision);
         SubscribeLocalEvent<ActorComponent, SenseAnomalyEvent>(OnSenseAnomaly);
         SubscribeLocalEvent<CodexFragmentComponent, UseInHandEvent>(CodexFragmentAfterInteract);
@@ -105,12 +104,11 @@ public sealed partial class CodexSystem : EntitySystem
     {
         EntityUid target = args.Target;
         EntityUid user = ent.Owner;
-        if(TryRevive(ent, user, target)) args.Handled = true;
+        if (TryRevive(ent, user, target)) args.Handled = true;
     }
 
     private bool TryRevive(Entity<MiracleReviveComponent> ent, EntityUid user, EntityUid target)
     {
-   
         bool failedRevive = true;
         if (_rotting.IsRotten(target))
         {
@@ -126,7 +124,6 @@ public sealed partial class CodexSystem : EntitySystem
             if (targetMobState == null || targetMobState.CurrentState != MobState.Dead) return false;
             _damageable.TryChangeDamage(target, ent.Comp.ZapHeal, true, origin: user);
             var canRevive = true;
-            
             if (canRevive && // funky
                 TryComp<MobThresholdsComponent>(target, out var targetThresholds) && // funky
                 _mobThreshold.TryGetThresholdForState(target, MobState.Dead, out var threshold, targetThresholds) &&
@@ -173,7 +170,7 @@ public sealed partial class CodexSystem : EntitySystem
         var passiveUnlockerQuery = EntityQueryEnumerator<CodexPassiveUnlockerComponent>();
         while (passiveUnlockerQuery.MoveNext(out var uid, out var comp))
         {
-            if(comp.EntryToAdd != "" && comp.ToAddRequirement != 0)
+            if (comp.EntryToAdd != "" && comp.ToAddRequirement != 0)
             {
                 comp.PossibleEntries.Add(comp.EntryToAdd, comp.ToAddRequirement);
                 comp.EntryToAdd = "";
@@ -186,7 +183,6 @@ public sealed partial class CodexSystem : EntitySystem
         }
         base.Update(frameTime);
     }
-    
     private void PassiveUnlockerCheck(EntityUid uid, CodexPassiveUnlockerComponent comp)
     {
         if (_crewMetaRecords.MetaRecords == null) return;
@@ -197,7 +193,7 @@ public sealed partial class CodexSystem : EntitySystem
             if (Transform(actorEnt).GridUid != uid) continue;
             if (!_crewMetaRecords.MetaRecords.TryGetRecord(Name(actorEnt), out var crewrecord) || crewrecord == null) continue;
             if (_random.Next(0, 2) == 0) continue;
-            foreach(var kv in comp.PossibleEntries)
+            foreach (var kv in comp.PossibleEntries)
             {
                 var entry = kv.Key;
                 var progressRequired = kv.Value;
@@ -211,7 +207,7 @@ public sealed partial class CodexSystem : EntitySystem
                     crewrecord.PassiveProgressEntries[entry] = 1;
                 }
                 var progress = crewrecord.PassiveProgressEntries[entry];
-                if(progress >= progressRequired)
+                if (progress >= progressRequired)
                 {
                     crewrecord.PassiveProgressEntries.Remove(entry);
                     UnlockEntry(actorEnt, entry);
@@ -227,7 +223,7 @@ public sealed partial class CodexSystem : EntitySystem
         var mob = args.Examiner;
         if (_crewMetaRecords.MetaRecords == null) return;
         if (!_crewMetaRecords.MetaRecords.TryGetRecord(Name(mob), out var crewrecord) || crewrecord == null) return;
-        if(!crewrecord.UnlockedEntries.Contains(ent.Comp.Entry))
+        if (!crewrecord.UnlockedEntries.Contains(ent.Comp.Entry))
         {
             UnlockEntry(mob, ent.Comp.Entry);
         }
@@ -253,7 +249,7 @@ public sealed partial class CodexSystem : EntitySystem
     {
         EntityUid? closest = null;
         float? distance = null;
-        foreach(var arti in _lookup.GetEntitiesInRange<AnomalyComponent>(Transform(ent).Coordinates, 1000))
+        foreach (var arti in _lookup.GetEntitiesInRange<AnomalyComponent>(Transform(ent).Coordinates, 1000))
         {
             if (closest == null || distance == null)
             {
@@ -293,7 +289,7 @@ public sealed partial class CodexSystem : EntitySystem
         var categoryProto = _protoMan.Index(codexProto.Category);
         NotifyPlayer(mob, $"You have unlocked the codex entry '[bold]{codexProto.Name}[/bold]' in the {categoryProto.Name} series.", _codexUnlockSound);
         crewrecord.CodexUnlocksSince++;
-        if(crewrecord.CodexUnlocksSince >= 5)
+        if (crewrecord.CodexUnlocksSince >= 5)
         {
             crewrecord.UnspentInsights++;
             crewrecord.CodexUnlocksSince = 0;
@@ -321,7 +317,7 @@ public sealed partial class CodexSystem : EntitySystem
 
     public void OnInsightPurchase(EntityUid ent, JobNetInsightPurchaseMessage args)
     {
-        if(_crewMetaRecords.MetaRecords == null) return;
+        if (_crewMetaRecords.MetaRecords == null) return;
         if (!_crewMetaRecords.MetaRecords.TryGetRecord(Name(ent), out var crewrecord) || crewrecord == null) return;
         if (crewrecord.UnspentInsights <= 0) return;
         if (crewrecord.UnlockedInsights.Contains(args.Target)) return;
