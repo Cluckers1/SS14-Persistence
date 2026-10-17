@@ -664,7 +664,7 @@ namespace Content.Client.Lobby.UI
             {
                 SaveButton.Disabled = true;
             }
-            if (!alignmentSelected && !originSelected && !motiveSelected)
+            if (!alignmentSelected || !originSelected || !motiveSelected)
             {
                 RequirementsLbl.Visible = true;
                 RequirementsLbl.Text = "[color=red]Complete the Background Page.";
@@ -708,7 +708,6 @@ namespace Content.Client.Lobby.UI
                 TabContainer.Visible = true;
 
                 SaveButton.Visible = true;
-                RequirementsLbl.Visible = true;
                 RandomizerPanel.Visible = true;
                 JoinGameButton.Visible = false;
 

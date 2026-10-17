@@ -3,28 +3,28 @@
     "license": "CC-BY-SA-4.0",
     "copyright": "Created by Cluckers1 (github)",
     "size": {
-      "x": 32,
-      "y": 32
+        "x": 32,
+        "y": 32
     },
     "states": [
-      {
-        "name": "lumi-codex"
-      },
-      {
-        "name": "nt-codex"
-      },
-      {
-        "name": "shadow-codex"
-      },
-      {
-        "name": "sl-codex"
-      },
-      {
-        "name": "syndi-codex"
-      },
-      {
-        "name": "unmc-codex"
-      },
+        {
+            "name": "lumi-codex"
+        },
+        {
+            "name": "nt-codex"
+        },
+        {
+            "name": "shadow-codex"
+        },
+        {
+            "name": "sl-codex"
+        },
+        {
+            "name": "syndi-codex"
+        },
+        {
+            "name": "unmc-codex"
+        },
         {
             "name": "inhand-left",
             "directions": 4
@@ -33,5 +33,5 @@
             "name": "inhand-right",
             "directions": 4
         }
-      ]
+    ]
 }
