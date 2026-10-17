@@ -224,7 +224,7 @@
     speechSounds: Alto
     allowedEmotes: ['Chirp', 'Squawk', 'Flap']
   - type: Vocal
-    emoteSounds: MaleHuman # TODO: Add unique sounds
+    emoteSounds: UnisexNeoAvian
   - type: TypingIndicator
     proto: default
   - type: Butcherable
