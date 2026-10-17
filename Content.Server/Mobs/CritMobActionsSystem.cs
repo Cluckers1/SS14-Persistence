@@ -11,7 +11,6 @@ using Content.Shared.Chat;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
-using Content.Shared.Mobs.Events;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Speech.Muting;
 using Content.Shared.StatusEffectNew;
@@ -25,6 +24,7 @@ using Robust.Shared.Map; // Persistence
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Prototypes;
+using Content.Shared.Mobs.Events;
 
 namespace Content.Server.Mobs;
 
@@ -159,15 +159,9 @@ public sealed partial class CritMobActionsSystem : EntitySystem
     public bool ValidateSOS(EntityUid uid, MobStateActionsComponent component)
     {
         if (component.SOSCooldown > _timing.CurTime) return false;
-
-        var ev = new GetSosOverrideEvent();
-        RaiseLocalEvent(uid, ev);
-
-        // state is null entirely (not just alive) for something like a mind vessel, which has no
-        // MobStateComponent at all - that's fine as long as the override says this is allowed.
         TryComp<MobStateComponent>(uid, out var state);
-        if (state is not { CurrentState: MobState.Dead } && !ev.AllowWhileAlive) return false;
-
+        if (state == null) return false;
+        if (state.CurrentState != MobState.Dead) return false;
         return true;
     }
 

@@ -223,6 +223,8 @@ public sealed partial class RadioSystem : SharedRadioSystem
                     continue;
             }
 
+
+
             if (!channel.LongRange && transform.MapID != sourceMapId && !radio.GlobalReceive)
                 continue;
 

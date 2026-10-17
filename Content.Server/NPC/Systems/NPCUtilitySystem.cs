@@ -12,7 +12,6 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Fluids.Components;
-using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -23,7 +22,6 @@ using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Stealth;
 using Content.Shared.Stealth.Components;
 using Content.Shared.Storage.Components;
-using static Content.Shared.Interaction.SharedInteractionSystem;
 using Content.Shared.Stunnable;
 using Content.Shared.Temperature.Components;
 using Content.Shared.Tools.Systems;
@@ -165,23 +163,6 @@ public sealed partial class NPCUtilitySystem : EntitySystem
             default:
                 throw new NotImplementedException();
         }
-    }
-
-    /// <summary>
-    /// An Eye-possessed thrall's own anomaly anchor is a static, opaque fixture it constantly
-    /// stands near/fights around - exempt only that entity from a thrall's own LOS checks so its
-    /// tether anchor can't block its own targeting. Null (no exemption) for every other NPC.
-    /// </summary>
-    private Ignored? GetEyeAnomalyIgnorePredicate(EntityUid owner)
-    {
-        if (!TryComp<TetheredByEyeComponent>(owner, out var tether))
-            return null;
-
-        if (!_pid.TryResolveId(tether.Eye, out var eyeEnt))
-            return null;
-
-        var eyeAnomaly = eyeEnt.Owner;
-        return entity => entity == eyeAnomaly;
     }
 
     private float GetScore(NPCBlackboard blackboard, EntityUid targetUid, UtilityConsideration consideration)
@@ -366,8 +347,71 @@ public sealed partial class NPCUtilitySystem : EntitySystem
                     return 1f;
                 }
 
-                return _examine.InRangeUnOccluded(owner, targetUid, radius + bufferRange, GetEyeAnomalyIgnorePredicate(owner)) ? 1f : 0f;
-            }
+                    if (!TryComp(targetUid, out TransformComponent? targetXform) ||
+                        !TryComp(owner, out TransformComponent? xform))
+                    {
+                        return 0f;
+                    }
+
+                    if (!targetXform.Coordinates.TryDistance(EntityManager, _transform, xform.Coordinates,
+                            out var distance))
+                    {
+                        return 0f;
+                    }
+
+                    return Math.Clamp(distance / radius, 0f, 1f);
+                }
+            case TargetAmmoCon:
+                {
+                    if (!HasComp<GunComponent>(targetUid))
+                        return 0f;
+
+                    var ev = new GetAmmoCountEvent();
+                    RaiseLocalEvent(targetUid, ref ev);
+
+                    if (ev.Count == 0)
+                        return 0f;
+
+                    // Wat
+                    if (ev.Capacity == 0)
+                        return 1f;
+
+                    return (float)ev.Count / ev.Capacity;
+                }
+            case TargetHealthCon con:
+                {
+                    if (!TryComp(targetUid, out DamageableComponent? damage))
+                        return 0f;
+                    var totalDamage = _damageable.GetTotalDamage((targetUid, damage));
+                    if (con.TargetState != MobState.Invalid && _thresholdSystem.TryGetPercentageForState(targetUid, con.TargetState, totalDamage, out var percentage))
+                        return Math.Clamp((float)(1 - percentage), 0f, 1f);
+                    if (_thresholdSystem.TryGetIncapPercentage(targetUid, totalDamage, out var incapPercentage))
+                        return Math.Clamp((float)(1 - incapPercentage), 0f, 1f);
+                    return 0f;
+                }
+            case TargetInLOSCon:
+                {
+                    var radius = blackboard.GetValueOrDefault<float>(blackboard.GetVisionRadiusKey(EntityManager), EntityManager);
+
+                    return _examine.InRangeUnOccluded(owner, targetUid, radius + 0.5f, null) ? 1f : 0f;
+                }
+            case TargetInLOSOrCurrentCon:
+                {
+                    var radius = blackboard.GetValueOrDefault<float>(blackboard.GetVisionRadiusKey(EntityManager), EntityManager);
+                    const float bufferRange = 0.5f;
+
+                    if (blackboard.TryGetValue<EntityUid>("Target", out var currentTarget, EntityManager) &&
+                        currentTarget == targetUid &&
+                        TryComp(owner, out TransformComponent? xform) &&
+                        TryComp(targetUid, out TransformComponent? targetXform) &&
+                        xform.Coordinates.TryDistance(EntityManager, _transform, targetXform.Coordinates, out var distance) &&
+                        distance <= radius + bufferRange)
+                    {
+                        return 1f;
+                    }
+
+                    return _examine.InRangeUnOccluded(owner, targetUid, radius + bufferRange, null) ? 1f : 0f;
+                }
             case TargetIsAliveCon:
             {
                 return _mobState.IsAlive(targetUid) ? 1f : 0f;
