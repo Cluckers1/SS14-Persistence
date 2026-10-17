@@ -34,9 +34,6 @@ using Microsoft.Extensions.ObjectPool;
 using Robust.Server.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using Content.Shared._Persistence14.PersistentIdentifier;
-using Content.Server.Anomaly.Effects.Components;
-using Content.Shared.Tag;
 
 namespace Content.Server.NPC.Systems;
 
@@ -45,7 +42,6 @@ namespace Content.Server.NPC.Systems;
 /// </summary>
 public sealed partial class NPCUtilitySystem : EntitySystem
 {
-    [Dependency] private PersistentIdentifierSystem _pid = default!;
     [Dependency] private ContainerSystem _container = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private HandsSystem _hands = default!;
@@ -64,7 +60,6 @@ public sealed partial class NPCUtilitySystem : EntitySystem
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SatiationSystem _satiation = default!;
     [Dependency] private SharedStealthSystem _stealth = default!;
-
     [Dependency] private EntityQuery<PuddleComponent> _puddleQuery = default!;
 
     private ObjectPool<HashSet<EntityUid>> _entPool =
@@ -180,7 +175,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
 
                 // only eat when hungry or if it will eat anything
                 if (TryComp<SatiationComponent>(owner, out var satiation) &&
-                    _satiation.IsValueInRange((owner, satiation), SatiationSystem.Hunger, below: foodValueConsideration.HungerThreshold) &&
+                    _satiation.IsValueInRange((owner, satiation), SatiationSystem.Hunger, above: foodValueConsideration.HungerThreshold) &&
                     avoidBadFood)
                     return 0f;
 
@@ -202,7 +197,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
 
                 // only drink when thirsty
                 if (TryComp<SatiationComponent>(owner, out var satiation) &&
-                    _satiation.IsValueInRange((owner, satiation), SatiationSystem.Thirst, below: drinkValueConsideration.ThirstThreshold))
+                    _satiation.IsValueInRange((owner, satiation), SatiationSystem.Thirst, above: drinkValueConsideration.ThirstThreshold))
                     return 0f;
 
                 // no janicow don't drink the blood puddle
@@ -330,7 +325,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
             {
                 var radius = blackboard.GetValueOrDefault<float>(blackboard.GetVisionRadiusKey(EntityManager), EntityManager);
 
-                return _examine.InRangeUnOccluded(owner, targetUid, radius + 0.5f, GetEyeAnomalyIgnorePredicate(owner)) ? 1f : 0f;
+                return _examine.InRangeUnOccluded(owner, targetUid, radius + 0.5f, null) ? 1f : 0f;
             }
             case TargetInLOSOrCurrentCon:
             {
@@ -347,71 +342,8 @@ public sealed partial class NPCUtilitySystem : EntitySystem
                     return 1f;
                 }
 
-                    if (!TryComp(targetUid, out TransformComponent? targetXform) ||
-                        !TryComp(owner, out TransformComponent? xform))
-                    {
-                        return 0f;
-                    }
-
-                    if (!targetXform.Coordinates.TryDistance(EntityManager, _transform, xform.Coordinates,
-                            out var distance))
-                    {
-                        return 0f;
-                    }
-
-                    return Math.Clamp(distance / radius, 0f, 1f);
-                }
-            case TargetAmmoCon:
-                {
-                    if (!HasComp<GunComponent>(targetUid))
-                        return 0f;
-
-                    var ev = new GetAmmoCountEvent();
-                    RaiseLocalEvent(targetUid, ref ev);
-
-                    if (ev.Count == 0)
-                        return 0f;
-
-                    // Wat
-                    if (ev.Capacity == 0)
-                        return 1f;
-
-                    return (float)ev.Count / ev.Capacity;
-                }
-            case TargetHealthCon con:
-                {
-                    if (!TryComp(targetUid, out DamageableComponent? damage))
-                        return 0f;
-                    var totalDamage = _damageable.GetTotalDamage((targetUid, damage));
-                    if (con.TargetState != MobState.Invalid && _thresholdSystem.TryGetPercentageForState(targetUid, con.TargetState, totalDamage, out var percentage))
-                        return Math.Clamp((float)(1 - percentage), 0f, 1f);
-                    if (_thresholdSystem.TryGetIncapPercentage(targetUid, totalDamage, out var incapPercentage))
-                        return Math.Clamp((float)(1 - incapPercentage), 0f, 1f);
-                    return 0f;
-                }
-            case TargetInLOSCon:
-                {
-                    var radius = blackboard.GetValueOrDefault<float>(blackboard.GetVisionRadiusKey(EntityManager), EntityManager);
-
-                    return _examine.InRangeUnOccluded(owner, targetUid, radius + 0.5f, null) ? 1f : 0f;
-                }
-            case TargetInLOSOrCurrentCon:
-                {
-                    var radius = blackboard.GetValueOrDefault<float>(blackboard.GetVisionRadiusKey(EntityManager), EntityManager);
-                    const float bufferRange = 0.5f;
-
-                    if (blackboard.TryGetValue<EntityUid>("Target", out var currentTarget, EntityManager) &&
-                        currentTarget == targetUid &&
-                        TryComp(owner, out TransformComponent? xform) &&
-                        TryComp(targetUid, out TransformComponent? targetXform) &&
-                        xform.Coordinates.TryDistance(EntityManager, _transform, targetXform.Coordinates, out var distance) &&
-                        distance <= radius + bufferRange)
-                    {
-                        return 1f;
-                    }
-
-                    return _examine.InRangeUnOccluded(owner, targetUid, radius + bufferRange, null) ? 1f : 0f;
-                }
+                return _examine.InRangeUnOccluded(owner, targetUid, radius + bufferRange, null) ? 1f : 0f;
+            }
             case TargetIsAliveCon:
             {
                 return _mobState.IsAlive(targetUid) ? 1f : 0f;
@@ -437,12 +369,6 @@ public sealed partial class NPCUtilitySystem : EntitySystem
             {
                 if (TryComp(targetUid, out FlammableComponent? fire) && fire.OnFire)
                     return 1f;
-
-                // Persistence: Firebots can target reagent fires
-                var reagentFireTagPrototype = "ReagentFire";
-                if (TryComp(targetUid, out TagComponent? tags) && tags.Tags.AsReadOnly().Contains(ProtoMan.Index<TagPrototype>(reagentFireTagPrototype)))
-                    return 1f;
-
                 return 0f;
             }
             case TargetIsStunnedCon:
@@ -565,24 +491,6 @@ public sealed partial class NPCUtilitySystem : EntitySystem
                 {
                     entities.Add(ent);
                 }
-                break;
-            }
-            case ComponentQueryAny compQueryAny: // Persistence: Firebots can target reagent fires
-            {
-                if (compQueryAny.Components.Count == 0)
-                    return;
-
-                var mapPos = _transform.GetMapCoordinates(owner, xform: Transform(owner));
-                _compTypes.Clear();
-                _entitySet.Clear();
-                foreach (var comp in compQueryAny.Components.Values)
-                {
-                    _lookup.GetEntitiesInRange(comp.Component.GetType(), mapPos, vision, _entitySet);
-                }
-
-                foreach (var ent in _entitySet)
-                    entities.Add(ent);
-
                 break;
             }
             default:

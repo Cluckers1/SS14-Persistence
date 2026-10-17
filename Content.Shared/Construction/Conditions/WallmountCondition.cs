@@ -7,6 +7,8 @@ using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Utility;
+using Content.Shared.Tag;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Construction.Conditions
 {
@@ -28,7 +30,7 @@ namespace Content.Shared.Construction.Conditions
             var transformSystem = entManager.System<SharedTransformSystem>();
             var userWorldPosition = transformSystem.GetWorldPosition(user);
             var objWorldPosition = transformSystem.ToMapCoordinates(location).Position;
-
+            var tagSystem = entManager.System<TagSystem>();
             // find direction from user to blueprint
             var userToObject = (objWorldPosition - userWorldPosition);
             // get direction of the grid being placed on as an offset.

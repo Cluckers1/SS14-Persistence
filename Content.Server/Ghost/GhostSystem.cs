@@ -334,7 +334,7 @@ namespace Content.Server.Ghost
             }
 
             var following = _followerQuery.CompOrNull(uid)?.Following;
-            if (_followerSystem.GetRandomGhostFollowed(except:following) is not {} target)
+            if (_followerSystem.GetRandomGhostFollowed(except:following) is not { } target)
                 return;
 
             _followerSystem.StartFollowingEntity(uid, target);
@@ -353,7 +353,7 @@ namespace Content.Server.Ghost
 
             var following = _followerQuery.CompOrNull(uid)?.Following;
             // select player warps cuz no one wants to warp to places.
-            if (GetPlayerWarps(following).ToArray() is not {} warps)
+            if (GetPlayerWarps(following).ToArray() is not { } warps)
                 return;
             if (warps.Length == 0)
                 return;
