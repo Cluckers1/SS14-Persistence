@@ -63,38 +63,13 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
     [Dependency] private CargoSystem _cargo = default!;
     [Dependency] private CrewManifestSystem _crewManifest = default!;
     [Dependency] private IdCardSystem _card = default!;
-    [Dependency] private CodewordSystem _codeword = default!;
     [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private SharedInteractionSystem _interactionSystem = default!;
     [Dependency] private SharedCuffableSystem _cuffable = default!;
-    [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private NameIdentifierSystem _nameIdentifier = default!;
     [Dependency] private RumorsSystem _rumors = default!;
     [Dependency] private CodexSystem _codex = default!;
     [Dependency] private ServerGlobalSoundSystem _globalsound = default!;
-    public override void ReagentObjectiveComplete(JobNetComponent component, ProtoId<PrecursorObjectivePrototype> objective)
-    {
-        if (_proto.TryIndex(objective, out PrecursorObjectivePrototype? proto) && proto != null)
-        {
-            component.PrecursorObjectives.Remove(objective);
-            AwardPrecursor(component.Owner, component, proto.Reward);
-            EntityUid? player = null;
-            var comp = Transform(component.Owner);
-            player = comp.ParentUid;
-            if (player == null) return;
-            if (TryComp<ActorComponent>(player, out var actor) && actor != null && actor.PlayerSession != null)
-            {
-                var msg = $"Precusor Objective Complete! {proto.Reward} precursor gained.";
-                _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                    msg,
-                    msg,
-                    player.Value,
-                    false,
-                    actor.PlayerSession.Channel
-                    );
-            }
-        }
-    }
+
     public override void Initialize()
     {
         base.Initialize();
@@ -165,43 +140,6 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         }
         return null;
     }
-
-
-    private void AwardPrecursor(EntityUid uid, JobNetComponent component, int amount)
-    {
-        component.Precursor += amount;
-        component.XP += amount;
-        EntityUid? player = null;
-        var comp = Transform(uid);
-        player = comp.ParentUid;
-        if (player == null) return;
-        _audio.PlayEntity(component.PaySuccessSound, player.Value, component.Owner);
-        var meta = _meta.GetMetaRecordsComponent();
-        if (meta != null)
-            meta.SectorChaos += amount;
-        if (TryComp<ActorComponent>(player, out var actor) && actor != null && actor.PlayerSession != null)
-        {
-            var msg = $"You have been awarded {amount} precursor.";
-            _chatManager.ChatMessageToOne(Shared.Chat.ChatChannel.Notifications,
-                msg,
-                msg,
-                player.Value,
-                false,
-                actor.PlayerSession.Channel
-                );
-        }
-        if (_proto.TryIndex(component.RogueLevel, out var rogueLevel))
-        {
-            if (rogueLevel.Next != null && _proto.TryIndex(rogueLevel.Next, out var nextLevel))
-            {
-                if (component.XP >= nextLevel.Cost)
-                {
-                    component.RogueLevel = nextLevel.ID;
-                }
-            }
-        }
-    }
-
 
     private void AfterInteractOn(EntityUid uid, PrecursorExtractorComponent component, AfterInteractEvent args)
     {
@@ -425,64 +363,6 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
         _bank.EnsureAccount(Name(mob), 50);
     }
 
-    public void TryAssignRogueObjective(EntityUid user, JobNetComponent component)
-    {
-        component.KillTarget = null;
-        component.DealerBounty = null;
-        if (component.NetworkType == RogueNetworkType.BountyHunter || component.NetworkType == RogueNetworkType.Assassin)
-        {
-            var query = EntityQueryEnumerator<JobNetComponent>();
-            List<EntityUid> possibleTargets = new();
-            while (query.MoveNext(out var uid, out var comp))
-            {
-                if (comp == component) continue;
-                if (component.NetworkType == comp.NetworkType || comp.NetworkType == RogueNetworkType.None) continue;
-                possibleTargets.Add(uid);
-            }
-            if (possibleTargets.Count < 1) return;
-            var chosenTarget = _random.Pick(possibleTargets);
-            var tf = Transform(chosenTarget);
-            var parent = tf.ParentUid;
-            component.KillTarget = Name(parent);
-
-        }
-        else if (component.NetworkType == RogueNetworkType.Dealer)
-        {
-            List<CargoBountyPrototype> possible = new();
-            var query = EntityQueryEnumerator<TradeStationComponent>();
-            List<TradeStationComponent> possibleTrade = new();
-            while (query.MoveNext(out var uid, out var comp))
-            {
-                if (TryComp<StationMemberComponent>(uid, out var sm))
-                {
-                    possibleTrade.Add(comp);
-                }
-            }
-            if (possibleTrade.Count < 1) return;
-            var chosenUID = _random.Pick(possibleTrade).UID;
-            foreach (var proto in _proto.EnumeratePrototypes<CargoBountyPrototype>())
-            {
-                if (proto.Group == "PrecursorBounty")
-                {
-                    possible.Add(proto);
-                }
-            }
-            if (possible.Count < 1) return;
-            var chosen = _random.Pick(possible);
-            _nameIdentifier.GenerateUniqueNameModifier("Bounty", out var randomVal);
-            var newBounty = new CargoBountyData(chosen, randomVal);
-            newBounty.TradeStationUID = chosenUID;
-            component.DealerBounty = newBounty;
-        }
-
-    }
-    public void TryAssignPrecursorObjective(EntityUid user, JobNetComponent component)
-    {
-        component.PrecursorObjectives.Clear();
-        var precursorObjectives = _proto.EnumeratePrototypes<PrecursorObjectivePrototype>();
-        var form = precursorObjectives.ToList().Shuffle();
-        component.PrecursorObjectives.AddRange(form.First().ID);
-    }
     public override void Update(float frameTime)
     {
         var query = EntityQueryEnumerator<JobNetComponent>();
@@ -497,23 +377,6 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
                     TryPay(comp.Owner, comp);
                 }
             }
-
-            comp.PrecursorResetTime -= TimeSpan.FromSeconds(frameTime);
-            if (comp.PrecursorResetTime <= TimeSpan.Zero)
-            {
-                var words = _codeword.GenerateCodewords("PersistenceCodewordGenerator");
-                comp.SecretPhrase = string.Join(" ", words);
-                comp.PrecursorResetTime = TimeSpan.FromMinutes(45);
-                TryAssignPrecursorObjective(uid, comp);
-            }
-            comp.RogueNetResetTime -= TimeSpan.FromSeconds(frameTime);
-            if (comp.NetworkType != RogueNetworkType.None && comp.RogueNetResetTime <= TimeSpan.Zero)
-            {
-                comp.RogueNetResetTime = TimeSpan.FromMinutes(180);
-                TryAssignRogueObjective(uid, comp);
-            }
-
-
         }
         base.Update(frameTime);
     }

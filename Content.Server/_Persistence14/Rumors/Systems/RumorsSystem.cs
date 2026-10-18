@@ -666,7 +666,7 @@ public sealed partial class RumorsSystem : EntitySystem
         if (newRumor != null)
         {
             comp.Rumors.Add(newRumor);
-            NotifyPlayer(player, $"Your job network reports you have recieved a new rumor: {newRumor.Name}");
+            NotifyPlayer(player, $"Your job network reports you have recieved a new rumor: {newRumor.Name}", comp.NewRumorSound);
         }
         _jobnet.UpdateUserInterface(player, comp.Owner);
     }

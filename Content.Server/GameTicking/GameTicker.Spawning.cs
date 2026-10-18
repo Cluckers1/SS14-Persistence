@@ -197,7 +197,7 @@ namespace Content.Server.GameTicking
             if (_crewMetaRecords.MetaRecords != null)
             {
                 _crewMetaRecords.MetaRecords.CreateRecord(character!.Name, out var createdRecord);
-                if(createdRecord != null)
+                if (createdRecord != null)
                 {
                     if (character.Alignment != null) createdRecord.Alignment = character.Alignment.Value;
                     if (character.UniverseOrigin != null) createdRecord.Origin = character.UniverseOrigin.Value;

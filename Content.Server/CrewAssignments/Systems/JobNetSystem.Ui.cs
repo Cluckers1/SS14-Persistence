@@ -29,7 +29,6 @@ namespace Content.Server.CrewAssignments.Systems;
 public sealed partial class JobNetSystem
 {
     [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly CrewMetaRecordsSystem _meta = default!;
