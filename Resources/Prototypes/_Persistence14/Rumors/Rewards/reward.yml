@@ -5,8 +5,8 @@
   price: 5000
   product: TradeGood
   icon:
-    sprite: _Persistence14/Objects/Specific/Upgrades/modules.rsi
-    state: solar-legion-full
+    sprite: _Persistence14/Objects/Specific/trade_node.rsi
+    state: icon
 
 - type: rumorReward
   id: VoiceMaskImplanter

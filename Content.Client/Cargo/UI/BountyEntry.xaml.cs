@@ -42,7 +42,7 @@ public sealed partial class BountyEntry : BoxContainer
         var calculatedReward = bountyPrototype.Reward * bounty.PriceMultiplier;
         var hasPricePer = bountyPrototype.Condition.TryGetPricePer(calculatedReward, out var pricePer, out var unitName);
         RewardLabel.SetMarkup(Loc.GetString("bounty-total-value",
-            ("reward", bountyPrototype.Reward.ToString("F2")),
+            ("reward", calculatedReward.ToString("F2")),
             ("hasPricePer", hasPricePer),
             ("pricePer", pricePer.ToString("F2")),
             ("unit", unitName ?? "")
