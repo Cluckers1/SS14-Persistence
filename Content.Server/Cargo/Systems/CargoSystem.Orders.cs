@@ -215,7 +215,7 @@ namespace Content.Server.Cargo.Systems
                 if (!TryComp(station, out StationBankAccountComponent? bank) ||
                     !TryComp(station, out StationDataComponent? stationData) ||
                     !TryGetOrderDatabase(station, out var orderDatabase))
-                              {
+                {
                     _popup.PopupCursor(Loc.GetString("cargo-console-station-not-found"), args.Actor);
                     PlayDenySound(uid, component);
                     return;
@@ -1001,7 +1001,7 @@ namespace Content.Server.Cargo.Systems
             // Ensure the item doesn't start anchored
             _transformSystem.Unanchor(item, itemXForm);
             EntityUid containerEntity = item;
-            if(!TryComp<EntityStorageComponent>(item, out _))
+            if (!TryComp<EntityStorageComponent>(item, out _))
             {
                 containerEntity = Spawn(rumorProto.Container, itemXForm.Coordinates);
                 if (!_container.TryGetContainer(containerEntity, rumorProto.ContainerId, out var container1) ||
@@ -1016,12 +1016,11 @@ namespace Content.Server.Cargo.Systems
                 item = containerEntity;
             }
             _metaSystem.SetEntityName(containerEntity, $"{Name(item)} ({personalAccount})");
-            if(TryComp<AccessReaderComponent>(containerEntity, out var accessReader) && accessReader != null)
+            if (TryComp<AccessReaderComponent>(containerEntity, out var accessReader) && accessReader != null)
             {
                 _accessReaderSystem.TryAddPersonalAccess((containerEntity, accessReader), personalAccount);
                 accessReader.PersonalAccessMode = true;
             }
-            
             // Create a sheet of paper to write the order details on
             var printed = Spawn(paperProto, spawn);
             if (TryComp<PaperComponent>(printed, out var paper))

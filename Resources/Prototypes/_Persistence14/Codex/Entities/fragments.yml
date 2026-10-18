@@ -107,7 +107,7 @@
   components:
   - type: Sprite
     layers:
-    - state: lumi-codex
+    - state: lumi
   - type: CodexFragment
     possibleEntries:
       - Luminal101
