@@ -22,7 +22,7 @@
     - MarineCodexFragment
     - GrandLottery
     - MarineWebbing
-  rewardsToOffer: 1
+  rewardsToOffer: 2
 
 - type: metaFactionLevel
   id: Marines3

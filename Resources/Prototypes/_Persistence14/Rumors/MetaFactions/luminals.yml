@@ -20,7 +20,7 @@
     - TradeGood
     - LuminalCodexFragment
     - GrandLottery
-  rewardsToOffer: 1
+  rewardsToOffer: 2
 
 - type: metaFactionLevel
   id: Luminals3

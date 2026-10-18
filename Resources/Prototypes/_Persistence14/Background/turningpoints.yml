@@ -15,7 +15,7 @@
 - type: turningPoint
   id: Magician
   name: Encountered by a Magician
-  description: "You encountered a strange traveler from beyond your Universe.\nThey claimed to be a [color=purple]Magician[/color] and convinced you to travel to the [bold]Nexus Space[/bold].\nYou left everything behind to pursue this Destiny."
+  description: "You encountered a strange traveler from beyond your Universe.\nThey claimed to be a [color=gray]Magician[/color] and convinced you to travel to the [bold]Nexus Space[/bold].\nYou left everything behind to pursue this Destiny."
   effects:
     - TraitPledge
 

@@ -22,7 +22,7 @@
     - PrecursorCodexFragment
     - PrecursorPJs
     - PrecursorMerchCrate
-  rewardsToOffer: 1
+  rewardsToOffer: 2
 
 - type: metaFactionLevel
   id: Precursor3

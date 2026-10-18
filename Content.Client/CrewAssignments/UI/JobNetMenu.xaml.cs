@@ -69,6 +69,7 @@ public sealed partial class JobNetMenu : DefaultWindow
         PossibleJobs.Clear();
         PossibleJobs.AddItem("Off Duty", 0);
         RumorTaxLabel.Text = $"{state.RumorTax.ToString()}% of rumor money rewards paid to your employer.";
+        SectorStatusLabel.Text = state.SectorStatus;
         if (state.Stations != null)
         {
             int ind = 1;

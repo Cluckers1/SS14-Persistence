@@ -21,7 +21,7 @@
     - TradeGood
     - ZenithCodexFragment
     - GrandLottery
-  rewardsToOffer: 1
+  rewardsToOffer: 2
 
 - type: metaFactionLevel
   id: Zenith3
