@@ -26,6 +26,7 @@
           - Goblin
           - Avali # Persistence
           - Yinglet # Scav
+          - NeoAvian # Scav
       # Convert Oxygen into CO2.
       - !type:ModifyLungGas
         conditions:
@@ -66,6 +67,7 @@
           - Goblin
           - Avali # Persistence
           - Yinglet # Scav
+          - NeoAvian # Scav
       # Convert Oxygen into CO2.
       - !type:ModifyLungGas
         conditions:
