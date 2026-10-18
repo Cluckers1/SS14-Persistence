@@ -459,7 +459,7 @@ public sealed partial class CargoSystem
                 groups = proto.Groups;
             }
         }
-        float bountyMult = 1f;
+        float bountyMult = 0.6f;
         if (proto != null)
         {
             bountyMult = proto.BountyPriceMult;
