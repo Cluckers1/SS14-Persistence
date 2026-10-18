@@ -69,7 +69,7 @@ public sealed partial class TradeGoodsSystem : EntitySystem
         }
     }
 
-    private void RecountTradeGoods(EntityUid ent, TradeStationComponent comp)
+    private void RecountTradeGoods(EntityUid ent, TradeStationComponent comp, bool initCount = false)
     {
         var query = EntityQueryEnumerator<TradeGoodComponent>();
         comp.ExperiencePoints = 0;
@@ -83,7 +83,7 @@ public sealed partial class TradeGoodsSystem : EntitySystem
         if (comp.ExperiencePoints < 5)
         {
             var station = _station.GetOwningStation(comp.Owner);
-            if(station != null)
+            if(station != null && !initCount)
             {
                 _station.RemoveGridFromStation(station.Value, comp.Owner);
                 _station.AnnounceTradeStationRelease(comp);
@@ -99,7 +99,7 @@ public sealed partial class TradeGoodsSystem : EntitySystem
         {
             if (_tradeStationQuery.TryComp(grid.Value, out var tradeStation))
             {
-                RecountTradeGoods(grid.Value, tradeStation);
+                RecountTradeGoods(grid.Value, tradeStation, true);
             }
         }
 
