@@ -24,8 +24,6 @@ namespace Content.Shared.Humanoid
         LArm,
         RHand,
         LHand,
-        RHandOverlay, // Scav: Things that go on top of hands
-        LHandOverlay, // Scav
         RLeg,
         LLeg,
         RFoot,

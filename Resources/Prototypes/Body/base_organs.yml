@@ -179,7 +179,6 @@
     markingData:
       layers:
       - LHand
-      - LHandOverlay # Scav: Things that go on top of hands
 
 - type: entity
   parent:
@@ -205,7 +204,6 @@
     markingData:
       layers:
       - RHand
-      - RHandOverlay # Scav: Things that go on top of hands
 
 - type: entity
   parent:
