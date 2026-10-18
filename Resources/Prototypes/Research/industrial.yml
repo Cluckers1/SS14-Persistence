@@ -242,21 +242,6 @@
   - EVAManufacturing
 
 # Tier 3
-
-- type: technology
-  id: BluespaceStorage
-  name: research-technology-bluespace-storage
-  icon:
-    sprite: Clothing/Back/Backpacks/holding.rsi
-    state: holding
-  discipline: Industrial
-  tier: 3
-  cost: 75000
-  recipeUnlocks:
-    ClothingBackpackHolding: 1
-    ClothingBackpackSatchelHolding: 1
-    ClothingBackpackDuffelHolding: 1
-
 - type: technology
   id: OptimizedMicrogalvanism
   name: research-technology-optimized-microgalvanism
