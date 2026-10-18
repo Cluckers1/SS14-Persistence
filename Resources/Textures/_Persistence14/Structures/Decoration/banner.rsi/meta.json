@@ -13,11 +13,14 @@
     {
       "name": "banner_wd"
     },
-	{
-	  "name": "banner_foe"
-	},
+	  {
+	    "name": "banner_foe"
+	  },
     {
       "name": "banner_preg"
+    },
+    {
+      "name": "banner_nexus"
     }
   ]
 }
