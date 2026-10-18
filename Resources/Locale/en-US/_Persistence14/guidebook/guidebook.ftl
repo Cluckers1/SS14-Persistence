@@ -33,6 +33,7 @@ guide-entry-achievements = Achievements
 guide-entry-grid-control = Grid Control
 guide-entry-access-control = Access Control
 guide-entry-threshold-medical = Persistence Medical
+guide-entry-threshold-botany = Persistence Botany
 # Persistence Medical #
 guide-entry-threshold-medicine-metabolism = Medicine & Metabolism
 guide-entry-threshold-topicals = Topicals
@@ -41,3 +42,7 @@ guide-entry-threshold-resuscitation = Resuscitation
 # Writing #
 
 guide-entry-text-colors = Text Colors
+
+# Botany #
+
+guide-entry-plant-nutrients = Plant nutrients
