@@ -30,7 +30,7 @@ public sealed partial class JobNetMenu : DefaultWindow
     public TimeSpan UntilNextPrec = TimeSpan.Zero;
     public TimeSpan UntilNextRumor = TimeSpan.Zero;
     public TimeSpan UntilNextReward = TimeSpan.Zero;
-    public SpriteSystem? _spriteSystem;
+    public SpriteSystem? SpriteSystem;
     public JobNetBoundUserInterface? Owner;
     public Action<string>? OnLabelButtonPressed;
     public JobNetMenu()
@@ -131,14 +131,14 @@ public sealed partial class JobNetMenu : DefaultWindow
 
         var codexCategories = _prototypeManager.EnumeratePrototypes<CodexCategoryPrototype>();
         Dictionary<ProtoId<CodexCategoryPrototype>, List<ProtoId<CodexEntryPrototype>>> sortedCodex = new();
-        foreach (var codexCategory in codexCategories.OrderBy(P => P.Order).ThenBy(p => p.Name).ToList())
+        foreach (var codexCategory in codexCategories.OrderBy(p => p.Order).ThenBy(p => p.Name).ToList())
         {
             sortedCodex[codexCategory.ID] = new();
         }
         var codexEntries = _prototypeManager.EnumeratePrototypes<CodexEntryPrototype>();
-        foreach (var codexEntry in codexEntries.OrderBy(P => P.Order).ThenBy(p => p.Name).ToList())
+        foreach (var codexEntry in codexEntries.OrderBy(p => p.Order).ThenBy(p => p.Name).ToList())
         {
-            if(sortedCodex.ContainsKey(codexEntry.Category))
+            if (sortedCodex.ContainsKey(codexEntry.Category))
             {
                 sortedCodex[codexEntry.Category].Add(codexEntry.ID);
             }
@@ -295,7 +295,6 @@ public sealed partial class JobNetMenu : DefaultWindow
                 }
             }
         }
-        
     }
 
 
@@ -333,7 +332,7 @@ public sealed partial class JobNetMenu : DefaultWindow
 
     public void RumorRewardPurchase(ProtoId<RumorRewardPrototype> rewardID, ProtoId<MetaFactionLevelPrototype> levelID, ProtoId<MetaFactionPrototype> factionID)
     {
-        if(Owner == null) return;
+        if (Owner == null) return;
         Owner.RumorRewardPurchase(rewardID, levelID, factionID);
     }
 }

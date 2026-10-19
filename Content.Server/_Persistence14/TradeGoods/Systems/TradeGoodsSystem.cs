@@ -53,14 +53,14 @@ public sealed partial class TradeGoodsSystem : EntitySystem
 
     private void OnTradeGoodGridChange(Entity<TradeGoodComponent> ent, ref GridUidChangedEvent args)
     {
-        if(args.NewGrid != null)
+        if (args.NewGrid != null)
         {
-            if(_tradeStationQuery.TryComp(args.NewGrid.Value, out var tradeStation))
+            if (_tradeStationQuery.TryComp(args.NewGrid.Value, out var tradeStation))
             {
                 RecountTradeGoods(args.NewGrid.Value, tradeStation);
             }
         }
-        if(args.OldGrid != null)
+        if (args.OldGrid != null)
         {
             if (_tradeStationQuery.TryComp(args.OldGrid.Value, out var tradeStation))
             {
@@ -75,7 +75,7 @@ public sealed partial class TradeGoodsSystem : EntitySystem
         comp.ExperiencePoints = 0;
         while (query.MoveNext(out var uid, out _))
         {
-            if(Transform(uid).GridUid == ent)
+            if (Transform(uid).GridUid == ent)
             {
                 comp.ExperiencePoints++;
             }
@@ -83,7 +83,7 @@ public sealed partial class TradeGoodsSystem : EntitySystem
         if (comp.ExperiencePoints < 5)
         {
             var station = _station.GetOwningStation(comp.Owner);
-            if(station != null && !initCount)
+            if (station != null && !initCount)
             {
                 _station.RemoveGridFromStation(station.Value, comp.Owner);
                 _station.AnnounceTradeStationRelease(comp);

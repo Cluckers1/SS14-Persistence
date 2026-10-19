@@ -23,7 +23,7 @@ public sealed class BotanyGuideDataSystem : SharedBotanyGuideDataSystem
     private static readonly ProtoId<MixingCategoryPrototype> DefaultMixingCategory = "DummyPlantOsmosis";
     private static readonly ProtoId<MixingCategoryPrototype> DefaultCondenseCategory = "DummyPlantRespiration";
 
-    private readonly Dictionary<string, List<PlantNutrientSourceData>> _PlantNutrientSources = new();
+    private readonly Dictionary<string, List<PlantNutrientSourceData>> _plantNutrientSources = new();
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -52,10 +52,10 @@ public sealed class BotanyGuideDataSystem : SharedBotanyGuideDataSystem
     private void OnPrototypesReloaded(PrototypesReloadedEventArgs? ev)
     {
         // this doesn't check what prototypes are being reloaded because, to be frank, we use a lot of them.
-        _PlantNutrientSources.Clear();
-        foreach (var PlantNutrient in PrototypeManager.EnumeratePrototypes<PlantNutrientPrototype>())
+        _plantNutrientSources.Clear();
+        foreach (var plantNutrient in PrototypeManager.EnumeratePrototypes<PlantNutrientPrototype>())
         {
-            _PlantNutrientSources.Add(PlantNutrient.ID, new());
+            _plantNutrientSources.Add(plantNutrient.ID, new());
         }
 
         foreach (var reagent in PrototypeManager.EnumeratePrototypes<ReagentPrototype>())
@@ -65,7 +65,7 @@ public sealed class BotanyGuideDataSystem : SharedBotanyGuideDataSystem
 
             foreach (var nutrient in nutrients)
             {
-                _PlantNutrientSources[nutrient].Add(data);
+                _plantNutrientSources[nutrient].Add(data);
             }
         }
 
@@ -77,13 +77,13 @@ public sealed class BotanyGuideDataSystem : SharedBotanyGuideDataSystem
             var data = new PlantNutrientGasSourceData(
                 new() { DefaultCondenseCategory },
                 gas);
-            _PlantNutrientSources[gas.Nutrient].Add(data);
+            _plantNutrientSources[gas.Nutrient].Add(data);
         }
     }
 
     public List<PlantNutrientSourceData> GetPlantNutrientSources(string id)
     {
-        return _PlantNutrientSources.GetValueOrDefault(id) ?? new List<PlantNutrientSourceData>();
+        return _plantNutrientSources.GetValueOrDefault(id) ?? new List<PlantNutrientSourceData>();
     }
 
     // Is handled on server and updated on client via PlantNutrientGuideRegistryChangedEvent
