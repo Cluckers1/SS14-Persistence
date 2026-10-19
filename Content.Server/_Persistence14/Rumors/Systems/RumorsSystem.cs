@@ -48,6 +48,7 @@ namespace Content.Shared._Persistence14.Rumors.Systems;
 
 public sealed partial class RumorsSystem : EntitySystem
 {
+    [Dependency] private EntityQuery<MobStateComponent> _mobStateQuery = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPrototypeManager _protoMan = default!;
     [Dependency] private CrewMetaRecordsSystem _crewMeta = default!;
@@ -74,6 +75,7 @@ public sealed partial class RumorsSystem : EntitySystem
     [Dependency] private IAfkManager _afkManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private ServerGlobalSoundSystem _globalsound = default!;
+    private List<(Entity<TransformComponent> Entity, EntityUid MapUid, Vector2 LocalPosition)> _detachEnts = new();
     public override void Initialize()
     {
         base.Initialize();
@@ -624,20 +626,40 @@ public sealed partial class RumorsSystem : EntitySystem
 
     private void SelfDeleteGrid(EntityUid uid)
     {
+        // Uhh yeah don't delete mobs or whatever
         var mobQuery = AllEntityQuery<MobStateComponent, TransformComponent>();
-        List<(Entity<TransformComponent> Entity, EntityUid MapUid, Vector2 LocalPosition)> detachEnts = new();
+        _detachEnts.Clear();
+
         while (mobQuery.MoveNext(out var mobUid, out _, out var xform))
         {
-            if (xform.GridUid == null || xform.GridUid != uid || xform.MapUid == null)
+            if (xform.GridUid == null || uid != xform.GridUid || xform.MapUid == null)
                 continue;
 
             if (_salvMobQuery.HasComp(mobUid))
                 continue;
-            detachEnts.Add(((mobUid, xform), xform.MapUid.Value, _transform.GetWorldPosition(xform)));
+
+            bool CheckParents(EntityUid uid)
+            {
+                do
+                {
+                    uid = _transform.GetParentUid(uid);
+                    if (_mobStateQuery.HasComp(uid))
+                        return true;
+                } while (uid != xform.GridUid && uid != EntityUid.Invalid);
+                return false;
+            }
+
+            if (CheckParents(mobUid))
+                continue;
+
+            // Can't parent directly to map as it runs grid traversal.
+            _detachEnts.Add(((mobUid, xform), xform.MapUid.Value, _transform.GetWorldPosition(xform)));
             _transform.DetachEntity(mobUid, xform);
         }
+
         QueueDel(uid);
-        foreach (var entity in detachEnts)
+
+        foreach (var entity in _detachEnts)
         {
             _transform.SetCoordinates(entity.Entity.Owner, new EntityCoordinates(entity.MapUid, entity.LocalPosition));
         }

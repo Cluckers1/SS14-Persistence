@@ -14,6 +14,7 @@ using Robust.Shared.Audio;
 using System.Linq;
 using Content.Shared.Cargo.Components;
 using Content.Server._Persistence14.Shuttles;
+using Robust.Shared.Player;
 
 namespace Content.Server.Cargo.Systems;
 
@@ -260,6 +261,18 @@ public sealed partial class CargoSystem
                     continue;
                 toSell.Add(ent);
                 goods.Add((ent, CompOrNull<OverrideSellComponent>(ent), price));
+            }
+            var query = _entityManager.EntityQueryEnumerator<ActorComponent>();
+            while(query.MoveNext(out var uid, out var comp))
+            {
+                var containers = _container.GetContainingContainers((uid, Transform(uid)));
+                foreach(var container in containers)
+                {
+                    if(toSell.Contains(container.Owner))
+                    {
+                        toSell.Remove(container.Owner);
+                    }
+                }
             }
         }
     }
