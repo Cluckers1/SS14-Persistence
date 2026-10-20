@@ -4,8 +4,9 @@
   parent: BaseStorageItem
   id: ConstructionBag
   name: construction bag
-  description: |-
-    A robust bag for construction specialists and engineers alike to carry large amounts of construction stuff.
+  description: A robust bag for construction specialists and engineers alike to carry large amounts of construction stuff.
+  components:
+  - type: MagnetPickup
   - type: Sprite
     sprite: _NF/Objects/Specific/Engineering/construction_bag.rsi
     layers:
