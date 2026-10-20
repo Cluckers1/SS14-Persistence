@@ -3,6 +3,7 @@ using Content.Shared.Cargo.Prototypes;
 using Content.Shared.Nutrition;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Robust.Shared.Utility;
 using System.Numerics;
 
@@ -33,7 +34,7 @@ public sealed partial class RumorPrototype : IPrototype
     public float SpawnDistance { get; set; } = 50f;
 
     [DataField]
-    public TimeSpan GridLifetime { get; set; } = TimeSpan.FromHours(1);
+    public TimeSpan GridLifetime { get; set; } = TimeSpan.FromHours(2);
     [DataField]
     public bool DespawnGrids { get; set; } = true;
     [DataField]
@@ -130,6 +131,10 @@ public partial class ActiveRumor
     public string OriginalOwner = "";
     [DataField]
     public bool Transfer = false;
+    [DataField]
+    public bool Cancelable = false;
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
+    public TimeSpan CancelTime = TimeSpan.Zero;
     public ActiveRumor(ProtoId<RumorPrototype> originalPrototype)
     {
         OriginalPrototype = originalPrototype;

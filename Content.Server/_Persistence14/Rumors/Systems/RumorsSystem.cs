@@ -585,6 +585,12 @@ public sealed partial class RumorsSystem : EntitySystem
             {
                 SelfDeleteGrid(uid);
             }
+            else if (_timing.CurTime > comp.AnnounceTime)
+            {
+                comp.AnnounceTime = _timing.CurTime + comp.AnnounceTime;
+                SelfDeleteGridAnnounce(uid, comp);
+            }
+
         }
         var query = EntityQueryEnumerator<RumorGetterComponent>();
         while (query.MoveNext(out var uid, out var comp))
@@ -595,6 +601,13 @@ public sealed partial class RumorsSystem : EntitySystem
             if (player == null) continue;
             foreach (var rumor in comp.Rumors.ShallowClone())
             {
+                if(rumor.Cancelable)
+                {
+                    if(rumor.CancelTime < _timing.CurTime)
+                    {
+                        FailRumor(uid, comp, rumor);
+                    }
+                }
                 if (rumor.DebugComplete)
                 {
                     CompleteRumor((uid, comp), player.Value, rumor);
@@ -622,6 +635,30 @@ public sealed partial class RumorsSystem : EntitySystem
             }
         }
         base.Update(frameTime);
+    }
+
+    private void SelfDeleteGridAnnounce(EntityUid uid, GridSelfDeleteComponent comp)
+    {
+        var sound = new SoundPathSpecifier("/Audio/Misc/notice2.ogg");
+        var actorQuery = AllEntityQuery<ActorComponent>();
+        var timeleft = comp.DeleteTime - _timing.CurTime;
+        while(actorQuery.MoveNext(out var actorUid, out _))
+        {
+            if (Transform(actorUid).GridUid == uid)
+            {
+                NotifyPlayer(actorUid, $"This grid is temporary and will despawn in {timeleft.ToString("hh\\:mm\\:ss")}.", sound);
+            }
+        }
+    }
+
+    private void FailRumor(EntityUid uid, RumorGetterComponent comp, ActiveRumor rumor)
+    {
+        comp.Rumors.Remove(rumor);
+        EntityUid? player = null;
+        var implant = Transform(uid);
+        player = implant.ParentUid;
+        NotifyPlayer(player.Value, $"The rumor {rumor.Name} has expired.");
+        _jobnet.UpdateUserInterface(player, uid);
     }
 
     private void SelfDeleteGrid(EntityUid uid)
@@ -991,7 +1028,11 @@ public sealed partial class RumorsSystem : EntitySystem
             return;
 
         mapChildren = salvMapXform.ChildEnumerator;
-
+        if (originalProto.DespawnGrids)
+        {
+            rumor.Cancelable = true;
+            rumor.CancelTime = originalProto.GridLifetime + _timing.CurTime;
+        }
         // It worked, move it into position and cleanup values.
         while (mapChildren.MoveNext(out var mapChild))
         {
@@ -1004,6 +1045,8 @@ public sealed partial class RumorsSystem : EntitySystem
             {
                 var comp = EnsureComp<GridSelfDeleteComponent>(mapChild);
                 comp.DeleteTime = originalProto.GridLifetime + _timing.CurTime;
+                rumor.Cancelable = true;
+                rumor.CancelTime = comp.DeleteTime;
             }
             var salvXForm = Transform(mapChild);
             var localPos = salvXForm.LocalPosition;
