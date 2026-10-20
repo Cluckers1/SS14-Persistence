@@ -450,6 +450,7 @@
 - type: construction
   parent: BaseWindow
   id: WindowDirectional
+  canRotate: true
   graph: WindowDirectional
   targetNode: windowDirectional
   category: construction-category-structures

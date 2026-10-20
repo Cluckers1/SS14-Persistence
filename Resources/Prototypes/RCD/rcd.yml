@@ -116,6 +116,7 @@
 
 - type: rcd
   id: WindowDirectional
+  canRotate: true
   category: WindowsAndGrilles
   sprite: /Textures/Interface/Radial/RCD/directional.png
   mode: ConstructObject
