@@ -7,6 +7,7 @@ using Content.Shared.Botany.Traits.Components;
 using Content.Shared.Examine;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes; // Persistence
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.Botany.Systems;
@@ -22,6 +23,7 @@ public sealed partial class PlantSystem : EntitySystem
     [Dependency] private PlantHolderSystem _plantHolder = default!;
     [Dependency] private PlantRequirementsSystem _plantRequirements = default!; // Persistence
     [Dependency] private IPrototypeManager _prototypeManager = default!; // Persistence
+    [Dependency] private IRobustRandom _random = default!;
 
     [Dependency] private EntityQuery<PlantHolderComponent> _holderQuery;
     [Dependency] private EntityQuery<PlantTrayComponent> _trayQuery;
@@ -77,6 +79,16 @@ public sealed partial class PlantSystem : EntitySystem
         _mutation.CrossFloat(ref ent.Comp.Production, pollenData.Production);
         //_mutation.CrossFloat(ref ent.Comp.Potency, pollenData.Potency); // Persistence: Remove potency
         _mutation.CrossTrait(ent.Owner, args.PollenData);
+
+        // Hybrids have a high chance of being seedless. Balances very
+        // effective hybrid crossings.
+        if (args.PollenProtoId != null
+            && args.PollenProtoId != MetaData(ent).EntityPrototype?.ID
+            && _random.Prob(0.7f))
+        {
+            EnsureComp<PlantTraitSeedlessComponent>(ent);
+        }
+
         Dirty(ent);
     }
 
