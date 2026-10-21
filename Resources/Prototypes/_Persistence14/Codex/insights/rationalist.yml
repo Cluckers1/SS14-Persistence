@@ -1,14 +1,14 @@
 - type: insightTrait
   id: AnomalySense
-  name: insight-rationalist-anomaly-sense-name
-  content: insight-rationalist-anomaly-sense-desc
+  name: insight-ration-1-name
+  content: insight-ration-1-desc
   next: ArtifactReroll
   trait: AnomalySense
 
 - type: trait
   id: AnomalySense
-  name: insight-rationalist-anomaly-sense-name
-  description: insight-rationalist-anomaly-sense-desc
+  name: insight-ration-1-name
+  description: insight-ration-1-desc
   selectable: false
   components:
     - type: ActionGrant
@@ -33,15 +33,15 @@
 
 - type: insightTrait
   id: ArtifactReroll
-  name: insight-rationalist-reroll-node-name
-  content: insight-rationalist-reroll-node-desc
+  name: insight-ration-2-name
+  content: insight-ration-2-desc
   trait: ArtifactReroll
   next: Rationalist3
 
 - type: trait
   id: ArtifactReroll
-  name: insight-rationalist-reroll-node-name
-  description: insight-rationalist-reroll-node-desc
+  name: insight-ration-2-name
+  description: insight-ration-3-name
   selectable: false
   components:
     - type: ActionGrant
@@ -66,13 +66,13 @@
 
 - type: insightTrait
   id: Rationalist3
-  name: Anomaly Generator
-  content: Once per day you can generate an anomaly of your choosing.
+  name: insight-ration-3-name
+  content: insight-ration-3-desc
   next: Rationalist4
   trait: AnomalySense
 
 - type: insightTrait
   id: Rationalist4
-  name: Upgrade Overclocker
-  content: Once per day you can apply one upgrade past the limit on an item or machine.
+  name: insight-ration-4-name
+  content: insight-ration-4-desc
   trait: AnomalySense
