@@ -791,7 +791,7 @@ public sealed partial class RumorsSystem : EntitySystem
         var currentPos = Transform(player).MapPosition;
         if (targetPos == null) return;
         var dist = Vector2.Distance(targetPos.Value.Position, currentPos.Position);
-        if (currentPos.MapId == targetPos.Value.MapId && dist <= 500)
+        if (currentPos.MapId == targetPos.Value.MapId && dist <= 800)
         {
             NotifyPlayer(player, $"The grids from the {rumor.Name} rumor have appeared nearby!");
             SpawnEventGrids(rumor, player);
