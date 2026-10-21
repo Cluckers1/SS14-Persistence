@@ -345,8 +345,10 @@ public sealed partial class PlantTraySystem : EntitySystem
         if (GetWaterThreshold(ent))
             markup.Add(Loc.GetString("tray-component-water-low-warning"));
 
+        /* Persistence
         if (GetNutrientThreshold(ent))
             markup.Add(Loc.GetString("tray-component-nutrient-low-warning"));
+            */
 
         if (GetToxinThreshold(ent))
             markup.Add(Loc.GetString("tray-component-toxin-high-level-warning"));
@@ -357,6 +359,9 @@ public sealed partial class PlantTraySystem : EntitySystem
         if (ent.Comp.DrawWarnings && TryGetPlant(ent, out var plantUid)
             && _holderQuery.TryComp(plantUid.Value, out var holder))
         {
+            if (holder.MissingNutrients) // Persistence
+                markup.Add(Loc.GetString("tray-component-nutrient-low-warning"));
+
             if (holder.ImproperHeat)
                 markup.Add(Loc.GetString("tray-component-plant-improper-heat-warning"));
 

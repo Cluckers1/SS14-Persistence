@@ -41,6 +41,8 @@ public sealed partial class PlantHarvestSystem : EntitySystem
 
         TryAutoHarvest((ent, harvest), ent.Owner);
 
+        ent.Comp.MissingNutrients = false; // Persistence. This may need to be changed when gas nutrient requirements are implemented.
+
         // Update whether the plant is ready for harvest.
         var timeLastHarvest = ent.Comp.Age - ent.Comp.LastHarvest;
         if (timeLastHarvest > plant.Production && !ent.Comp.ReadyForHarvest)
@@ -52,6 +54,7 @@ public sealed partial class PlantHarvestSystem : EntitySystem
             else
             {
                 _plantHolder.AdjustsHealth(ent.AsNullable(), 2); // Magic number based off of low nutrient damage in upstream botany, which is a random int between 1 and 3. TODO: Maybe not use magic number?
+                ent.Comp.MissingNutrients = true;
             }
         }
 
