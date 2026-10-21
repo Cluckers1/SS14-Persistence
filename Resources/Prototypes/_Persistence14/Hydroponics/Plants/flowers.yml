@@ -124,4 +124,3 @@
   - type: PlantAtmospheric
     lowHeatTolerance: 1363 # Based off of the wikipedia article for glass blowing
     highHeatTolerance: 1823
-    heatToleranceDamage: 0.05 # 1/40 the usual amount, to prevent it from instantly dying at room temp.

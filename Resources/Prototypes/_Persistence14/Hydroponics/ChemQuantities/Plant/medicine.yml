@@ -43,7 +43,6 @@
   pressureToleranceModifier:
     low: -101 # Survives space pressure
     high: -101 # Does not survive normal pressure
-    damage: 0.2 # Plant does not instantly die once mutated.
 
 - type: plantChemQuantity
   id: Stellibinin
