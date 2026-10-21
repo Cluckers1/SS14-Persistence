@@ -391,6 +391,7 @@ public sealed partial class RumorsSystem : EntitySystem
                                 if (sisterBattery.LastCharge < sisterBattery.MaxCharge)
                                 {
                                     pass = false;
+                                    break;
                                 }
 
                             }
@@ -625,7 +626,7 @@ public sealed partial class RumorsSystem : EntitySystem
             }
             else if (_timing.CurTime > comp.AnnounceTime)
             {
-                comp.AnnounceTime = _timing.CurTime + comp.AnnounceTime;
+                comp.AnnounceTime = _timing.CurTime + comp.AnnounceCooldown;
                 SelfDeleteGridAnnounce(uid, comp);
             }
 

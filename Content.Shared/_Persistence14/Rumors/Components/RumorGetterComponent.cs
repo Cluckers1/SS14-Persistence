@@ -19,9 +19,9 @@ public sealed partial class RumorGetterComponent : Component
     public TimeSpan RewardCooldownLength = TimeSpan.FromMinutes(120);
 
     [DataField]
-    public TimeSpan NextRumor = TimeSpan.FromMinutes(60);
+    public TimeSpan NextRumor = TimeSpan.FromMinutes(90);
     [DataField]
-    public TimeSpan RumorCooldownLength = TimeSpan.FromMinutes(60);
+    public TimeSpan RumorCooldownLength = TimeSpan.FromMinutes(90);
     [DataField]
     public Dictionary<ProtoId<MetaFactionPrototype>, Dictionary<ProtoId<MetaFactionLevelPrototype>, List<ActiveRumorReward>>> RumorRewards = new();
     public SoundSpecifier NewRumorSound = new SoundPathSpecifier("/Audio/Effects/RingtoneNotes/b.ogg");

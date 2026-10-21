@@ -47,6 +47,10 @@ public sealed partial class RumorBoxFragment : PanelContainer
             ReqLabel.Text = $"{targets} crew need to be saved.";
             Requirements.Visible = true;
         }
+        if (activeRumor.CompletionType == CompletionType.ArtifactNodesUnlock && !activeRumor.ShouldSpawn)
+        {
+            ReqLabel.Text = $"{originalProto.CompletionTarget} nodes left to unlock.";
+        }
         if(activeRumor.Cancelable)
         {
             _cancelTime = activeRumor.CancelTime - _timing.CurTime;

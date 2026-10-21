@@ -550,7 +550,7 @@ namespace Content.Server.Ghost
         {
             if (!Resolve(mindId, ref mind))
                 return false;
-
+            return false;
             var playerEntity = mind.CurrentEntity;
 
             if (playerEntity != null && viaCommand)
