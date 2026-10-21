@@ -110,4 +110,11 @@ public sealed partial class PlantHolderComponent : Component
     [DataField, AutoNetworkedField]
     [Access(Other = AccessPermissions.ReadWriteExecute)]
     public bool MissingGas;
+
+    /// <summary>
+    /// Persistence: True if the plant is losing health due to lack of nutrients.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    [Access(Other = AccessPermissions.ReadWriteExecute)]
+    public bool MissingNutrients;
 }

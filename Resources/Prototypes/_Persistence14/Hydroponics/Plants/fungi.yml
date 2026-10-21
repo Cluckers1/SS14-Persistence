@@ -52,7 +52,6 @@
   - type: PlantAtmospheric
     lowHeatTolerance: 253 # ~-20°C
     highHeatTolerance: 573 # ~300°C
-    heatToleranceDamage: 0.5 # 1/4 the usual amount.
   - type: PlantTraitLigneous
 
 - type: entity
