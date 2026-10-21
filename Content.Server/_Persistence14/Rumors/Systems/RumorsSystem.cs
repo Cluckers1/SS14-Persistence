@@ -30,6 +30,8 @@ using Content.Shared.Power;
 using Content.Shared.Power.Components;
 using Content.Shared.Prayer;
 using Content.Shared.Station.Components;
+using Content.Shared.Xenoarchaeology.Artifact;
+using Content.Shared.Xenoarchaeology.Artifact.Components;
 using Robust.Server.Player;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -44,7 +46,9 @@ using Robust.Shared.Utility;
 using System.Linq;
 using System.Numerics;
 
+#pragma warning disable IDE1006 // Naming Styles
 namespace Content.Shared._Persistence14.Rumors.Systems;
+#pragma warning restore IDE1006 // Naming Styles
 
 public sealed partial class RumorsSystem : EntitySystem
 {
@@ -61,6 +65,7 @@ public sealed partial class RumorsSystem : EntitySystem
     [Dependency] private EntityQuery<SalvageMobRestrictionsComponent> _salvMobQuery = default!;
     [Dependency] private EntityQuery<RumorHealingTargetComponent> _healingTargetQuery = default!;
     [Dependency] private EntityQuery<RumorPowerTargetComponent> _powerTargetQuery = default!;
+    [Dependency] private EntityQuery<XenoArtifactComponent> _artifactQuery = default!;
     [Dependency] private IChatManager _chatManager = default!;
     [Dependency] private ChatSystem _chatSystem = default!;
     [Dependency] private MetaDataSystem _meta = default!;
@@ -88,6 +93,39 @@ public sealed partial class RumorsSystem : EntitySystem
         SubscribeLocalEvent<RumorPowerTargetComponent, ChargeChangedEvent>(OnBatteryChargeChanged);
         SubscribeLocalEvent<EdibleComponent, IngestedRumorEvent>(OnEdibleIngested);
         SubscribeLocalEvent<PrayableComponent, PrayedEvent>(OnPrayed);
+        SubscribeLocalEvent<RumorArtifactNodeUnlockTargetComponent, ArtifactUnlockingFinishedEvent>(OnArtifactNodeUnlock);
+    }
+
+    private void OnArtifactNodeUnlock(Entity<RumorArtifactNodeUnlockTargetComponent> ent, ref ArtifactUnlockingFinishedEvent args)
+    {
+        if (!args.Success) return;
+        if (!TryComp<PersistentIdentifierComponent>(ent, out var pid) || pid == null) return;
+        _pid.TryGetId((ent, pid), out var pID);
+        if (pID == null) return;
+        var query = EntityQueryEnumerator<RumorGetterComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            foreach (var rumor in comp.Rumors.ShallowClone())
+            {
+                if (rumor.CompletionType == CompletionType.ArtifactNodesUnlock)
+                {
+                    if (rumor.Targets.Contains(pID))
+                    {
+                        rumor.CompletionProgress++;
+                        var rumorProto = _protoMan.Index(rumor.OriginalPrototype);
+                        if (rumor.CompletionProgress >= rumorProto.CompletionTarget)
+                        {
+                            EntityUid? player = null;
+                            var implant = Transform(uid);
+                            player = implant.ParentUid;
+                            if (player == null) return;
+                            CompleteRumor((uid, comp), player.Value, rumor);
+                        }
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     private void GenerateRumorRewards(Entity<RumorGetterComponent> ent)
@@ -310,9 +348,9 @@ public sealed partial class RumorsSystem : EntitySystem
             }
             if (passed)
             {
-                rumor.CurrentConsumption += args.Split.Volume.Int();
+                rumor.CompletionProgress += args.Split.Volume.Int();
                 var originalProto = _protoMan.Index<RumorPrototype>(rumor.OriginalPrototype);
-                if (rumor.CurrentConsumption >= originalProto.ConsumptionTarget)
+                if (rumor.CompletionProgress >= originalProto.CompletionTarget)
                 {
                     CompleteRumor(getter.Value, args.Target, rumor);
                 }
@@ -601,9 +639,9 @@ public sealed partial class RumorsSystem : EntitySystem
             if (player == null) continue;
             foreach (var rumor in comp.Rumors.ShallowClone())
             {
-                if(rumor.Cancelable)
+                if (rumor.Cancelable)
                 {
-                    if(rumor.CancelTime < _timing.CurTime)
+                    if (rumor.CancelTime < _timing.CurTime)
                     {
                         FailRumor(uid, comp, rumor);
                     }
@@ -642,7 +680,7 @@ public sealed partial class RumorsSystem : EntitySystem
         var sound = new SoundPathSpecifier("/Audio/Misc/notice2.ogg");
         var actorQuery = AllEntityQuery<ActorComponent>();
         var timeleft = comp.DeleteTime - _timing.CurTime;
-        while(actorQuery.MoveNext(out var actorUid, out _))
+        while (actorQuery.MoveNext(out var actorUid, out _))
         {
             if (Transform(actorUid).GridUid == uid)
             {
@@ -920,6 +958,10 @@ public sealed partial class RumorsSystem : EntitySystem
             if (!_pid.TryResolveId(active.TargetStation, out var targetStation)) return rumor.Description;
             addon += $"\nRevive and heal the crew on the grids and bring them to {Name(targetStation)}.";
         }
+        if (rumor.CompletionType == CompletionType.ArtifactNodesUnlock)
+        {
+            addon += $"\nFind xeno-artifacts on the grids and unlock at least {rumor.CompletionTarget} nodes from them.";
+        }
         if (rumor.CompletionType == CompletionType.Eat || rumor.CompletionType == CompletionType.Drink)
         {
             if (active.Targets.Count < 1) return rumor.Description;
@@ -1079,6 +1121,13 @@ public sealed partial class RumorsSystem : EntitySystem
                 {
                     if (!_healingTargetQuery.TryGetComponent(child, out _))
                         continue;
+                    rumor.Targets.Add(_pid.EnsureId(child));
+                }
+                if (rumor.CompletionType == CompletionType.ArtifactNodesUnlock)
+                {
+                    if (!_artifactQuery.TryGetComponent(child, out _))
+                        continue;
+                    EnsureComp<RumorArtifactNodeUnlockTargetComponent>(child);
                     rumor.Targets.Add(_pid.EnsureId(child));
                 }
 

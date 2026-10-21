@@ -34,7 +34,8 @@
     - BountyBasicGeneral
     - BountyBasicScience
     - PowerLuminal
-  consumptionTarget: 30
+    - ArtifactNodeBasic
+  completionTarget: 25
 
 - type: rumor
   id: DrinkBasicEvil
@@ -64,4 +65,4 @@
     - RescuePrecursor
     - PowerPrecursor
     - RescueShadow
-  consumptionTarget: 30
+  completionTarget: 25

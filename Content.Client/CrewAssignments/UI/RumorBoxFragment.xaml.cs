@@ -35,8 +35,8 @@ public sealed partial class RumorBoxFragment : PanelContainer
         var originalProto = _protoManager.Index<RumorPrototype>(activeRumor.OriginalPrototype);
         if (activeRumor.CompletionType == CompletionType.Eat || activeRumor.CompletionType == CompletionType.Drink)
         {
-            var requirement = originalProto.ConsumptionTarget;
-            var current = activeRumor.CurrentConsumption;
+            var requirement = originalProto.CompletionTarget;
+            var current = activeRumor.CompletionProgress;
             ReqLabel.Text = $"{current}/{requirement} units consumed.";
             Requirements.Visible = true;
 

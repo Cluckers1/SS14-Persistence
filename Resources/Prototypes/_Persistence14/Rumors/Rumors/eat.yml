@@ -19,7 +19,7 @@
     - BountyBasicGeneral
     - BountyBasicScience
     - PowerLuminal
-
+    - ArtifactNodeBasic
 
 - type: rumor
   id: EatBasicEvil

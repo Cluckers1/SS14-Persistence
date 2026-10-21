@@ -52,7 +52,7 @@ public sealed partial class RumorPrototype : IPrototype
     [DataField]
     public int FlavorsToPick = 1;
     [DataField]
-    public int ConsumptionTarget = 40;
+    public int CompletionTarget = 30;
     [DataField]
     public List<ProtoId<RumorPrototype>> PossibleFollowups = new();
     [DataField]
@@ -71,7 +71,8 @@ public enum CompletionType
     Bounty,
     Eat,
     Drink,
-    Pray
+    Pray,
+    ArtifactNodesUnlock
 
 }
 
@@ -85,22 +86,16 @@ public partial class ActiveRumor
     public string Name = "Unnamed Rumor";
     [DataField]
     public string Description = "No description provided.";
-
     [DataField]
     public MapCoordinates? TargetPosition;
-
     [DataField]
     public bool ShouldSpawn = false;
-
     [DataField]
     public CompletionType CompletionType = CompletionType.Discover;
-
     [DataField]
     public ProtoId<MetaFactionPrototype> Faction = "Zenith";
-
     [DataField]
     public List<ResPath> EventGrids { get; set; } = new List<ResPath>();
-
     [DataField]
     public int GridsToSpawn { get; set; } = 1;
     [DataField]
@@ -111,18 +106,14 @@ public partial class ActiveRumor
     public int CashReward { get; set; } = 2500;
     [DataField]
     public int ReputationReward { get; set; } = 50;
-
     [DataField]
     public CargoBountyData? Bounty = null;
-
     [DataField]
     public List<ProtoId<FlavorPrototype>> TargetFlavors = new();
     [DataField]
-    public int CurrentConsumption = 0;
-
+    public int CompletionProgress = 0;
     [DataField]
     public ProtoId<RumorPrototype> OriginalPrototype;
-
     [DataField]
     public bool DebugComplete = false;
     [DataField]
