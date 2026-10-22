@@ -90,7 +90,7 @@ namespace Content.Server.Kitchen.ButcheringMachine
                 foreach (var item in reclaimer.SpawnedEntities)
                 {
                     var number = item.Amount;
-                    for (int i = 0; i < item.Amount + 1; i++)
+                    for (int i = 0; i < item.Amount * 2; i++)
                     {
                         number--;
                         var thrown = Spawn(item.PrototypeId, Transform(uid).Coordinates);
