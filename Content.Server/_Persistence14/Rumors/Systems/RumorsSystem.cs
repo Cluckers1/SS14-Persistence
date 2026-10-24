@@ -346,6 +346,25 @@ public sealed partial class RumorsSystem : EntitySystem
                 }
                 if (!found) passed = false;
             }
+            foreach (var flavorGroup in rumor.TargetFlavorGroups)
+            {
+                var found = false;
+                foreach (var flavor in flavorGroup)
+                {
+                    foreach (var secondFlavor in flavors)
+                    {
+                        if (secondFlavor.Id == flavor.Id)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (found) break;
+                }
+
+                if (!found) passed = false;
+            }
             if (passed)
             {
                 rumor.CompletionProgress += args.Split.Volume.Int();
@@ -910,7 +929,11 @@ public sealed partial class RumorsSystem : EntitySystem
         }
         if (rumorProto.CompletionType == CompletionType.Eat || rumorProto.CompletionType == CompletionType.Drink)
         {
-            final.TargetFlavors.AddRange(_random.GetItems(rumorProto.PossibleFlavors, rumorProto.FlavorsToPick));
+            var possibleFlavorGroups = rumorProto.PossibleFlavors
+                .Select(flavor => new List<ProtoId<FlavorPrototype>> { flavor })
+                .Concat(rumorProto.PossibleFlavorGroups)
+                .ToList();
+            final.TargetFlavorGroups.AddRange(_random.GetItems(possibleFlavorGroups, rumorProto.FlavorsToPick));
             var serviceQuery = EntityQueryEnumerator<RumorServiceStationComponent>();
             List<EntityUid> possibleService = new();
             while (serviceQuery.MoveNext(out var uid, out var comp))
@@ -975,16 +998,20 @@ public sealed partial class RumorsSystem : EntitySystem
                 addon += $"\nDrink something that tastes";
             }
 
-            bool first = true;
+            var targetFlavors = new List<string>();
             foreach (var flavor in active.TargetFlavors)
             {
                 var flavorProto = _protoMan.Index<FlavorPrototype>(flavor);
-                addon += $" {Loc.GetString(flavorProto.FlavorDescription)}";
-                if (!first)
-                {
-                    addon += ",";
-                }
+                targetFlavors.Add(Loc.GetString(flavorProto.FlavorDescription));
             }
+            foreach (var flavorGroup in active.TargetFlavorGroups)
+            {
+                var alternatives = flavorGroup
+                    .Select(flavor => Loc.GetString(_protoMan.Index<FlavorPrototype>(flavor).FlavorDescription))
+                    .ToList();
+                targetFlavors.Add(string.Join(" or ", alternatives));
+            }
+            addon += $" {string.Join(" and ", targetFlavors)}";
             if (!_pid.TryResolveId(active.Targets[0], out var targetStation)) return rumor.Description;
             addon += $" while onboard {Name(targetStation)}";
         }
@@ -1275,5 +1302,3 @@ public sealed partial class RumorsSystem : EntitySystem
         }
     }
 }
-
-
