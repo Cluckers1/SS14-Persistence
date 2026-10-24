@@ -51,6 +51,9 @@ public sealed partial class RumorPrototype : IPrototype
     public List<ProtoId<FlavorPrototype>> PossibleFlavors = new();
 
     [DataField]
+    public List<List<ProtoId<FlavorPrototype>>> PossibleFlavorGroups = new();
+
+    [DataField]
     public int FlavorsToPick = 1;
     [DataField]
     public int CompletionTarget = 30;
@@ -115,6 +118,8 @@ public partial class ActiveRumor
     public CargoBountyData? Bounty = null;
     [DataField]
     public List<ProtoId<FlavorPrototype>> TargetFlavors = new();
+    [DataField]
+    public List<List<ProtoId<FlavorPrototype>>> TargetFlavorGroups = new();
     [DataField]
     public int CompletionProgress = 0;
     [DataField]

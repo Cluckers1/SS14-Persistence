@@ -7,25 +7,31 @@
   completionType: Drink
   possibleFlavors:
     - energydrink
-    - drgibb
-    - gingersoda
-    - coffee
-    - tea
     - water
-    - icedtea
     - milk
-    - rootbeersoda
-    - beer
-    - mead
-    - cognac
-    - vermouth
-    - ale
-    - vodka
-    - tequila
-    - sake
-    - rum
-    - shittywine
-    - gin
+  possibleFlavorGroups:
+    -
+      - beer
+      - mead
+      - ale
+    -
+      - drgibb
+      - gingersoda
+      - rootbeersoda
+    -
+      - coffee
+      - tea
+      - icedtea
+    -
+      - cognac
+      - vodka
+      - tequila
+      - rum
+      - gin
+    -
+      - vermouth
+      - shittywine
+      - sake
   rewardRumors: 1
   possibleFollowups:
     - ExterminateGeneral
@@ -44,18 +50,21 @@
   cashReward: 0
   reputationReward: 10
   completionType: Drink
-  possibleFlavors:
-    - beer
-    - mead
-    - cognac
-    - vermouth
-    - ale
-    - vodka
-    - tequila
-    - sake
-    - rum
-    - shittywine
-    - gin
+  possibleFlavorGroups:
+    -
+      - beer
+      - mead
+      - ale
+    -
+      - cognac
+      - vodka
+      - tequila
+      - rum
+      - gin
+    -
+      - vermouth
+      - shittywine
+      - sake
   rewardRumors: 1
   possibleFollowups:
     - DiscoverSmallCriminal
