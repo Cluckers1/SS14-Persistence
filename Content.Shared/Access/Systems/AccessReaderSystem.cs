@@ -1,5 +1,4 @@
 using Content.Shared.Access.Components;
-using Content.Shared.Construction.Components;
 using Content.Shared.CrewAccesses.Components;
 using Content.Shared.CrewAssignments.Components;
 using Content.Shared.CrewRecords.Components;
@@ -17,8 +16,6 @@ using Content.Shared.PDA;
 using Content.Shared.Station;
 using Content.Shared.Station.Components;
 using Content.Shared.StationRecords;
-using Content.Shared.StationRecords.Components;
-using Content.Shared.StationRecords.Systems;
 using Content.Shared.Tag;
 using Robust.Shared.Collections;
 using Robust.Shared.Containers;
@@ -32,26 +29,23 @@ using System.Text;
 
 namespace Content.Shared.Access.Systems;
 
-public sealed partial class AccessReaderSystem : EntitySystem
+public sealed class AccessReaderSystem : EntitySystem
 {
-    [Dependency] private InventorySystem _inventorySystem = default!;
-    [Dependency] private IGameTiming _gameTiming = default!;
-    [Dependency] private EmagSystem _emag = default!;
-    [Dependency] private TagSystem _tag = default!;
-    [Dependency] private SharedGameTicker _gameTicker = default!;
-    [Dependency] private SharedHandsSystem _handsSystem = default!;
-    [Dependency] private SharedContainerSystem _containerSystem = default!;
-    [Dependency] private SharedStationSystem _station = default!;
-    [Dependency] private StationRecordsSystem _recordsSystem = default!;
-    [Dependency] private IdentitySystem _identity = default!;
-
+    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private readonly InventorySystem _inventorySystem = default!;
+    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private readonly EmagSystem _emag = default!;
+    [Dependency] private readonly SharedGameTicker _gameTicker = default!;
+    [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
+    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
+    [Dependency] private readonly SharedStationRecordsSystem _recordsSystem = default!;
+    [Dependency] private readonly SharedStationSystem _station = default!;
     private static readonly ProtoId<TagPrototype> PreventAccessLoggingTag = "PreventAccessLogging";
 
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<AccessReaderComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<AccessReaderComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<AccessReaderComponent, GotEmaggedEvent>(OnEmagged);
         SubscribeLocalEvent<AccessReaderComponent, LinkAttemptEvent>(OnLinkAttempt);
@@ -61,19 +55,8 @@ public sealed partial class AccessReaderSystem : EntitySystem
         SubscribeLocalEvent<AccessReaderComponent, SetupAccessList>(OnSetupAccessList);
         SubscribeLocalEvent<AccessReaderComponent, ComponentGetState>(OnGetState);
         SubscribeLocalEvent<AccessReaderComponent, ComponentHandleState>(OnHandleState);
-        SubscribeLocalEvent<AccessReaderComponent, UnanchorAttemptEvent>(OnUnanchorAttempt);
 
         Subs.SubscribeWithRelay<ShowAccessReaderSettingsComponent, ShowAccessReaderSettingsEvent>(OnAccessRead); // Moffstation
-    }
-
-    private void OnUnanchorAttempt(Entity<AccessReaderComponent> ent, ref UnanchorAttemptEvent args)
-    {
-        if (!ent.Comp.BlockUnanchor) return;
-        if (!IsAllowed(args.User, ent, ent.Comp))
-        {
-            args.FailMessage = "The access reader prevent you from unanchoring this; Access Denied.";
-            args.Cancel();
-        }
     }
 
     // Moffstation - Begin - Access reader by event
@@ -632,15 +615,16 @@ public sealed partial class AccessReaderSystem : EntitySystem
 
         return (ICollection<ProtoId<AccessLevelPrototype>>?)tags ?? Array.Empty<ProtoId<AccessLevelPrototype>>();
     }
-    public ICollection<int> FindAccessTagsPersistent(EntityUid targetUID, EntityUid owningStationUID)
+    public ICollection<int> FindAccessTagsAssignments(EntityUid targetUID, EntityUid owningStationUID)
     {
         HashSet<EntityUid>? items = null;
-        HashSet<int>? tags = null;
+        HashSet<int>? ids = null;
+        var owned = false;
 
         //owning person redundant for now but couldnt find an altentive function and maybe it could possible be used with personalacces
         _station.GetOwning(owningStationUID, out var station, out var owningPerson);
-        if (!TryComp<CrewAssignmentsComponent>(owningStationUID, out var crewAssignments)) return (ICollection<int>?)tags ?? Array.Empty<int>();
-        if (!TryComp<CrewRecordsComponent>(owningStationUID, out var crewRecords)) return (ICollection<int>?)tags ?? Array.Empty<int>();
+        if (!TryComp<CrewAssignmentsComponent>(owningStationUID, out var crewAssignments)) return (ICollection<int>?)ids ?? Array.Empty<int>();
+        if (!TryComp<CrewRecordsComponent>(owningStationUID, out var crewRecords)) return (ICollection<int>?)ids ?? Array.Empty<int>();
 
         items ??= FindPotentialAccessItems(targetUID);
 
@@ -651,8 +635,8 @@ public sealed partial class AccessReaderSystem : EntitySystem
                 if (!crewRecords.TryGetRecord(idComp.FullName ?? "", out var record) || record == null) continue;
                 if (crewAssignments.TryGetAssignment(record.AssignmentID, out var assignment) && assignment != null)
                 {
-                    if (tags == null) tags = new HashSet<int>();
-                    tags.Add(record.AssignmentID);
+                    if (ids == null) ids = new HashSet<int>();
+                    ids.Add(record.AssignmentID);
                 }
             }
             else if (TryComp<PdaComponent>(ent, out var pdaComp))
@@ -664,16 +648,15 @@ public sealed partial class AccessReaderSystem : EntitySystem
                         if (!crewRecords.TryGetRecord(idComp2.FullName ?? "", out var record) || record == null) continue;
                         if (crewAssignments.TryGetAssignment(record.AssignmentID, out var assignment) && assignment != null)
                         {
-                            if (tags == null) tags = new HashSet<int>();
-                            tags.Add(record.AssignmentID);
+                            if (ids == null) ids = new HashSet<int>();
+                            ids.Add(record.AssignmentID);
                         }
                     }
                 }
             }
-            //FindAccessTagsItem(ent, ref tags, ref owned);
         }
 
-        return (ICollection<int>?)tags ?? Array.Empty<int>();
+        return (ICollection<int>?)ids ?? Array.Empty<int>();
     }
 
     public string GetAssignmentNameFromId(EntityUid entityUID, int assignmentId)
@@ -688,6 +671,42 @@ public sealed partial class AccessReaderSystem : EntitySystem
         assignmentName = assignment.Name;
 
         return assignmentName;
+    }
+
+    public ICollection<string> FindAccessTagsNames(EntityUid targetUID)
+    {
+        HashSet<EntityUid>? items = null;
+        HashSet<string>? names = null;
+
+        items ??= FindPotentialAccessItems(targetUID);
+
+        foreach (var ent in items)
+        {
+            if (TryComp<IdCardComponent>(ent, out var idComp))
+            {
+                if (idComp.FullName != null)
+                {
+                    if (names == null) names = new HashSet<string>();
+                    names.Add(idComp.FullName);
+                }
+            }
+            else if (TryComp<PdaComponent>(ent, out var pdaComp))
+            {
+                if (pdaComp != null && pdaComp.ContainedId != null)
+                {
+                    if (TryComp<IdCardComponent>(pdaComp.ContainedId, out var idComp2))
+                    {
+                        if (idComp2.FullName != null)
+                        {
+                            if (names == null) names = new HashSet<string>();
+                            names.Add(idComp2.FullName);
+                        }
+                    }
+                }
+            }
+        }
+
+        return (ICollection<string>?)names ?? Array.Empty<string>();
     }
 
     /// <summary>
@@ -1215,7 +1234,7 @@ public sealed partial class AccessReaderSystem : EntitySystem
     private bool FindAccessTagsItem(EntityUid uid, out HashSet<ProtoId<AccessLevelPrototype>> tags)
     {
         tags = new();
-        var ev = new GetAccessTagsEvent(tags, ProtoMan);
+        var ev = new GetAccessTagsEvent(tags, _prototype);
         RaiseLocalEvent(uid, ref ev);
 
         return tags.Count != 0;
@@ -1265,7 +1284,12 @@ public sealed partial class AccessReaderSystem : EntitySystem
 
         // TODO pass the ID card on IsAllowed() instead of using this expensive method
         // Set name if the accessor has a card and that card has a name and allows itself to be recorded
-        name = _identity.GetIdentityShortInfo(accessor, ent, true) ?? name;
+        var getIdentityShortInfoEvent = new TryGetIdentityShortInfoEvent(ent, accessor, true);
+        RaiseLocalEvent(getIdentityShortInfoEvent);
+        if (getIdentityShortInfoEvent.Title != null)
+        {
+            name = getIdentityShortInfoEvent.Title;
+        }
 
         LogAccess(ent, name ?? Loc.GetString("access-reader-unknown-id"));
     }
@@ -1307,7 +1331,7 @@ public sealed partial class AccessReaderSystem : EntitySystem
             {
                 var accessName = Loc.GetString("access-reader-unknown-id");
 
-                if (ProtoMan.Resolve(access, out var accessProto) && !string.IsNullOrWhiteSpace(accessProto.Name))
+                if (_prototype.Resolve(access, out var accessProto) && !string.IsNullOrWhiteSpace(accessProto.Name))
                     accessName = Loc.GetString(accessProto.Name);
 
                 sb.Append(Loc.GetString("access-reader-access-label", ("access", accessName)));

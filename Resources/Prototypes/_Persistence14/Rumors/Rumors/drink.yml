@@ -8,16 +8,17 @@
   possibleFlavors:
     - energydrink
     - water
-    - milk
   possibleFlavorGroups:
     -
       - beer
       - mead
       - ale
+      - rootbeersoda
+      - gingersoda
     -
       - drgibb
-      - gingersoda
-      - rootbeersoda
+      - fizzy
+      - sweet
     -
       - coffee
       - tea
@@ -28,10 +29,19 @@
       - tequila
       - rum
       - gin
+      - apple
     -
       - vermouth
       - shittywine
       - sake
+      - juice
+      - banana
+    -
+      - creamy
+      - chocolate
+      - milk
+      - bitter
+      - nutty
   rewardRumors: 1
   possibleFollowups:
     - ExterminateGeneral
@@ -55,16 +65,35 @@
       - beer
       - mead
       - ale
+      - rootbeersoda
+      - gingersoda
+    -
+      - drgibb
+      - fizzy
+      - sweet
+    -
+      - coffee
+      - tea
+      - icedtea
     -
       - cognac
       - vodka
       - tequila
       - rum
       - gin
+      - apple
     -
       - vermouth
       - shittywine
       - sake
+      - juice
+      - banana
+    -
+      - creamy
+      - chocolate
+      - milk
+      - bitter
+      - nutty
   rewardRumors: 1
   possibleFollowups:
     - DiscoverSmallCriminal
