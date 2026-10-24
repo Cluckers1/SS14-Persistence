@@ -6,6 +6,7 @@
     - DrinkBasicEvil
     - EatBasicEvil
     - PrayBasicEvil
+    - ReceiveMailEvil
   color: Purple
   levels:
     Precursor2: 150
