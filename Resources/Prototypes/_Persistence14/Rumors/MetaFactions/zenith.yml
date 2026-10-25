@@ -20,7 +20,7 @@
     - ZenithUpgradeModule
     - TradeGood
     - ZenithCodexFragment
-    - GrandLottery
+    - SoLMerchCrate
   rewardsToOffer: 2
 
 - type: metaFactionLevel
