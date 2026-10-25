@@ -21,7 +21,7 @@
     - ShadowUpgradeModule
     - TradeGood
     - ShadowCodexFragment
-    - GrandLottery
+    - ShadowMerchCrate
   rewardsToOffer: 2
 
 - type: metaFactionLevel
