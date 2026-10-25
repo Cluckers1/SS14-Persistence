@@ -2,7 +2,7 @@
   id: Rationalist
   name: Rationalist
   order: 1
-  firstTrait: AnomalySense
+  firstTrait: Rationalist1
   color: DarkGreen
 
 - type: insightCategory
