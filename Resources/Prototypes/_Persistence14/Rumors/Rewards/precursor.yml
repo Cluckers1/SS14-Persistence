@@ -177,7 +177,7 @@
     state: icon
 
 - type: rumorReward
-  id: PrecursorHardsuitSyndie
+  id: PrecursorMedHardsuitSyndie
   name: Blood Red Medic Hardsuit Bundle
   description: "The Syndicate's well known armored blood red hardsuit, Now with medical stylings."
   price: 12000
