@@ -21,7 +21,7 @@
 - type: rumorReward
   id: SoLMerchCrate
   name: Solar Legion paraphernalia Crate
-  description: "A crate of what makes the threshold livable. The comunity...and cookies."
+  description: "A crate of what makes the threshold livable. The community... and cookies."
   price: 1200
   product: CrateSoLMerch
   icon:

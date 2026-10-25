@@ -22,7 +22,7 @@
 - type: rumorReward
   id: UNMCMerchCrate
   name: UNMC Merch Crate
-  description: "Anything a soldier needs to survive out in the threshold."
+  description: "Anything a soldier needs to survive out in the Threshold."
   price: 1200
   product: CrateUNMCMerch
   icon:
