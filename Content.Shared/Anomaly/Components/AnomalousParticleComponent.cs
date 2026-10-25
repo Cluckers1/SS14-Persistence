@@ -45,7 +45,7 @@ public sealed partial class AnomalousParticleComponent : Component
     /// of an anomalous particle of <seealso cref="AnomalyComponent.DestabilizingParticleType"/>.
     /// </summary>
     [DataField]
-    public float StabilityPerWeakeningeHit = 0.1f;
+    public float StabilityPerWeakeningeHit = -0.1f;
 
     /// <summary>
     /// If this is true then the particle will always affect the stability of the anomaly.
