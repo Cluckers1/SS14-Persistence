@@ -1,12 +1,12 @@
 - type: insightTrait
-  id: Rationalist1
+  id: AnomalySense
   name: insight-ration-1-name
   content: insight-ration-1-desc
   next: Rationalist2
-  trait: Rationalist1
+  trait: AnomalySense
 
 - type: trait
-  id: Rationalist1
+  id: AnomalySense
   name: insight-ration-1-name
   description: insight-ration-1-desc
   selectable: false
@@ -70,10 +70,10 @@
   name: insight-ration-3-name
   content: insight-ration-3-desc
   next: Rationalist4
-  trait: Rationalist1
+  trait: AnomalySense
 
 - type: insightTrait
   id: Rationalist4
   name: insight-ration-4-name
   content: insight-ration-4-desc
-  trait: Rationalist1
+  trait: AnomalySense
