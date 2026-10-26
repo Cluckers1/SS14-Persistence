@@ -55,5 +55,6 @@ anomaly-name-eye = eye anomaly
 ## Tech Names
 
 research-technology-interstellar-logistics = Interstellar Logistics
-research-technology-civilian-eva = Civilian EVA
+research-technology-civilian-eva = Civilian EVA Manufacturing
 research-technology-plushie-sound-activation = Plushie Sound Activation
+research-technology-industrial-eva = Industrial EVA Manufacturing

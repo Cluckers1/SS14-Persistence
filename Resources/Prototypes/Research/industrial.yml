@@ -271,4 +271,6 @@
     ClothingHandsGlovesCaptain: 1
   technologyPrerequisites:
   - EVAManufacturing
-  - SpecializedEVA
+  - IndustrialEVA
+  - CivilianEVA
+  - SecurityEVA
