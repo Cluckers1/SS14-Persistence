@@ -25,7 +25,7 @@
   name: Power Banks
   description: "Restore power to the two SMES and the substation so we can retrieve our science data!"
   eventGrids:
-    - /Maps/Rumors/Charge/lumi-charge.yml
+    - /Maps/Rumors/Charge/syndi-charge.yml
   cashReward: 5000
   reputationReward: 50
   completionType: Power
