@@ -400,6 +400,44 @@ public sealed partial class PlantSystem : EntitySystem
     }
 
     /// <summary>
+    /// Gets the non-mutation markup shown when examining a growing plant.
+    /// </summary>
+    [PublicAPI]
+    public string GetPlantExamineMarkup(Entity<PlantComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp, false) || !_holderQuery.TryComp(ent.Owner, out var holder))
+            return string.Empty;
+
+        var markup = new List<string>();
+        if (_plantHolder.IsDead(ent.Owner))
+            markup.Add(Loc.GetString("plant-component-dead-plant-matter-message"));
+
+        if (_plantHolder.GetHealthThreshold(ent.Owner))
+        {
+            markup.Add(Loc.GetString(
+                "plant-component-something-already-growing-low-health-message",
+                ("healthState",
+                    Loc.GetString(holder.Age > ent.Comp.Lifespan
+                        ? "plant-component-plant-old-adjective"
+                        : "plant-component-plant-unhealthy-adjective"))));
+        }
+
+        return string.Join("\n", markup);
+    }
+
+    /// <summary>
+    /// Gets the mutation descriptions shown when examining a growing plant.
+    /// </summary>
+    [PublicAPI]
+    public IEnumerable<LocId> GetPlantMutationDescriptions(EntityUid uid)
+    {
+        return AllComps<PlantTraitsComponent>(uid)
+            .OrderBy(trait => trait.GetType().FullName)
+            .Select(trait => trait.TraitState)
+            .OfType<LocId>();
+    }
+
+    /// <summary>
     /// Gets the states markup of the plant.
     /// </summary>
     [PublicAPI]
