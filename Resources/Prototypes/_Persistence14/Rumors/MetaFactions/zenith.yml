@@ -6,6 +6,7 @@
     - DrinkBasicFriendly
     - EatBasicFriendly
     - PrayBasicFriendly
+    - ReceiveMailFriendly
   color: Red
   levels:
     Zenith2: 150
@@ -20,8 +21,9 @@
     - ZenithUpgradeModule
     - TradeGood
     - ZenithCodexFragment
+    - SoLMerchCrate
     - GrandLottery
-  rewardsToOffer: 1
+  rewardsToOffer: 2
 
 - type: metaFactionLevel
   id: Zenith3

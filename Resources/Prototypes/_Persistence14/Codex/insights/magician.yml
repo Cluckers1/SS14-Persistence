@@ -1,14 +1,14 @@
 - type: insightTrait
   id: Magic1
-  name: Void Visionary
-  content: Once per day you can peek into the Void and get a random rumor.
+  name: insight-magic-1-name
+  content: insight-magic-1-desc
   next: Magic2
   trait: Magic1
 
 - type: trait
   id: Magic1
-  name: Void Visionary
-  description: Once per day you can peek into the Void and get a random rumor.
+  name: insight-magic-1-name
+  description: insight-magic-1-desc
   selectable: false
   components:
     - type: ActionGrant
@@ -37,15 +37,15 @@
 
 - type: insightTrait
   id: Magic2
-  name: Basic Summoner
-  content: Summon some other-world tentacles to grab and stun people!
+  name: insight-magic-2-name
+  content: insight-magic-2-desc
   next: Magic3
   trait: Magic2
 
 - type: trait
   id: Magic2
-  name: Basic Summoner
-  description: Summon some other-world tentacles to grab and stun people!
+  name: insight-magic-2-name
+  description: insight-magic-2-desc
   selectable: false
   components:
   - type: ActionGrant
@@ -79,16 +79,16 @@
 
 - type: insightTrait
   id: Magic3
-  name: "Strange Alchemist"
-  content: "Once per day you can transmute a stack of steel into a more valuable material."
+  name: insight-magic-3-name
+  content: insight-magic-3-desc
   trait: Priest1
   requiresAwake: true
   next: Magic4
 
 - type: insightTrait
   id: Magic4
-  name: "Advanced Summoner"
-  content: "Once per day you can create a pair of linked portals which last for four hours."
+  name: insight-magic-4-name
+  content: insight-magic-4-desc
   trait: Priest1
   requiresAwake: true
 

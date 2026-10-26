@@ -127,18 +127,18 @@ public sealed partial class CharacterBackgroundSystem : EntitySystem
                 var traitProto = ProtoMan.Index<TraitPrototype>(trait);
                 _traitSystem.AddTrait(mob, traitProto);
             }
-            if(crewrecord != null)
+            if (crewrecord != null)
             {
                 foreach (var kv in effectProto.ReputationGains)
                 {
                     var total = kv.Value;
-                    if(crewrecord.MetaFactionReputations.ContainsKey(kv.Key))
+                    if (crewrecord.MetaFactionReputations.ContainsKey(kv.Key))
                     {
                         total += crewrecord.MetaFactionReputations[kv.Key];
                     }
                     crewrecord.MetaFactionReputations[kv.Key] = total;
                 }
-                if(effectProto.BonusCash > 0)
+                if (effectProto.BonusCash > 0)
                 {
                     _bank.TryBankDeposit(args.Mob, effectProto.BonusCash);
                 }

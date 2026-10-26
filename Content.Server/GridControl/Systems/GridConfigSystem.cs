@@ -1,11 +1,10 @@
-using Content.Server.Cargo.Components;
 using Content.Server.CrewRecords.Systems;
 using Content.Server.Popups;
 using Content.Server.Station.Systems;
 using Content.Shared._Persistence14;
+using Content.Shared._Persistence14.Rumors.Components;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
-using Content.Shared.Administration.Logs;
 using Content.Shared.Cargo.Components;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CrewAssignments.Components;
@@ -19,8 +18,6 @@ using Content.Shared.Station;
 using Content.Shared.Station.Components;
 using JetBrains.Annotations;
 using Robust.Server.GameObjects;
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
@@ -211,6 +208,10 @@ public sealed partial class GridConfigSystem : SharedGridConfigSystem
         var targetGrid = _transform.GetGrid(uid);
         var targetStation = _station.GetStationByID(component.ConnectedStation.Value);
         bool tradeStationGrid = false;
+        if (TryComp<GridSelfDeleteComponent>(targetGrid, out var gridDelete))
+        {
+            return false;
+        }
         if (TryComp<TradeStationComponent>(targetGrid, out var tradeStation))
         {
             tradeStationGrid = true;
@@ -263,8 +264,14 @@ public sealed partial class GridConfigSystem : SharedGridConfigSystem
         limit = levelProto.TileLimit;
         if (limit < 1) return false;
         var targetGrid = _transform.GetGrid(uid);
-        bool tradeStationGrid = false;
-        if (tradeStationGrid) return false;
+        if (TryComp<TradeStationComponent>(targetGrid, out var tradeStation))
+        {
+            return false;
+        }
+        if (TryComp<GridSelfDeleteComponent>(targetGrid, out var gridDelete))
+        {
+            return false;
+        }
         if (targetGrid.HasValue && TryComp<MapGridComponent>(targetGrid, out var targetGridComp))
         {
             var tiles = _mapSystem.GetAllTiles(targetGrid.Value, targetGridComp);
@@ -287,11 +294,7 @@ public sealed partial class GridConfigSystem : SharedGridConfigSystem
         bool idPresent = false;
 
         var targetGrid = _transform.GetGrid(uid);
-        //bool tradeStationGrid = false;
-        //if (TryComp<TradeStationComponent>(targetGrid, out var tradeStation))
-        //{
-        //    tradeStationGrid = true;
-        //}
+
         if (component.PrivilegedIdSlot.Item is { Valid: true } idCard)
         {
             idPresent = true;
@@ -766,6 +769,10 @@ public sealed partial class GridConfigSystem : SharedGridConfigSystem
             {
                 errMsg = "A minimum of five trade nodes must be on board to claim the trade station.";
             }
+        }
+        if(TryComp<GridSelfDeleteComponent>(grid, out var deleteGrid))
+        {
+            errMsg = $"This grid is temporary and will self-delete soon. It cannot be claimed.";
         }
         newState = new GridConfigBoundUserInterfaceState(
             idPresent, isOwner, isAuth, component.PersonalMode, controlled, possibleStations,

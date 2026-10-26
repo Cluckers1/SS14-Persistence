@@ -34,7 +34,7 @@
     children:
     - prototype: TechAnomaly
     - prototype: PolymorphAnomaly
-    - prototype: EyeAnomaly
+    #- prototype: EyeAnomaly
 
 ## Should contain all anomaly types
 - type: randomTable
@@ -52,4 +52,4 @@
     - prototype: ShadowAnomaly
     - prototype: TechAnomaly
     - prototype: PolymorphAnomaly
-    - prototype: EyeAnomaly
+    #- prototype: EyeAnomaly

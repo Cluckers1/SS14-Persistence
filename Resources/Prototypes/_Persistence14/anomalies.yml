@@ -100,11 +100,11 @@
   environmentalWeight: 3
   # No infectious version
 
-- type: anomaly
-  id: EyeAnomaly
-  name: anomaly-name-eye
-  environmental: AnomalyEye
-  environmentalWeight: 3
+#- type: anomaly
+#  id: EyeAnomaly
+#  name: anomaly-name-eye
+#  environmental: AnomalyEye
+#  environmentalWeight: 3
   # No infectious version
 
 - type: anomaly

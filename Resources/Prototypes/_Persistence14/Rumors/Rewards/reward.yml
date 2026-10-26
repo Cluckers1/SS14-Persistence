@@ -5,8 +5,8 @@
   price: 5000
   product: TradeGood
   icon:
-    sprite: _Persistence14/Objects/Specific/Upgrades/modules.rsi
-    state: solar-legion-full
+    sprite: _Persistence14/Objects/Specific/trade_node.rsi
+    state: icon
 
 - type: rumorReward
   id: VoiceMaskImplanter
@@ -51,11 +51,11 @@
 - type: rumorReward
   id: Defib
   name: Advanced Defibrillator Kit
-  description: "A fast and compact defibrillator. Some say that Nanotrasen is known as best with their advancements in medical sience."
+  description: "A fast and compact defibrillator from Nanotrasen."
   price: 6000
-  product: DefibrillatorSyndicate
+  product: DefibrillatorNT
   icon:
-    sprite: Objects/Specific/Medical/defibsyndi.rsi
+    sprite: _Persistence14/Objects/Specific/Medical/defibnt.rsi
     state: icon
 
 - type: rumorReward

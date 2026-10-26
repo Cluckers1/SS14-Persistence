@@ -360,7 +360,7 @@ public sealed partial class JobNetSystem : SharedJobNetSystem
     private void OnJobNetImplantImplanted(Entity<JobNetComponent> ent, ref ImplantImplantedEvent args)
     {
         var mob = args.Implanted;
-        _bank.EnsureAccount(Name(mob), 50);
+        _bank.EnsureAccount(Name(mob), 500);
     }
 
     public override void Update(float frameTime)

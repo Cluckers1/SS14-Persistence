@@ -6,6 +6,7 @@
     - DrinkBasicFriendly
     - EatBasicFriendly
     - PrayBasicFriendly
+    - ReceiveMailFriendly
   color: Green
   levels:
     Green2: 150
@@ -23,7 +24,7 @@
     - GreenCodexFragment
     - GreenPlasmaCrate
     - GreenMerchCrate
-  rewardsToOffer: 1
+  rewardsToOffer: 2
 
 
 - type: metaFactionLevel

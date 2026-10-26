@@ -27,7 +27,7 @@ flavor_text = true
 punctuation = false
 
 [lore]
-year_offset = 200
+year_offset = 220
 
 [tips]
 enabled = false

@@ -123,6 +123,7 @@
   possibleFollowups:
     - DiscoverSmallScience
     - PowerLuminal
+    - ArtifactNodeBasic
 
 - type: rumor
   id: BountyBasicCriminal

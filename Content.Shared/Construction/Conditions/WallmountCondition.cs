@@ -7,8 +7,6 @@ using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Utility;
-using Content.Shared.Tag;
-using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Construction.Conditions
 {
@@ -16,12 +14,6 @@ namespace Content.Shared.Construction.Conditions
     [DataDefinition]
     public sealed partial class WallmountCondition : IConstructionCondition
     {
-        private static readonly ProtoId<TagPrototype> WallTag = "Wall";
-        // Start Persistence: Allow wallmounts on non-directional windows
-        private static readonly ProtoId<TagPrototype> WindowTag = "Window";
-        private static readonly ProtoId<TagPrototype> DirectionalWindowTag = "DirectionalWindow";
-        // End Persistence
-
         public bool Condition(EntityUid user, EntityCoordinates location, Direction direction)
         {
             var entManager = IoCManager.Resolve<IEntityManager>();
@@ -30,7 +22,7 @@ namespace Content.Shared.Construction.Conditions
             var transformSystem = entManager.System<SharedTransformSystem>();
             var userWorldPosition = transformSystem.GetWorldPosition(user);
             var objWorldPosition = transformSystem.ToMapCoordinates(location).Position;
-            var tagSystem = entManager.System<TagSystem>();
+
             // find direction from user to blueprint
             var userToObject = (objWorldPosition - userWorldPosition);
             // get direction of the grid being placed on as an offset.
@@ -48,9 +40,7 @@ namespace Content.Shared.Construction.Conditions
             var length = userToObject.Length();
 
             var userToObjRaycastResults = physics.IntersectRayWithPredicate(entManager.GetComponent<TransformComponent>(user).MapID, rUserToObj, maxLength: length,
-                predicate: (e) => !tagSystem.HasTag(e, WallTag) &&
-                    !tagSystem.HasTag(e, WindowTag) || // Persistence: Allow wallmounts on windows
-                    tagSystem.HasTag(e, DirectionalWindowTag)); // Persistence: Disallow wallmounts on directional windows
+                predicate: (e) => !entManager.HasComponent<WallComponent>(e));
 
             var targetWall = userToObjRaycastResults.FirstOrNull();
 
@@ -61,9 +51,7 @@ namespace Content.Shared.Construction.Conditions
             // check that we didn't try to build wallmount that facing another adjacent wall
             var rAdjWall = new CollisionRay(objWorldPosition, directionWithOffset.Normalized(), (int)CollisionGroup.Impassable);
             var adjWallRaycastResults = physics.IntersectRayWithPredicate(entManager.GetComponent<TransformComponent>(user).MapID, rAdjWall, maxLength: 0.5f,
-               predicate: e => e == targetWall.Value.HitEntity || !tagSystem.HasTag(e, WallTag) &&
-                               !tagSystem.HasTag(e, WindowTag) || // Persistence: Prevent wallmounts facing windows
-                               tagSystem.HasTag(e, DirectionalWindowTag)); // Persistence: Unless they are directional windows
+               predicate: e => e == targetWall.Value.HitEntity || !entManager.HasComponent<WallComponent>(e));
 
             return !adjWallRaycastResults.Any();
         }

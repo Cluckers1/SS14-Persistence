@@ -11,20 +11,22 @@ using Content.Shared.Chat;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Events;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.Speech.Muting;
-using Content.Shared.StatusEffectNew;
 using Content.Shared.Players;
 using Content.Shared.Preferences;
+using Content.Shared.Radio;
+using Content.Shared.Speech.Muting;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Tag;
 using Robust.Server.Console;
 using Robust.Server.GameObjects;
+using Robust.Shared.Audio.Sources;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map; // Persistence
 using Robust.Shared.Player;
-using Robust.Shared.Timing;
 using Robust.Shared.Prototypes;
-using Content.Shared.Mobs.Events;
+using Robust.Shared.Timing;
 
 namespace Content.Server.Mobs;
 
@@ -49,6 +51,7 @@ public sealed partial class CritMobActionsSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IConfigurationManager _configurationManager = default!;
     [Dependency] private TagSystem _tag = default!;
+    [Dependency] private IPrototypeManager _protoMan = default!;
     // End Persistence
 
     private const int MaxLastWordsLength = 30;
@@ -188,7 +191,9 @@ public sealed partial class CritMobActionsSystem : EntitySystem
         var message = overrideEv.MessageOverride ?? $"{Name(uid)} has died at ({mapPos.X:F1}, {mapPos.Y:F1}) and is broadcasting an SOS.";
 
         var speaker = overrideEv.SpeakerOverride ?? uid;
-        _radio.SendRadioMessage(speaker, message, "Common", speaker, true);
+        var commonID = "Common";
+        var common = _protoMan.Index<RadioChannelPrototype>(commonID);
+        _radio.SendRadioMessage(speaker, message, common, speaker, escapeMarkup: true, useNetworkOverride: true, transmitterRange: float.PositiveInfinity);
         var respawnTime = TimeSpan.FromSeconds(_configurationManager.GetCVar(CCVars.AcceptDeathTime));
         component.SOSCooldown = _timing.CurTime + respawnTime;
         UpdateUserInterface(uid, uid, component);
