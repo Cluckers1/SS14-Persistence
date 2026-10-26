@@ -51,3 +51,9 @@ anomaly-name-tech = technology anomaly
 anomaly-name-santa = santa anomaly
 anomaly-name-polymorph = polymorph anomaly
 anomaly-name-eye = eye anomaly
+
+## Tech Names
+
+research-technology-interstellar-logistics = Interstellar Logistics
+research-technology-civilian-eva = Civilian EVA
+research-technology-plushie-sound-activation = Plushie Sound Activation
