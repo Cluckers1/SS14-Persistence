@@ -120,12 +120,13 @@
   - type: NonSpreaderZombie
   - type: ZombifyOnDeath
   - type: MobState
+  - type: SalvageMobRestrictions
     currentState: Alive
   - type: Damageable
     damage:
       types:
-        Slash: 100
-        Blunt: 99
+        Slash: 99
+
   - type: Loadout
     prototypes:
         - ZombieCivilian
