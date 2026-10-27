@@ -119,8 +119,8 @@
     randomizeName: true
   - type: NonSpreaderZombie
   - type: ZombifyOnDeath
-  - type: MobState
   - type: SalvageMobRestrictions
+  - type: MobState
     currentState: Alive
   - type: Damageable
     damage:
