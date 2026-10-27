@@ -63,6 +63,10 @@ public abstract partial class SharedWieldableSystem : EntitySystem
         SubscribeLocalEvent<GunWieldBonusComponent, ItemUnwieldedEvent>(OnGunUnwielded);
         SubscribeLocalEvent<GunWieldBonusComponent, GunRefreshModifiersEvent>(OnGunRefreshModifiers);
         SubscribeLocalEvent<GunWieldBonusComponent, ExaminedEvent>(OnExamine);
+        SubscribeLocalEvent<GunUnwieldedPenaltyComponent, ItemWieldedEvent>(OnGunPenaltyWielded);
+        SubscribeLocalEvent<GunUnwieldedPenaltyComponent, ItemUnwieldedEvent>(OnGunPenaltyUnwielded);
+        SubscribeLocalEvent<GunUnwieldedPenaltyComponent, GunRefreshModifiersEvent>(OnGunPenaltyRefreshModifiers);
+        SubscribeLocalEvent<GunUnwieldedPenaltyComponent, ExaminedEvent>(OnPenaltyExamine);
         SubscribeLocalEvent<SpeedModifiedOnWieldComponent, ItemWieldedEvent>(OnSpeedModifierWielded);
         SubscribeLocalEvent<SpeedModifiedOnWieldComponent, ItemUnwieldedEvent>(OnSpeedModifierUnwielded);
         SubscribeLocalEvent<SpeedModifiedOnWieldComponent, HeldRelayedEvent<RefreshMovementSpeedModifiersEvent>>(OnRefreshSpeedWielded);
@@ -127,6 +131,36 @@ public abstract partial class SharedWieldableSystem : EntitySystem
             args.AngleDecay += bonus.Comp.AngleDecay;
             args.AngleIncrease += bonus.Comp.AngleIncrease;
         }
+    }
+
+    private void OnGunPenaltyWielded(Entity<GunUnwieldedPenaltyComponent> ent, ref ItemWieldedEvent args)
+    {
+        _gun.RefreshModifiers(ent.Owner);
+    }
+
+    private void OnGunPenaltyUnwielded(Entity<GunUnwieldedPenaltyComponent> ent, ref ItemUnwieldedEvent args)
+    {
+        _gun.RefreshModifiers(ent.Owner);
+    }
+
+    private void OnGunPenaltyRefreshModifiers(Entity<GunUnwieldedPenaltyComponent> ent, ref GunRefreshModifiersEvent args)
+    {
+        if (TryComp(ent, out WieldableComponent? wield) && wield.Wielded)
+            return;
+
+        args.MinAngle *= ent.Comp.AngleMultiplier;
+        args.MaxAngle *= ent.Comp.AngleMultiplier;
+        args.AngleIncrease *= ent.Comp.AngleMultiplier;
+        args.AngleDecay /= ent.Comp.AngleMultiplier;
+    }
+
+    private void OnPenaltyExamine(Entity<GunUnwieldedPenaltyComponent> ent, ref ExaminedEvent args)
+    {
+        if (HasComp<GunRequiresWieldComponent>(ent) || MathHelper.CloseTo(ent.Comp.AngleMultiplier, 1f))
+            return;
+
+        if (ent.Comp.ExamineMessage != null)
+            args.PushText(Loc.GetString(ent.Comp.ExamineMessage));
     }
 
     private void OnSpeedModifierWielded(EntityUid uid, SpeedModifiedOnWieldComponent component, ItemWieldedEvent args)
