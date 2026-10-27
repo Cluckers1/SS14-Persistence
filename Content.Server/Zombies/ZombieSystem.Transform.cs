@@ -82,7 +82,7 @@ public sealed partial class ZombieSystem
     /// <summary>
     /// Handles an entity turning into a zombie when they die or go into crit
     /// </summary>
-    /// Edited state to be SoftCritical instead of Dead for Persistence 14 salvage Zeds
+    /// Edited state to be HardCritical instead of Dead for Persistence 14 salvage Zeds
     private void OnDamageChanged(EntityUid uid, ZombifyOnDeathComponent component, MobStateChangedEvent args)
     {
         if (args.NewMobState == MobState.HardCritical)
