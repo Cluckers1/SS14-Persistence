@@ -126,7 +126,7 @@
     damage:
       types:
         Slash: 99
-
+        Blunt: 45
   - type: Loadout
     prototypes:
         - ZombieCivilian

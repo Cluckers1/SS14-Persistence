@@ -85,7 +85,7 @@ public sealed partial class ZombieSystem
     /// Edited state to be SoftCritical instead of Dead for Persistence 14 salvage Zeds
     private void OnDamageChanged(EntityUid uid, ZombifyOnDeathComponent component, MobStateChangedEvent args)
     {
-        if (args.NewMobState == MobState.SoftCritical)
+        if (args.NewMobState == MobState.HardCritical)
         {
             ZombifyEntity(uid, args.Component);
         }
