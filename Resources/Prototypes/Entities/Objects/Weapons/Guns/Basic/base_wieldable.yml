@@ -17,7 +17,7 @@
   id: BaseGunWieldClassPistol
   abstract: true
   components:
-  - type: AkimboCapable
+#  - type: AkimboCapable # Commented out for now to enable Akimbo later
   - type: Wieldable
     unwieldOnUse: false
   - type: GunUnwieldedPenalty
