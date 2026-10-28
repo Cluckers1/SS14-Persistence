@@ -1,13 +1,13 @@
-using Content.Shared.Wieldable;
+using Content.Shared._Persistence14.Weapons.Ranged.Systems;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared.Weapons.Ranged.Components;
+namespace Content.Shared._Persistence14.Weapons.Ranged.Components;
 
 /// <summary>
 /// Multiplies the gun's minimum and maximum spread angles while it is NOT wielded.
 /// Requires a WieldableComponent on the same entity.
 /// </summary>
-[RegisterComponent, NetworkedComponent, Access(typeof(SharedWieldableSystem))]
+[RegisterComponent, NetworkedComponent, Access(typeof(GunUnwieldedPenaltySystem))]
 public sealed partial class GunUnwieldedPenaltyComponent : Component
 {
     /// <summary>

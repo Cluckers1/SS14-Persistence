@@ -117,24 +117,6 @@
       map: ["enum.ActionVisuals.IconToggled"]
       visible: false
 
-#- type: entity
-#  parent: BaseAction
-#  id: ActionToggleAkimbo
-#  name: Toggle Akimbo
-#  description: Fire the pistol in your other hand whenever you fire the one in your active hand.
-#  components:
-#  - type: Action
-#    useDelay: 0.5
-#    checkCanInteract: false
-#  - type: Sprite
-#    sprite: Objects/Weapons/Guns/Pistols/viper.rsi
-#    layers:
-#    - state: icon
-#      map: ["enum.ActionVisuals.Icon"]
-#  - type: InstantAction
-#    event: !type:ToggleAkimboActionEvent
-# COMMENTED OUT FOR NOW PENDING IMPLEMENTATION OF AKIMBO
-
 - type: entity
   parent: BaseAction
   id: ActionOpenStorageImplant
