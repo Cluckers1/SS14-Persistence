@@ -41,7 +41,7 @@ public sealed partial class SharedAkimboSystem : EntitySystem
         SubscribeLocalEvent<AkimboCapableComponent, GunShotEvent>(OnGunShot);
         SubscribeLocalEvent<AkimboCapableComponent, OnEmptyGunShotEvent>(OnEmptyGunShot);
         SubscribeLocalEvent<AkimboCapableComponent, GunRefreshModifiersEvent>(OnRefreshModifiers,
-            after: [typeof(GunUnwieldedPenaltySystem)]);
+            after: [typeof(GunPenaltySystem)]);
         SubscribeLocalEvent<AkimboUserComponent, GetUserGunEvent>(OnGetUserGun);
         SubscribeLocalEvent<AkimboUserComponent, ToggleAkimboActionEvent>(OnToggle);
         SubscribeAllEvent<RequestStopShootEvent>(OnStopShootRequest);

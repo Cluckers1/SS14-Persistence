@@ -7,7 +7,7 @@ namespace Content.Shared._Persistence14.Weapons.Ranged.Components;
 /// Multiplies the gun's minimum and maximum spread angles while it is NOT wielded.
 /// Requires a WieldableComponent on the same entity.
 /// </summary>
-[RegisterComponent, NetworkedComponent, Access(typeof(GunUnwieldedPenaltySystem))]
+[RegisterComponent, NetworkedComponent, Access(typeof(GunPenaltySystem))]
 public sealed partial class GunUnwieldedPenaltyComponent : Component
 {
     /// <summary>
