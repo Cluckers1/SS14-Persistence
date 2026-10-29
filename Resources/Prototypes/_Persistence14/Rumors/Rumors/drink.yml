@@ -50,6 +50,8 @@
     - BountyBasicGeneral
     - BountyBasicScience
     - PowerLuminal
+    - PowerGreen
+    - RescueMarine
     - ArtifactNodeBasic
   completionTarget: 25
 
