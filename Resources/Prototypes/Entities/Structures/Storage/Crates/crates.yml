@@ -190,6 +190,7 @@
   components:
   - type: Icon
     sprite: _Persistence14/Structures/Storage/Crates/solarlegion.rsi
+    state: icon
   - type: Sprite
     sprite: _Persistence14/Structures/Storage/Crates/solarlegion.rsi
 
@@ -357,6 +358,7 @@
   components:
     - type: Icon
       sprite: _Persistence14/Structures/Storage/Crates/solarlegionsecure.rsi
+      state: icon
     - type: Sprite
       sprite: _Persistence14/Structures/Storage/Crates/solarlegionsecure.rsi
 
