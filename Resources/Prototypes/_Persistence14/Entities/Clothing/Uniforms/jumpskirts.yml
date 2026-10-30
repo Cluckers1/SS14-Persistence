@@ -167,7 +167,7 @@
   parent: [ClothingUniformBase, ClothingUniformFoldableBase]
   id: ClothingUniformJumpskirtNCC
   name: nexus central council's jumpskirt
-  description: A garb
+  description: An elegant and fine garb, tailored with the NNC colors for the First Officer of the Eclipse Station.
   components:
   - type: Sprite
     sprite: _Persistence14/Clothing/Uniforms/Jumpskirt/ncc.rsi
