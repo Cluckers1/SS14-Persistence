@@ -325,6 +325,16 @@ spray-painter-style-itemheadsets-centcom = CentCom
 spray-painter-style-itemheadsets-freelance = Freelance
 spray-painter-style-itemheadsets-wizard = Wizard
 spray-painter-style-itemheadsets-ninja = Ninja
+spray-painter-style-itemheadsets-overearcargo = Quartermaster
+spray-painter-style-itemheadsets-overearcentcom = Overear CentCom
+spray-painter-style-itemheadsets-overearcommand = Overear Command
+spray-painter-style-itemheadsets-overearengineering = Chief Engineer
+spray-painter-style-itemheadsets-overearfreelancer = Overear Freelance
+spray-painter-style-itemheadsets-overearmedical = Chief Medical Officer
+spray-painter-style-itemheadsets-overearscience = Research Director
+spray-painter-style-itemheadsets-overearsecurity = Head Of Security
+spray-painter-style-itemheadsets-overearsyndicate = Blood Red
+spray-painter-style-itemheadsets-overearwizard = Overear Wizard
 
 # Items - Pill Canisters
 spray-painter-style-pillbottle-basic = Basic
