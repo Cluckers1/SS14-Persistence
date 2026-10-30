@@ -192,6 +192,7 @@ spray-painter-style-cratesteel-radiation = Radiation
 spray-painter-style-cratesteel-science = Science
 spray-painter-style-cratesteel-surgery = Surgery
 spray-painter-style-cratesteel-syndicate = Syndicate
+spray-painter-style-cratesteel-solarlegion = Solar Legion
 
 spray-painter-style-crateplastic-basic = Basic
 spray-painter-style-crateplastic-chemistry = Chemistry
@@ -212,6 +213,7 @@ spray-painter-style-cratesecure-science = Science
 spray-painter-style-cratesecure-secgear = Secgear
 spray-painter-style-cratesecure-weapon = Weapon
 spray-painter-style-cratesecure-syndicate = Syndicate
+spray-painter-style-cratesecure-solarlegion = Solar Legion
 
 # Canisters
 spray-painter-style-canisters-air = Air
