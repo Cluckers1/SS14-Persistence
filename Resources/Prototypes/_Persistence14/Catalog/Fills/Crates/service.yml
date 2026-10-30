@@ -101,6 +101,7 @@
         - id: BookThresholdHandbook
         - !type:NestedSelector
           tableId: AllPersistencePlushiesTable
+        - id: SolarLegionFlippo
 
 - type: entity
   parent: CratePrivateSecure
