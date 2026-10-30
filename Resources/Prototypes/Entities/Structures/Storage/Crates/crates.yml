@@ -193,6 +193,7 @@
     state: icon
   - type: Sprite
     sprite: _Persistence14/Structures/Storage/Crates/solarlegion.rsi
+    state: sprite
 
 # Secure Crates
 
@@ -361,6 +362,7 @@
       state: icon
     - type: Sprite
       sprite: _Persistence14/Structures/Storage/Crates/solarlegionsecure.rsi
+      state: sprite
 
 - type: entity
   parent: [ BaseCrate, StructureHealthContainerFlimsy ]
