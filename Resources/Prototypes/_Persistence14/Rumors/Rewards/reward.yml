@@ -333,3 +333,13 @@
   icon:
     sprite: Clothing/Uniforms/Jumpsuits/Color/rainbow.rsi
     state: icon
+
+- type: rumorReward
+  id: AdvancedTeleporterChip
+  name: Advanced Teleporter Chip
+  description: An advanced version of the teleporter chip with significantly extended range.
+  price: 25000
+  product: TeleporterChipBlankAdvanced
+  icon: 
+    sprite: Objects/Misc/teleporter_chips.rsi
+    state: icon
