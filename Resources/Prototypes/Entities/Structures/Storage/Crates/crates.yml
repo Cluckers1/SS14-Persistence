@@ -189,9 +189,9 @@
   name: Solar Legion crate
   components:
   - type: Icon
-    sprite: _Persistence14/Structures/Storage/Crates/solarlegion.rsi
+    sprite: _Persistence14/Structures/storage/Crates/solarlegion.rsi
   - type: Sprite
-    sprite: _Persistence14/Structures/Storage/Crates/solarlegion.rsi
+    sprite: _Persistence14/Structures/storage/Crates/solarlegion.rsi
 
 # Secure Crates
 
@@ -356,9 +356,9 @@
   name: Solar Legion secure crate
   components:
   - type: Icon
-    sprite: _Persistence14/Structures/Storage/Crates/solarlegionsecure.rsi
+    sprite: _Persistence14/Structures/storage/Crates/solarlegionsecure.rsi
   - type: Sprite
-    sprite: _Persistence14/Structures/Storage/Crates/solarlegionsecure.rsi
+    sprite: _Persistence14/Structures/storage/Crates/solarlegionsecure.rsi
 
 - type: entity
   parent: [ BaseCrate, StructureHealthContainerFlimsy ]
