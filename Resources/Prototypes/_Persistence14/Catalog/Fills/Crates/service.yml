@@ -78,7 +78,6 @@
         - !type:NestedSelector
           tableId: MeatTable
 
-
 - type: entity
   parent: CrateSolarLegion
   id: CrateSoLMerch
