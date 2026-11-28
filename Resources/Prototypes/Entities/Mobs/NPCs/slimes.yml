@@ -1,10 +1,13 @@
-﻿- type: entity
+﻿#Persistence 14 removed barotrauma from slimes and added salvage mob for use as space mobs
+
+- type: entity
   name: basic slime
   id: BaseMobAdultSlimes
-  parent: [ BaseMobSlimes, SimpleMobBase, MobCombat, BaseSlicingRefinable, MobNightVision, BaseMobDestructible ]
+  parent: [ BaseMobSlimes, SimpleSpaceMobBase, MobCombat, BaseSlicingRefinable, MobNightVision, BaseMobDestructible, ]
   abstract: true
   description: It looks so much like jelly. I wonder what it tastes like?
   components:
+  - type: SalvageMobRestrictions
   - type: Sprite
     drawdepth: Mobs
     sprite: Mobs/Aliens/slimes.rsi
@@ -40,14 +43,7 @@
     refineResult:
     - id: FoodMeatSlime
       amount: 2
-  - type: Respirator
-    damage:
-      types:
-        Asphyxiation: 0.2
-    damageRecovery:
-      types:
-        Asphyxiation: -1.0
-    maxSaturation: 15
+
   - type: Damageable
     damageModifierSet: Slime
   - type: Bloodstream
@@ -63,10 +59,7 @@
       types:
         Bloodloss:
           -0.25
-  - type: Barotrauma
-    damage:
-      types:
-        Blunt: 0.45
+
   - type: Reactive
     groups:
       Flammable: [ Touch ]

@@ -402,6 +402,38 @@
       - id: NitrousOxideCanister
         weight: 0.25
 
+#Persistence watcher and slime tables
+- type: entityTable
+  id: WatcherSpawnerTable
+  table: !type:GroupSelector
+    children:
+    - !type:GroupSelector
+      weight: 95
+      children:
+      - id: MobWatcherLavaland
+      - id: MobWatcherIcewing
+      - id: MobWatcherMagmawing
+    - !type:GroupSelector
+      weight: 5
+      children:
+      - id: MobWatcherPride
+
+- type: entityTable
+  id: SlimeSpawnerTable
+  table: !type:GroupSelector
+    children:
+    - !type:GroupSelector
+      weight: 95
+      children:
+      - id: MobAdultSlimesBlueAngry
+      - id: MobAdultSlimesGreenAngry
+      - id: MobAdultSlimesYellowAngry
+    - !type:GroupSelector
+      weight: 5
+      children:
+      - id: PlushieSlime
+
+#Persistence 14 added watchers and slimes to tables.
 - type: entityTable
   id: SalvageMagnetMobTable
   table: !type:GroupSelector
@@ -416,6 +448,10 @@
       - id: MobTickSalvage
       - id: MobSpiderSpaceSalvage
       - id: PlushieCarp
+      - !type:NestedSelector
+          tableId: SlimeSpawnerTable
+      - !type:NestedSelector
+          tableId: WatcherSpawnerTable
       - id: DehydratedSpaceCarp
         weight: 2
       - !type:AllSelector
